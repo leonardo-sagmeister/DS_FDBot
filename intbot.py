@@ -63,6 +63,14 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     if user_data == 'sim':
         
+        # try:
+        #     with open('Usuario.txt', 'r') as f:
+        #         processar_arquivo(f)
+        # except IOError:
+        #     criacao = open('Usuarios.txt', 'w+')
+        #     criacao.close()
+        #Precisamos tentar implementar isso ^^^^
+        
         arquivo = open('Usuarios.txt', 'r')
         linha = arquivo.readline()
 
@@ -94,3 +102,4 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
+    
