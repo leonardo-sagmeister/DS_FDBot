@@ -5,7 +5,7 @@ It echoes any incoming text messages.
 
 #Utilize CTRL+C no terminal para encerrar o bot
 
-import logging
+import logging, os.path
 
 from aiogram import Bot, Dispatcher, executor, types
 
@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.INFO)
 # Initialize bot and dispatcher
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
-
+i = 0
 
 @dp.message_handler(commands=['start', 'help', 'Ola'])
 async def send_welcome(message: types.Message):
@@ -64,13 +64,19 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     if user_data == 'sim':
         
         # try:
-        #     with open('Usuario.txt', 'r') as f:
-        #         processar_arquivo(f)
-        # except IOError:
-        #     criacao = open('Usuarios.txt', 'w+')
-        #     criacao.close()
-        #Precisamos tentar implementar isso ^^^^
-        
+        #     nome_arquivo = input('Usuarios.txt')
+        #     arquivo = open(nome_arquivo, 'r+')
+        # except FileNotFoundError:
+        #     arquivo = open('Usuarios.txt', 'w+')
+        #     #faca o que quiser
+        #     arquivo.close()
+        # #Precisamos tentar implementar isso ^^^^
+
+
+        if os.path.exists('Usuarios.txt') == False:
+            arquivo = open('Usuarios.txt', 'w+')
+            arquivo.close()
+           
         arquivo = open('Usuarios.txt', 'r')
         linha = arquivo.readline()
 
@@ -79,7 +85,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             
             #print(ids)
             #print(str(query.from_user.id))
-            if linha == (str(query.from_user.id) + ": " + str(query.from_user.full_name) + "\n"):
+            if linha == (str(query.from_user.id) + " " + str(query.from_user.full_name) + "\n"):
                 cont = 1
             
             linha = arquivo.readline()
@@ -87,7 +93,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
         arquivo = open('Usuarios.txt', 'a')
         #arquivo.write(str(query.from_user.id) + "\n")
         if cont != 1:
-            arquivo.write(str(query.from_user.id) + ": " + str(query.from_user.full_name) + "\n")
+            arquivo.write(str(query.from_user.id) + " " + str(query.from_user.full_name) + "\n")
             texto1 = "TOP DEMAIS MANO, BORA JOGAR!"
         elif cont == 1:
             texto1 = "VOCE JA ESTA JOGANDO!"
