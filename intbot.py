@@ -62,16 +62,6 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.answer(f'Você respondeu com {user_data!r}')
 
     if user_data == 'sim':
-        
-        # try:
-        #     nome_arquivo = input('Usuarios.txt')
-        #     arquivo = open(nome_arquivo, 'r+')
-        # except FileNotFoundError:
-        #     arquivo = open('Usuarios.txt', 'w+')
-        #     #faca o que quiser
-        #     arquivo.close()
-        # #Precisamos tentar implementar isso ^^^^
-
 
         if os.path.exists('Usuarios.txt') == False:
             arquivo = open('Usuarios.txt', 'w+')
@@ -81,10 +71,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
         linha = arquivo.readline()
 
         while linha:
-            #ids = linha.split()
-            
-            #print(ids)
-            #print(str(query.from_user.id))
+
             if linha == (str(query.from_user.id) + " " + str(query.from_user.full_name) + "\n"):
                 cont = 1
             
