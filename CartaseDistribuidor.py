@@ -1,4 +1,4 @@
-import logging, random
+import logging, random, os.path
 
 from aiogram import Bot, Dispatcher, executor, types
 
@@ -42,7 +42,7 @@ qouros = "CAACAgEAAxkBAAOmX40sOPFAdYBPehbVg7g2Mafe8n8AAhcAA4IVFjabn8s4CMkHnBsE"
 
 zap>copas>espadilha>ouros7>joker>paus3>copas3>espadas3>ouros3>paus2>copas2>espadas2>ouros2>aspaus>ascopas>asouros>kpaus>kcopas>kespadas>kouros>jpaus>jcopas>jespadas>jouros>qpaus>qcopas>qespadas>qouros
 
-tcartas = [zap, copas, espadilha, ouros7]  # joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus, ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros]
+tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3]#, ouros3, paus2, copas2, espadas2, ouros2, aspaus, ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros]
 
 rcarta = []
 @dp.message_handler(commands=['start', 'help', 'Ola'])
@@ -74,20 +74,38 @@ async def start_cmd_handler(message: types.Message):
 @dp.callback_query_handler(text='naod')
 async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     user_data = query.data
+    
     await query.answer(f'Você respondeu com {user_data!r}')
-    x = 4
+    x = 8
     if user_data == 'simd':
-             
+        if os.path.exists('Usuarios.txt') == False:
+            arquivo = open('Usuarios.txt', 'w+')
+            arquivo.close()
+        
+        if os.path.exists('Usuarioscartas.txt') == False:
+            arquivo = open('Usuarioscartas.txt', 'w+')
+            arquivo.close()
+
         while x > 0:
             arquivo = open('Usuarios.txt', 'r')
-
+            arquivo2 = open('Usuarioscartas.txt', 'a')
             for linha in arquivo:
                 userid = linha.split() 
                 send = random.randrange(0, x)
+
+                arquivo2.write(userid[0] + ' ' + tcartas[send] + "\n")
+
                 await bot.send_sticker(userid[0], tcartas[send])
                 x = x-1
                 del(tcartas[send])
             arquivo.close()
+            arquivo2.close()
+            #---------COMO OBTER AS CARTAS---------------
+            # arquivo2 = open('Usuarioscartas.txt', 'r')
+            # for linha in arquivo2:
+            #     ucarta = linha.split()
+            #     print(ucarta[0]+ ' Recebeu a carta '+ ucarta[1])
+            # arquivo.close()
     else:
         texto1 = f'Entrada não esperada: {user_data!r}!'
 
