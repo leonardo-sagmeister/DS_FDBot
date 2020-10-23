@@ -56,6 +56,7 @@ async def send_welcome(message: types.Message):
 
 
 @dp.message_handler(commands='carta') 
+#Serve para o player ver quais cartas tem em mãos (ainda não sei como coddar isso, HELP!)
 async def start_cmd_handler(message: types.Message):
     keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
 
@@ -69,6 +70,22 @@ async def start_cmd_handler(message: types.Message):
     keyboard_markup.row(*cbotao)
     
     await message.reply("Deseja distribuir as cartas agora?", reply_markup=keyboard_markup)
+
+#Rafael novo-codigo    
+# @dp.message_handler(commands='verCarta') 
+# async def start_cmd_handler(message: types.Message):
+#     keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
+
+#     tVisualisar = (
+#         ('Acessar carta', 'simV'),
+#         ('Não acessar carta', 'naoV'),
+#     )
+
+#     cVer = (types.InlineKeyboardButton(ctex, callback_data=cdat) for ctex, cdat in ctexto)
+
+#     keyboard_markup.row(*cVer)
+    
+#     await message.reply("Deseja ver sua mão de carta?", reply_markup=keyboard_markup)
 
 @dp.callback_query_handler(text='simd')
 @dp.callback_query_handler(text='naod')
@@ -101,16 +118,21 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             arquivo.close()
             arquivo2.close()
             #---------COMO OBTER AS CARTAS---------------
-            # arquivo2 = open('Usuarioscartas.txt', 'r')
-            # for linha in arquivo2:
-            #     ucarta = linha.split()
-            #     print(ucarta[0]+ ' Recebeu a carta '+ ucarta[1])
-            # arquivo.close()
+            arquivo2 = open('Usuarioscartas.txt', 'r')
+            for linha in arquivo2:
+                ucarta = linha.split()
+                print(ucarta[0]+ ' Recebeu a carta '+ ucarta[1])
+            arquivo.close()
     else:
         texto1 = f'Entrada não esperada: {user_data!r}!'
-
-
+     
+#Rafael novo-codigo
+# @dp.callback_query_handler(text='simV')
+# @dp.callback_query_handler(text='naoV')
+# async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
+#     user_data = query.data
     
+#     await query.answer(f'Você respondeu com {user_data!r}')    
     
 
 
