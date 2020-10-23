@@ -42,7 +42,7 @@ qouros = "CAACAgEAAxkBAAOmX40sOPFAdYBPehbVg7g2Mafe8n8AAhcAA4IVFjabn8s4CMkHnBsE"
 
 zap>copas>espadilha>ouros7>joker>paus3>copas3>espadas3>ouros3>paus2>copas2>espadas2>ouros2>aspaus>ascopas>asouros>kpaus>kcopas>kespadas>kouros>jpaus>jcopas>jespadas>jouros>qpaus>qcopas>qespadas>qouros
 
-tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3]#, ouros3, paus2, copas2, espadas2, ouros2, aspaus, ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros]
+tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus, ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros]
 
 rcarta = []
 @dp.message_handler(commands=['start', 'help', 'Ola'])
@@ -76,7 +76,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     user_data = query.data
     
     await query.answer(f'Você respondeu com {user_data!r}')
-    x = 8
+    x = 28
     if user_data == 'simd':
         if os.path.exists('Usuarios.txt') == False:
             arquivo = open('Usuarios.txt', 'w+')
