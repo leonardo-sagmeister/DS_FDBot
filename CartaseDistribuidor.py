@@ -76,7 +76,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     user_data = query.data
     
     await query.answer(f'Você respondeu com {user_data!r}')
-    x = 28
+    ncartas = 28
     if user_data == 'simd':
         if os.path.exists('Usuarios.txt') == False:
             arquivo = open('Usuarios.txt', 'w+')
@@ -86,17 +86,17 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             arquivo = open('Usuarioscartas.txt', 'w+')
             arquivo.close()
 
-        while x > 0:
+        while ncartas > 0:
             arquivo = open('Usuarios.txt', 'r')
             arquivo2 = open('Usuarioscartas.txt', 'a')
             for linha in arquivo:
                 userid = linha.split() 
-                send = random.randrange(0, x)
+                send = random.randrange(0, ncartas)
 
                 arquivo2.write(userid[0] + ' ' + tcartas[send] + "\n")
 
                 await bot.send_sticker(userid[0], tcartas[send])
-                x = x-1
+                ncartas = ncartas-1
                 del(tcartas[send])
             arquivo.close()
             arquivo2.close()
