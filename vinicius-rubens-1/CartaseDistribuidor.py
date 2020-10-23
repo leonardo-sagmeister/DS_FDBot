@@ -42,7 +42,7 @@ qouros = "CAACAgEAAxkBAAOmX40sOPFAdYBPehbVg7g2Mafe8n8AAhcAA4IVFjabn8s4CMkHnBsE"
 
 zap>copas>espadilha>ouros7>joker>paus3>copas3>espadas3>ouros3>paus2>copas2>espadas2>ouros2>aspaus>ascopas>asouros>kpaus>kcopas>kespadas>kouros>jpaus>jcopas>jespadas>jouros>qpaus>qcopas>qespadas>qouros
 
-tcartas = [zap, copas, espadilha, ouros7]  # joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus, ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros]
+tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus, ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros]
 
 rcarta = []
 @dp.message_handler(commands=['start', 'help', 'Ola'])
@@ -75,19 +75,30 @@ async def start_cmd_handler(message: types.Message):
 async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     user_data = query.data
     await query.answer(f'Você respondeu com {user_data!r}')
-    x = 4
+    ncartas = 28
     if user_data == 'simd':
              
-        while x > 0:
+        while ncartas > 0:
             arquivo = open('Usuarios.txt', 'r')
-            arquivoids = open('idsusuarios.txt', 'a')
+            arquivo2 = open('Usuarioscartas.txt', 'a')
             for linha in arquivo:
                 userid = linha.split() 
-                send = random.randrange(0, x)
+                send = random.randrange(0, ncartas)
+
+                arquivo2.write(userid[0] + ' ' + tcartas[send] + "\n")
+
+
                 await bot.send_sticker(userid[0], tcartas[send])
                 del (tcartas[send])  
-                x = x-1
+                ncartas = ncartas-1
             arquivo.close()
+            arquivo2.close()
+            #---------COMO OBTER AS CARTAS---------------
+            # arquivo2 = open('Usuarioscartas.txt', 'r')
+            # for linha in arquivo2:
+            #     ucarta = linha.split()
+            #     print(ucarta[0]+ ' Recebeu a carta '+ ucarta[1])
+            # arquivo.close()
     else:
         texto1 = f'Entrada não esperada: {user_data!r}!'
     
