@@ -9,7 +9,7 @@ import logging, os.path, random
 
 from aiogram import Bot, Dispatcher, executor, types
 
-API_TOKEN = '1217146552:AAHnCqhnKifnogXmDz6ZC2i1qXTSOF-KfMg'
+API_TOKEN = '1194976667:AAGrxoVyWVWjvVJL4EA2bvjxdglaVwTmytM'
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
