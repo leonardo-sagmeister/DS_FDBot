@@ -116,11 +116,11 @@ zap>copas>espadilha>ouros7>joker>paus3>copas3>espadas3>ouros3>paus2>copas2>espad
 #Vetor contendo todas as cartas
 tcartas = [zap, copas, espadilha, ouros7, joker, paus3]#, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus, ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros]
 tcartascopia = [zap, copas, espadilha, ouros7, joker, paus3]
-namecartas = ["zap", "copas", "espadilha", "7 de ouros", "joker", "3 de paus"]
+namecartas = ["zap", "copas", "espadilha", "7 de ouros", "joker", "3 de paus"]#"3 de copas", "3 de espadas", "3 de ouros", "2 de copas", "2 de espadas", "2 de ouros", "as de paus", "as de copas","Rei de paus", "Rei de copas", "Rei de espadas", "Rei de ouros", "Valete de paus", "Valete de copas","Valegte de espadas", "Valete de ouros", "Rainha de paus", "Rainha de copas", "Rainha de espadas", "Rainha de ouros"
 #Carta recebida
 rcarta = []
 
-@dp.message_handler(commands='carta') 
+@dp.message_handler(commands='carta') #Aciona o botao de distribuir as cartas
 async def start_cmd_handler(message: types.Message):
     keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
 
@@ -163,52 +163,18 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             arquivo.close()
             arquivo2.close()
             #---------COMO OBTER AS CARTAS---------------
-            # arquivo2 = open('Usuarioscartas.txt', 'r')
-            # for linha in arquivo2:
-            #     ucarta = linha.split()
-            #     print(ucarta[0]+ ' Recebeu a carta '+ ucarta[1])
-            # arquivo.close()
+            arquivo2 = open('Usuarioscartas.txt', 'r')
+            for linha in arquivo2:
+                ucarta = linha.split()
+                print(ucarta[0]+ ' Recebeu a carta '+ ucarta[1])
+            arquivo.close()
     else:
         texto1 = f'Entrada não esperada: {user_data!r}!'
 
-# @dp.message_handler(commands='rcarta') 
-# async def start_cmd_handler(message: types.Message):
-#     arquivo = open('Usuarioscartas.txt', 'r')
-#     for linha in arquivo: #Lendo os arquivo que tem as cartas
-#         usercarddata = linha.split() #Lendo linha por linha
-#         usercardid = usercarddata[0] #Primeiro bloco da minha
-#         usercard = usercarddata[1] #Segundo bloco da linha
-#         i = 0
-#         cartas = 4
-#         while i < cartas: #Gambira para debug
-#             # print(str(tcartas[i]))
-#             if usercard == str(tcartas[i]): 
-#                 # await bot.send_message(usercardid, "Você recebeu a carta: " + namecartas[i])
-#                 await message.reply("Sua carta é: " + namecartas[i])
-#             i = i+1
-#         #await bot.send_message(usercardid, "Escolha a carta que você deseja enviar: ")
-
-
-@dp.message_handler(commands='rcarta') 
+@dp.message_handler(commands='vercarta') #Aciona o botão ver carta
 async def start_cmd_handler(message: types.Message):
     keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
     
-    # arquivo = open('Usuarioscartas.txt', 'r')
-    # for linha in arquivo: #Lendo os arquivo que tem as cartas
-    #     usercarddata = linha.split() #Lendo linha por linha
-    #     usercardid = usercarddata[0] #Primeiro bloco da minha
-    #     usercard = usercarddata[1] #Segundo bloco da linha
-    #     i = 0
-    #     cartas = 4
-    #     while i < cartas: #Gambira para debug
-    #         # print(str(tcartas[i]))
-    #         if usercard == str(tcartas[i]): 
-    #             ctexto = (
-    #                 (tcartas[i], tcartas[i]),
-    #             )
-    #         i = i+1
-
-
     ctexto = (
         ('Sim, ver', 'simv'),
         ('Não ver', 'naov'),
@@ -232,7 +198,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
         usercardid = usercarddata[0] #Primeiro bloco da minha
         usercard = usercarddata[1] #Segundo bloco da linha
         i = 0
-        ###
+       
         cartas = 6
         while i < cartas: #Gambira para debug
             # print(str(tcartas[i]))
@@ -243,6 +209,52 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     else:
         texto1 = f'Entrada não esperada: {user_data!r}!'
 
+# @dp.message_handler(commands='enviarc') #Aciona o botao de enviar cartas
+# async def start_cmd_handler(message: types.Message):
+#     keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
+    
+#     envioC = (
+#         ('zap', 'zp'),
+#         ('copas','cs'),
+#         ('espadilha','ea'),
+#         ('7 de ouros', '7os'),
+#         ('joker', 'jr'),
+#         ('3 de paus','3ps'),
+#         ('3 de copas', '3cs'),
+#         ('3 de espadas', '3es'),
+#         ('3 de ouros', '3os'),
+#         ('2 de copas', '2cs'),
+#         ('2 de espadas', '2es'),
+#         ('2 de ouros','2os'),
+#         ('as de paus', 'aps'),
+#         ('as de copas','acs'),
+#         ('Rei de paus', 'reps'),
+#         ('Rei de copas', 'recs'),
+#         ('Rei de espadas','rees'),
+#         ('Rei de ouros', 'reos'),
+#         ('Valete de paus', 'vps'),
+#         ('Valete de copas', 'vcs'),
+#         ('Valete de espadas', 'ves'),
+#         ('Valete de ouros', 'vos'),
+#         ('Rainha de paus','raps'),
+#         ('Rainha de copas', 'racs'),
+#         ('Rainha de espadas', 'raes'),
+#         ('Rainha de ouros', 'raos'),
+#     )
+
+#     cbotao = (types.InlineKeyboardButton(ctex, callback_data=cdat) for ctex, cdat in envioC)
+
+#     keyboard_markup.row(*cbotao)
+    
+#     await message.reply("Deseja ver cartas agora?", reply_markup=keyboard_markup)
+
+
+# @dp.callback_query_handler(text='simv')
+# @dp.callback_query_handler(text='naov')
+# async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
+#     user_data = query.data
+#     await query.answer(f'Você respondeu com {user_data!r}')
+    
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
