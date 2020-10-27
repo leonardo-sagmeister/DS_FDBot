@@ -1,8 +1,15 @@
-import logging, random, os.path
+"""
+This is a echo bot.
+It echoes any incoming text messages.
+"""
+
+#Utilize CTRL+C no terminal para encerrar o bot
+
+import logging, os.path, random
 
 from aiogram import Bot, Dispatcher, executor, types
 
-API_TOKEN = '1255502823:AAFduKDPX5DJEkIio5xPG8fYRpHCse55Ba4'
+API_TOKEN = '1217146552:AAHnCqhnKifnogXmDz6ZC2i1qXTSOF-KfMg'
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -10,7 +17,72 @@ logging.basicConfig(level=logging.INFO)
 # Initialize bot and dispatcher
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
+i = 0
 
+@dp.message_handler(commands=['start', 'help', 'Ola'])
+async def send_welcome(message: types.Message):
+    """
+    This handler will be called when user sends `/start` or `/help` command
+    """
+    await message.reply("Olá!\nEu sou o FDPBOT!\nDesenvolvido pela FDBot Developer Team.\nÉ muito legal ter você aqui comigo :)"
+    "\nEu utilizo a API da aiogram,\nVocê pode consulta-la aqui: https://docs.aiogram.dev/en/latest/index.html")
+    
+
+@dp.message_handler(commands='join') 
+async def start_cmd_handler(message: types.Message):
+    keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
+
+    texto = (
+        ('SIM!', 'sim'),
+        ('NÃO!', 'nao'),
+    )
+
+    rbotao = (types.InlineKeyboardButton(tex, callback_data=dat) for tex, dat in texto)
+
+    keyboard_markup.row(*rbotao)
+    
+    await message.reply("Deseja participar do game?", reply_markup=keyboard_markup)   
+
+@dp.callback_query_handler(text='sim')
+@dp.callback_query_handler(text='nao')
+async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
+    user_data = query.data
+    cont = 0
+    await query.answer(f'Você respondeu com {user_data!r}')
+
+    if user_data == 'sim':
+
+        if os.path.exists('Usuarios.txt') == False:
+            arquivo = open('Usuarios.txt', 'w+')
+            arquivo.close()
+           
+        arquivo = open('Usuarios.txt', 'r')
+        linha = arquivo.readline()
+
+        while linha:
+
+            if linha == (str(query.from_user.id) + " " + str(query.from_user.full_name) + "\n"):
+                cont = 1
+            
+            linha = arquivo.readline()
+        arquivo.close
+        arquivo = open('Usuarios.txt', 'a')
+        #arquivo.write(str(query.from_user.id) + "\n")
+        if cont != 1:
+            arquivo.write(str(query.from_user.id) + " " + str(query.from_user.full_name) + "\n")
+            texto1 = "TOP DEMAIS MANO, BORA JOGAR!"
+        elif cont == 1:
+            texto1 = "VOCE JA ESTA JOGANDO!"
+        arquivo.close
+    elif user_data == 'nao':
+        texto1 = "BELEZA, NÃO AGUENTA PERDER NÉ?"
+    else:
+        texto1 = f'Entrada não esperada: {user_data!r}!'
+    
+    await bot.send_message(query.from_user.id, texto1)
+
+
+#Atribuindo o código da figurinha as variaveis de cartas
 zap = "CAACAgEAAxkBAAOjX40im97tNxuWNUKwOU8-5vyYAAE6AAIhAAOCFRY2Ezylu98G3FIbBA"
 copas = "CAACAgEAAxkBAAOkX40iuVC-sD4RxSxxWknzswbPmikAAg4AA4IVFjadPcs09HwT6xsE"
 espadilha = "CAACAgEAAxkBAAO1X43J8Gqs5fML2F4Qbvv5ScBMMwgAAhEAA4IVFjaCjVIgaC0x-BsE"
@@ -39,24 +111,16 @@ qpaus = "CAACAgEAAxkBAAOpX40sckXcTuBRRaEyzlfo8fSUxgUAAhgAA4IVFjaw8Fiu2L4LKBsE"
 qcopas = "CAACAgEAAxkBAAOnX40sUryRoFxrvS_7AUfHs_xweOYAAhUAA4IVFjb_txkWAUYo5BsE"
 qespadas = "CAACAgEAAxkBAAOlX40sIalN2qnz13Mn32ftAAFC0CEiAAIWAAOCFRY2qrzrD-YUiI0bBA"
 qouros = "CAACAgEAAxkBAAOmX40sOPFAdYBPehbVg7g2Mafe8n8AAhcAA4IVFjabn8s4CMkHnBsE"
-
+#Atribuindo valor as cartas
 zap>copas>espadilha>ouros7>joker>paus3>copas3>espadas3>ouros3>paus2>copas2>espadas2>ouros2>aspaus>ascopas>asouros>kpaus>kcopas>kespadas>kouros>jpaus>jcopas>jespadas>jouros>qpaus>qcopas>qespadas>qouros
-
-tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus, ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros]
-
+#Vetor contendo todas as cartas
+tcartas = [zap, copas, espadilha, ouros7, joker, paus3]#, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus, ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros]
+tcartascopia = [zap, copas, espadilha, ouros7, joker, paus3]
+namecartas = ["zap", "copas", "espadilha", "7 de ouros", "joker", "3 de paus"]
+#Carta recebida
 rcarta = []
-@dp.message_handler(commands=['start', 'help', 'Ola'])
-async def send_welcome(message: types.Message):
-    """
-    This handler will be called when user sends `/start` or `/help` command
-    """
-    await message.reply("Olá!\nEu sou o FDPBOT!\nDesenvolvido pela FDBot Developer Team.\nÉ muito legal ter você aqui comigo :)"
-    "\nEu utilizo a API da aiogram,\nVocê pode consulta-la aqui: https://docs.aiogram.dev/en/latest/index.html")
-    
-
 
 @dp.message_handler(commands='carta') 
-#Serve para o player ver quais cartas tem em mãos (ainda não sei como coddar isso, HELP!)
 async def start_cmd_handler(message: types.Message):
     keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
 
@@ -71,37 +135,16 @@ async def start_cmd_handler(message: types.Message):
     
     await message.reply("Deseja distribuir as cartas agora?", reply_markup=keyboard_markup)
 
-#Rafael novo-codigo    
-# @dp.message_handler(commands='verCarta') 
-# async def start_cmd_handler(message: types.Message):
-#     keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
-
-#     tVisualisar = (
-#         ('Acessar carta', 'simV'),
-#         ('Não acessar carta', 'naoV'),
-#     )
-
-#     cVer = (types.InlineKeyboardButton(ctex, callback_data=cdat) for ctex, cdat in ctexto)
-
-#     keyboard_markup.row(*cVer)
-    
-#     await message.reply("Deseja ver sua mão de carta?", reply_markup=keyboard_markup)
-
 @dp.callback_query_handler(text='simd')
 @dp.callback_query_handler(text='naod')
 async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     user_data = query.data
-    
     await query.answer(f'Você respondeu com {user_data!r}')
-    ncartas = 28
+    ncartas = 6
     if user_data == 'simd':
-        if os.path.exists('Usuarios.txt') == False:
-            arquivo = open('Usuarios.txt', 'w+')
-            arquivo.close()
-        
         if os.path.exists('Usuarioscartas.txt') == False:
-            arquivo = open('Usuarioscartas.txt', 'w+')
-            arquivo.close()
+            arquivo2 = open('Usuarioscartas.txt', 'w+')
+            arquivo2.close() 
 
         while ncartas > 0:
             arquivo = open('Usuarios.txt', 'r')
@@ -112,28 +155,92 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
                 arquivo2.write(userid[0] + ' ' + tcartas[send] + "\n")
 
+
                 await bot.send_sticker(userid[0], tcartas[send])
+
+                del (tcartas[send])  
                 ncartas = ncartas-1
-                del(tcartas[send])
             arquivo.close()
             arquivo2.close()
             #---------COMO OBTER AS CARTAS---------------
-            arquivo2 = open('Usuarioscartas.txt', 'r')
-            for linha in arquivo2:
-                ucarta = linha.split()
-                print(ucarta[0]+ ' Recebeu a carta '+ ucarta[1])
-            arquivo.close()
+            # arquivo2 = open('Usuarioscartas.txt', 'r')
+            # for linha in arquivo2:
+            #     ucarta = linha.split()
+            #     print(ucarta[0]+ ' Recebeu a carta '+ ucarta[1])
+            # arquivo.close()
     else:
         texto1 = f'Entrada não esperada: {user_data!r}!'
-     
-#Rafael novo-codigo
-# @dp.callback_query_handler(text='simV')
-# @dp.callback_query_handler(text='naoV')
-# async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
-#     user_data = query.data
+
+# @dp.message_handler(commands='rcarta') 
+# async def start_cmd_handler(message: types.Message):
+#     arquivo = open('Usuarioscartas.txt', 'r')
+#     for linha in arquivo: #Lendo os arquivo que tem as cartas
+#         usercarddata = linha.split() #Lendo linha por linha
+#         usercardid = usercarddata[0] #Primeiro bloco da minha
+#         usercard = usercarddata[1] #Segundo bloco da linha
+#         i = 0
+#         cartas = 4
+#         while i < cartas: #Gambira para debug
+#             # print(str(tcartas[i]))
+#             if usercard == str(tcartas[i]): 
+#                 # await bot.send_message(usercardid, "Você recebeu a carta: " + namecartas[i])
+#                 await message.reply("Sua carta é: " + namecartas[i])
+#             i = i+1
+#         #await bot.send_message(usercardid, "Escolha a carta que você deseja enviar: ")
+
+
+@dp.message_handler(commands='rcarta') 
+async def start_cmd_handler(message: types.Message):
+    keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
     
-#     await query.answer(f'Você respondeu com {user_data!r}')    
+    # arquivo = open('Usuarioscartas.txt', 'r')
+    # for linha in arquivo: #Lendo os arquivo que tem as cartas
+    #     usercarddata = linha.split() #Lendo linha por linha
+    #     usercardid = usercarddata[0] #Primeiro bloco da minha
+    #     usercard = usercarddata[1] #Segundo bloco da linha
+    #     i = 0
+    #     cartas = 4
+    #     while i < cartas: #Gambira para debug
+    #         # print(str(tcartas[i]))
+    #         if usercard == str(tcartas[i]): 
+    #             ctexto = (
+    #                 (tcartas[i], tcartas[i]),
+    #             )
+    #         i = i+1
+
+
+    ctexto = (
+        ('Sim, ver', 'simv'),
+        ('Não ver', 'naov'),
+    )
+
+    cbotao = (types.InlineKeyboardButton(ctex, callback_data=cdat) for ctex, cdat in ctexto)
+
+    keyboard_markup.row(*cbotao)
     
+    await message.reply("Deseja ver cartas agora?", reply_markup=keyboard_markup)
+
+
+@dp.callback_query_handler(text='simv')
+@dp.callback_query_handler(text='naov')
+async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
+    user_data = query.data
+    await query.answer(f'Você respondeu com {user_data!r}')
+    arquivo = open('Usuarioscartas.txt', 'r')
+    for linha in arquivo: #Lendo os arquivo que tem as cartas
+        usercarddata = linha.split() #Lendo linha por linha
+        usercardid = usercarddata[0] #Primeiro bloco da minha
+        usercard = usercarddata[1] #Segundo bloco da linha
+        i = 0
+        cartas = 6
+        while i < cartas: #Gambira para debug
+            # print(str(tcartas[i]))
+            if usercard == str(tcartascopia[i]):
+                if usercardid == str(query.from_user.id): 
+                    await bot.send_message(query.from_user.id, namecartas[i])
+            i = i+1
+    else:
+        texto1 = f'Entrada não esperada: {user_data!r}!'
 
 
 if __name__ == '__main__':
