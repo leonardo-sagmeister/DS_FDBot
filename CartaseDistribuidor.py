@@ -232,6 +232,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
         usercardid = usercarddata[0] #Primeiro bloco da minha
         usercard = usercarddata[1] #Segundo bloco da linha
         i = 0
+        ##
         cartas = 6
         while i < cartas: #Gambira para debug
             # print(str(tcartas[i]))
