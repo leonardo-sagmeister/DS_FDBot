@@ -1,15 +1,10 @@
-"""
-This is a echo bot.
-It echoes any incoming text messages.
-"""
-
 #Utilize CTRL+C no terminal para encerrar o bot
 
 import logging, os.path, random
 
 from aiogram import Bot, Dispatcher, executor, types
 
-API_TOKEN = '1217146552:AAHnCqhnKifnogXmDz6ZC2i1qXTSOF-KfMg'
+API_TOKEN = '1194976667:AAGrxoVyWVWjvVJL4EA2bvjxdglaVwTmytM'
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -167,4 +162,3 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
-    
