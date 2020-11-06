@@ -195,8 +195,8 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     arquivo = open('Usuarioscartas.txt', 'r')
     for linha in arquivo: #Lendo os arquivo que tem as cartas
         usercarddata = linha.split() #Lendo linha por linha
-        usercardid = usercarddata[0] #Primeiro bloco da minha
-        usercard = usercarddata[1] #Segundo bloco da linha
+        usercardid = usercarddata[0] #ID usuário
+        usercard = usercarddata[1] #Código da carta
         i = 0
        
         cartas = 6
@@ -239,37 +239,20 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     user_data_naipe = query.data
     await query.answer(f'Você respondeu com {user_data_naipe!r}')
     
+    u ={}
+
+    arquivo = open('Usuarioscartas.txt', 'r')
     
-    # if user_data_naipe == 'zap' || user_data_naipe == 'coringa':
-    #     carta_selecionada = user_data_naipe
-
-    # else:
-
-    #     keyboard_markup = types.InlineKeyboardMarkup(row_width=7)
+    for linha in arquivo: #Lendo os arquivo que tem as cartas
+        usercarddata = linha.split() #Lendo linha por linha
+        if usercarddata[0] not in u:
+            u[usercarddata[0]] = list()
+        u[usercarddata[0]].append(usercarddata[1])
         
-    #     envioCvalor = (
-    #         ('A', 'as'),
-    #         ('2', 'dois'),
-    #         ('3', 'tres'),
-    #         ('7', 'sete'),
-    #         ('J', 'valete'),
-    #         ('Q', 'dama'),
-    #         ('K', 'rei'),
-    #     )
-        
-    #     cbotao2 = (types.InlineKeyboardButton(ctex, callback_data=cdat) for ctex, cdat in envioCvalor)
+    for key, value in u.items():
+        await bot.send_message(key, value)
 
-    #     keyboard_markup.row(*cbotao2)
-        
-    #     await message.reply("Qual valor deseja selecionar?", reply_markup=keyboard_markup)
-
-    # @dp.callback_query_handler(text='as')
-    # @dp.callback_query_handler(text='dois')
-    # @dp.callback_query_handler(text='tres')
-    # @dp.callback_query_handler(text='sete')
-    # @dp.callback_query_handler(text='valete')
-    # @dp.callback_query_handler(text='dama')
-    # @dp.callback_query_handler(text='rei')
+    
 
 # async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 #     user_data_naipe = query.data
