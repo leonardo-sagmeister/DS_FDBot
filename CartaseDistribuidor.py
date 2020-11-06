@@ -209,52 +209,71 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     else:
         texto1 = f'Entrada não esperada: {user_data!r}!'
 
-# @dp.message_handler(commands='enviarc') #Aciona o botao de enviar cartas
-# async def start_cmd_handler(message: types.Message):
-#     keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
+@dp.message_handler(commands='enviarc') #Aciona o botao de enviar cartas
+async def start_cmd_handler(message: types.Message):
+    keyboard_markup = types.InlineKeyboardMarkup(row_width=6)
+
+    envioC = (
+        ('copas'),
+        ('espadas'),
+        ('ouros'),
+        ('paus'),
+        ('zap'),
+        ('coringa'),
+    )
+
+    cbotao = (types.InlineKeyboardButton(ctex, callback_data=cdat) for ctex, cdat in zip(envioC, envioC))
+
+    keyboard_markup.row(*cbotao)
+
+    await message.reply("Por Favor, selecione a carta desejada", reply_markup=keyboard_markup)
+
+
+@dp.callback_query_handler(text='copas')
+@dp.callback_query_handler(text='espadas')
+@dp.callback_query_handler(text='ouros')
+@dp.callback_query_handler(text='paus')
+@dp.callback_query_handler(text='zap')
+@dp.callback_query_handler(text='coringa')
+async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
+    user_data_naipe = query.data
+    await query.answer(f'Você respondeu com {user_data_naipe!r}')
     
-#     envioC = (
-#         ('zap', 'zp'),
-#         ('copas','cs'),
-#         ('espadilha','ea'),
-#         ('7 de ouros', '7os'),
-#         ('joker', 'jr'),
-#         ('3 de paus','3ps'),
-#         ('3 de copas', '3cs'),
-#         ('3 de espadas', '3es'),
-#         ('3 de ouros', '3os'),
-#         ('2 de copas', '2cs'),
-#         ('2 de espadas', '2es'),
-#         ('2 de ouros','2os'),
-#         ('as de paus', 'aps'),
-#         ('as de copas','acs'),
-#         ('Rei de paus', 'reps'),
-#         ('Rei de copas', 'recs'),
-#         ('Rei de espadas','rees'),
-#         ('Rei de ouros', 'reos'),
-#         ('Valete de paus', 'vps'),
-#         ('Valete de copas', 'vcs'),
-#         ('Valete de espadas', 'ves'),
-#         ('Valete de ouros', 'vos'),
-#         ('Rainha de paus','raps'),
-#         ('Rainha de copas', 'racs'),
-#         ('Rainha de espadas', 'raes'),
-#         ('Rainha de ouros', 'raos'),
-#     )
-
-#     cbotao = (types.InlineKeyboardButton(ctex, callback_data=cdat) for ctex, cdat in envioC)
-
-#     keyboard_markup.row(*cbotao)
     
-#     await message.reply("Deseja ver cartas agora?", reply_markup=keyboard_markup)
+    # if user_data_naipe == 'zap' || user_data_naipe == 'coringa':
+    #     carta_selecionada = user_data_naipe
 
+    # else:
 
-# @dp.callback_query_handler(text='simv')
-# @dp.callback_query_handler(text='naov')
+    #     keyboard_markup = types.InlineKeyboardMarkup(row_width=7)
+        
+    #     envioCvalor = (
+    #         ('A', 'as'),
+    #         ('2', 'dois'),
+    #         ('3', 'tres'),
+    #         ('7', 'sete'),
+    #         ('J', 'valete'),
+    #         ('Q', 'dama'),
+    #         ('K', 'rei'),
+    #     )
+        
+    #     cbotao2 = (types.InlineKeyboardButton(ctex, callback_data=cdat) for ctex, cdat in envioCvalor)
+
+    #     keyboard_markup.row(*cbotao2)
+        
+    #     await message.reply("Qual valor deseja selecionar?", reply_markup=keyboard_markup)
+
+    # @dp.callback_query_handler(text='as')
+    # @dp.callback_query_handler(text='dois')
+    # @dp.callback_query_handler(text='tres')
+    # @dp.callback_query_handler(text='sete')
+    # @dp.callback_query_handler(text='valete')
+    # @dp.callback_query_handler(text='dama')
+    # @dp.callback_query_handler(text='rei')
+
 # async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
-#     user_data = query.data
-#     await query.answer(f'Você respondeu com {user_data!r}')
-    
+#     user_data_naipe = query.data
+#     await query.answer(f'Você respondeu com {user_data_naipe!r}')
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
