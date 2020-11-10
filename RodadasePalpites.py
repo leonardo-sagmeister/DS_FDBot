@@ -1,6 +1,6 @@
-import logging
+import logging, random
 import os.path
-from time import sleep
+# from time import sleep
 from aiogram import Bot, Dispatcher, executor, types
 
 API_TOKEN = '1255502823:AAFduKDPX5DJEkIio5xPG8fYRpHCse55Ba4'
@@ -46,10 +46,9 @@ bw = "CAACAgEAAxkBAAIHC1-cQ4oGWhB8evXf5qsDI8jK2YpoAAIiAAOCFRY2xZv1cewnL-kbBA"
 # Atribuindo valor as cartas
 zap > copas > espadilha > ouros7 > joker > paus3 > copas3 > espadas3 > ouros3 > paus2 > copas2 > espadas2 > ouros2 > aspaus > ascopas > asouros > kpaus > kcopas > kespadas > kouros > jpaus > jcopas > jespadas > jouros > qpaus > qcopas > qespadas > qouros
 # Vetor contendo todas as cartas
-tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus,
-           ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros, bw]
-# Carta recebida
-rcarta = []
+# tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus,
+#            ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros, bw]
+
 
 
 @dp.message_handler(commands=['start', 'help', 'Ola'])
@@ -57,6 +56,9 @@ async def send_welcome(message: types.Message):
     """
     This handler will be called when user sends `/start` or `/help` command
     """
+    if os.path.exists('rodada.txt') == False:
+        arquivo = open('rodada.txt', 'w+')
+        arquivo.close()
     await message.reply("Olá!\nEu sou o FDPBOT!\nDesenvolvido pela FDBot Developer Team.\nÉ muito legal ter você aqui comigo :)"
                         "\nEu utilizo a API da aiogram,\nVocê pode consulta-la aqui: https://docs.aiogram.dev/en/latest/index.html, VOCE INICIOU O BOT")
 
@@ -102,7 +104,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             linha = arquivo.readline()
         arquivo.close
         arquivo = open('Usuarios.txt', 'a')
-        #arquivo.write(str(query.from_user.id) + "\n")
+
         if cont != 1:
             arquivo.write(str(query.from_user.id) + " " +
                           str(query.from_user.full_name) + "\n")
@@ -120,10 +122,24 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
 @dp.message_handler(commands='nrodada')
 async def criadorderodadas(message: types.Message):
+    tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus,
+           ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros, bw]
+    
     if os.path.exists('rodada.txt') == False:
         arquivo = open('rodada.txt', 'w+')
-        arquivou = open('Usuarios.txt', 'r')
-        arquivo.write('1')
+        arquivo.close()
+    
+    with open('rodada.txt') as f:
+        contagem = sum(1 for _ in f)
+    arquivo2 = open('Usuarioscartas.txt', 'a')
+    with open ('Usuarios.txt') as f:
+        players = sum(1 for _ in f)
+    if contagem == 0:
+        tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus,
+           ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros, bw]
+        arquivou = open ('Usuarios.txt', 'r')
+        arquivo = open ('rodada.txt', 'a')
+        arquivo.write('1\n')
         arquivo.close()
         keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
 
@@ -132,269 +148,366 @@ async def criadorderodadas(message: types.Message):
             ("1", "1"),
         )
         ctexto = (types.InlineKeyboardButton(ctex, callback_data=cdat)
-                  for ctex, cdat in cbotao)
+                    for ctex, cdat in cbotao)
 
         keyboard_markup.row(*ctexto)
-        await bot.send_sticker(907416962, bw)
+        ncartas = players
+        totcartas = 28
+        while ncartas > 0:
+
+            for linha in arquivou:
+                userid = linha.split() 
+                send = random.randrange(0, totcartas)
+
+                arquivo2.write(userid[0] + ' ' + tcartas[send] + "\n")
+                await message.reply_sticker(tcartas[send])
+                
+                del (tcartas[send])  
+                ncartas -=1
+                totcartas -=1
+
+        
         await message.reply("Quantas você vai fazer?", reply_markup=keyboard_markup)
+        arquivou.close()
+        arquivo2.close()
 
         @dp.callback_query_handler(text='0')
         @dp.callback_query_handler(text='1')
+        async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
+            verpalpite = 0
+            if os.path.exists('Usuariospalpites.txt') == False:
+                arquivo = open('Usuariospalpites.txt', 'w+')
+                arquivo.close()
+            user_data = query.data
+            await query.answer(f'Você respondeu com {user_data!r}')
+            with open('Usuariospalpites.txt') as f:
+                contagem = sum(1 for _ in f)
+            
+            if contagem > 0:
+                arquivo = open("Usuariospalpites.txt", "r")
+                for linha in arquivo:  
+                    ver = linha.split()
+                    if(str(query.from_user.id) == str(ver[0])):
+                        await bot.send_message(query.from_user.id, "Você já deu seu palpite, não tem volta haha")
+                        verpalpite = 1
+                arquivo.close()
+            if verpalpite == 0:
+                arquivo = open("Usuariospalpites.txt", "a")
+                arquivo.write(str(query.from_user.id) +" " + str(user_data)+ "\n")
+
+            arquivo = open("Usuariospalpites.txt", "r")
+            spalpites = 0
+            for palpite in arquivo:
+                userpalpite = palpite.split()
+                spalpites = int(userpalpite[1]) + spalpites
+            arquivo.close()
+            print(spalpites)
+
+    if contagem == 1:
+        tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus,
+           ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros, bw]
+        resetpalpite = open ('Usuariospalpites.txt', 'r+')
+        resetpalpite.truncate(0)
+        resetpalpite.close()
+        arquivou = open ('Usuarios.txt', 'r')
+        arquivo = open ('rodada.txt', 'a')
+        arquivo2 = open('Usuarioscartas.txt', 'a')
+        arquivo.write('2\n')
+        arquivo.close()
+        keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
+
+        cbotao = (
+            ("0", "0"),
+            ("1", "1"),
+            ("2", "2"),
+        )
+        ctexto = (types.InlineKeyboardButton(ctex, callback_data=cdat)
+                    for ctex, cdat in cbotao)
+        keyboard_markup.row(*ctexto)
+
+        lista = []
+        for linhas in arquivou:
+            userid = linhas.split()
+            lista.append(userid[0])
+            lista.append(userid[0])
+
+
+        ncartas = (2*players)
+        i = 0
+        totcartas = 28
+        while ncartas > 0:
+            send = random.randrange(0, totcartas)
+            arquivo2.write(lista[i] + ' ' + tcartas[send] + "\n")
+            await bot.send_sticker(lista[i], tcartas[send])
+            del (tcartas[send])
+            ncartas -= 1
+            i += 1
+            totcartas -= 1
+
+        await message.reply("Quantas você vai fazer?", reply_markup=keyboard_markup)
+        arquivou.close()
+        arquivo2.close()
+
+        @dp.callback_query_handler(text='0')
+        @dp.callback_query_handler(text='1')
+        @dp.callback_query_handler(text='2')
         async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             if os.path.exists('Usuariospalpites.txt') == False:
                 arquivo = open('Usuariospalpites.txt', 'w+')
                 arquivo.close()
             user_data = query.data
             await query.answer(f'Você respondeu com {user_data!r}')
-            if user_data == '0':
-                arquivo = open("Usuariospalpites.txt", "a")
-                arquivo.write(str(query.from_user.id) + " " + str(user_data))
-                arquivo.close()
-            if user_data == '1':
-                arquivo = open("Usuariospalpites.txt", "a")
-                arquivo.write(str(query.from_user.id) + " " + str(user_data))
-                arquivo.close()
-    elif os.path.exists('rodada.txt') == True:
-        arquivo = open('rodada.txt', 'r')
-        # linha = arquivo.readline()
-        for linha in arquivo:
-            if linha == '1':
-                arquivo.close()
-                print("ENTROU AQUI E APAGOU O ARQUIVO")
-                arquivo2 = open('rodada.txt', 'w+')
-                arquivo2.write('2')
-                arquivo2.close()
-                keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
-
-                cbotao = (
-                    ("0", "0"),
-                    ("1", "1"),
-                    ("2", "2"),
-                )
-                ctexto = (types.InlineKeyboardButton(ctex, callback_data=cdat)
-                          for ctex, cdat in cbotao)
-
-                keyboard_markup.row(*ctexto)
-
-                await message.reply("Quantas você vai fazer?", reply_markup=keyboard_markup)
-
-                @dp.callback_query_handler(text='0')
-                @dp.callback_query_handler(text='1')
-                @dp.callback_query_handler(text='2')
-                async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
-                    if os.path.exists('Usuariospalpites.txt') == False:
-                        arquivo = open('Usuariospalpites.txt', 'w+')
-                        arquivo.close()
-                    user_data = query.data
-                    await query.answer(f'Você respondeu com {user_data!r}')
-                    if user_data == '0':
-                        arquivo = open("Usuariospalpites.txt", "a")
-                        arquivo.write(str(query.from_user.id) +
-                                      " " + str(user_data))
-                        arquivo.close()
-                    if user_data == '1':
-                        arquivo = open("Usuariospalpites.txt", "a")
-                        arquivo.write(str(query.from_user.id) +
-                                      " " + str(user_data))
-                        arquivo.close()
-                    if user_data == '2':
-                        arquivo = open("Usuariospalpites.txt", "a")
-                        arquivo.write(str(query.from_user.id) +
-                                      " " + str(user_data))
-                        arquivo.close()
-            elif linha == '2':
-                arquivo.close()
-                print("ENTROU AQUI E APAGOU O ARQUIVO")
-                arquivo2 = open('rodada.txt', 'w+')
-                arquivo2.write('3')
-                arquivo2.close()
-                keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
-
-                cbotao = (
-                    ("0", "0"),
-                    ("1", "1"),
-                    ("2", "2"),
-                    ("3", "3"),
-                )
-                ctexto = (types.InlineKeyboardButton(ctex, callback_data=cdat)
-                          for ctex, cdat in cbotao)
-
-                keyboard_markup.row(*ctexto)
-
-                await message.reply("Quantas você vai fazer?", reply_markup=keyboard_markup)
-
-                @dp.callback_query_handler(text='0')
-                @dp.callback_query_handler(text='1')
-                @dp.callback_query_handler(text='2')
-                @dp.callback_query_handler(text='3')
-                async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
-                    if os.path.exists('Usuariospalpites.txt') == False:
-                        arquivo = open('Usuariospalpites.txt', 'w+')
-                        arquivo.close()
-                    user_data = query.data
-                    await query.answer(f'Você respondeu com {user_data!r}')
-                    if user_data == '0':
-                        arquivo = open("Usuariospalpites.txt", "a")
-                        arquivo.write(str(query.from_user.id) +
-                                      " " + str(user_data))
-                        arquivo.close()
-                    if user_data == '1':
-                        arquivo = open("Usuariospalpites.txt", "a")
-                        arquivo.write(str(query.from_user.id) +
-                                      " " + str(user_data))
-                        arquivo.close()
-                    if user_data == '2':
-                        arquivo = open("Usuariospalpites.txt", "a")
-                        arquivo.write(str(query.from_user.id) +
-                                      " " + str(user_data))
-                        arquivo.close()
-                    if user_data == '3':
-                        arquivo = open("Usuariospalpites.txt", "a")
-                        arquivo.write(str(query.from_user.id) +
-                                      " " + str(user_data))
-                        arquivo.close()
-            elif linha == '3':
-                arquivo.close()
-                print("ENTROU AQUI E APAGOU O ARQUIVO")
-                arquivo2 = open('rodada.txt', 'w+')
-                arquivo2.write('4')
-                arquivo2.close()
-                keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
-
-                cbotao = (
-                    ("0", "0"),
-                    ("1", "1"),
-                    ("2", "2"),
-                    ("3", "3"),
-                    ("4", "4"),
-                )
-                ctexto = (types.InlineKeyboardButton(ctex, callback_data=cdat)
-                          for ctex, cdat in cbotao)
-
-                keyboard_markup.row(*ctexto)
-
-                await message.reply("Quantas você vai fazer?", reply_markup=keyboard_markup)
-
-                @dp.callback_query_handler(text='0')
-                @dp.callback_query_handler(text='1')
-                @dp.callback_query_handler(text='2')
-                @dp.callback_query_handler(text='3')
-                @dp.callback_query_handler(text='4')
-                async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
-                    if os.path.exists('Usuariospalpites.txt') == False:
-                        arquivo = open('Usuariospalpites.txt', 'w+')
-                        arquivo.close()
-                    user_data = query.data
-                    await query.answer(f'Você respondeu com {user_data!r}')
-                    if user_data == '0':
-                        arquivo = open("Usuariospalpites.txt", "a")
-                        arquivo.write(str(query.from_user.id) +
-                                      " " + str(user_data))
-                        arquivo.close()
-                    if user_data == '1':
-                        arquivo = open("Usuariospalpites.txt", "a")
-                        arquivo.write(str(query.from_user.id) +
-                                      " " + str(user_data))
-                        arquivo.close()
-                    if user_data == '2':
-                        arquivo = open("Usuariospalpites.txt", "a")
-                        arquivo.write(str(query.from_user.id) +
-                                      " " + str(user_data))
-                        arquivo.close()
-                    if user_data == '3':
-                        arquivo = open("Usuariospalpites.txt", "a")
-                        arquivo.write(str(query.from_user.id) +
-                                      " " + str(user_data))
-                        arquivo.close()
-                    if user_data == '4':
-                        arquivo = open("Usuariospalpites.txt", "a")
-                        arquivo.write(str(query.from_user.id) +
-                                      " " + str(user_data))
-                        arquivo.close()
-            elif linha == '4':
-                arquivo.close()
-                print("ENTROU AQUI E APAGOU O ARQUIVO")
-                arquivo2 = open('rodada.txt', 'w+')
-                arquivo2.write('5')
-                arquivo2.close()
-                keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
-
-                cbotao = (
-                    ("0", "0"),
-                    ("1", "1"),
-                    ("2", "2"),
-                    ("3", "3"),
-                    ("4", "4"),
-                    ("5", "5"),
-                )
-                ctexto = (types.InlineKeyboardButton(ctex, callback_data=cdat)
-                          for ctex, cdat in cbotao)
-
-                keyboard_markup.row(*ctexto)
-
-                await message.reply("Quantas você vai fazer?", reply_markup=keyboard_markup)
-
-                @dp.callback_query_handler(text='0')
-                @dp.callback_query_handler(text='1')
-                @dp.callback_query_handler(text='2')
-                @dp.callback_query_handler(text='3')
-                @dp.callback_query_handler(text='4')
-                @dp.callback_query_handler(text='5')
-                async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
-                    if os.path.exists('Usuariospalpites.txt') == False:
-                        arquivo = open('Usuariospalpites.txt', 'w+')
-                        arquivo.close()
-                    user_data = query.data
-                    await query.answer(f'Você respondeu com {user_data!r}')
-                    if user_data == '0':
-                        arquivo = open("Usuariospalpites.txt", "a")
-                        arquivo.write(str(query.from_user.id) +
-                                      " " + str(user_data))
-                        arquivo.close()
-                    if user_data == '1':
-                        arquivo = open("Usuariospalpites.txt", "a")
-                        arquivo.write(str(query.from_user.id) +
-                                      " " + str(user_data))
-                        arquivo.close()
-                    if user_data == '2':
-                        arquivo = open("Usuariospalpites.txt", "a")
-                        arquivo.write(str(query.from_user.id) +
-                                      " " + str(user_data))
-                        arquivo.close()
-                    if user_data == '3':
-                        arquivo = open("Usuariospalpites.txt", "a")
-                        arquivo.write(str(query.from_user.id) +
-                                      " " + str(user_data))
-                        arquivo.close()
-                    if user_data == '4':
-                        arquivo = open("Usuariospalpites.txt", "a")
-                        arquivo.write(str(query.from_user.id) +
-                                      " " + str(user_data))
-                        arquivo.close()
-                    if user_data == '5':
-                        arquivo = open("Usuariospalpites.txt", "a")
-                        arquivo.write(str(query.from_user.id) +
-                                      " " + str(user_data))
-                        arquivo.close()
-            elif linha == '5':
-                arquivo.close()
-                print("ENTROU AQUI E APAGOU O ARQUIVO")
-                arquivo2 = open('rodada.txt', 'w+')
-                arquivo2.write('1')
-                arquivo2.close()
-                keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
-
-                cbotao = (
-                    ("0", "0"),
-                    ("1", "1"),
-                )
-                ctexto = (types.InlineKeyboardButton(ctex, callback_data=cdat)
-                          for ctex, cdat in cbotao)
-
-                keyboard_markup.row(*ctexto)
-
-                await message.reply("Quantas você vai fazer?", reply_markup=keyboard_markup)
+            #Cadastrando palpite
+            arquivo = open("Usuariospalpites.txt", "a")
+            arquivo.write(str(query.from_user.id) +" " + str(user_data)+ "\n")
+            arquivo.close()
+            
+            arquivo = open("Usuariospalpites.txt", "r")
+            spalpites = 0
+            for palpite in arquivo:
+                userpalpite = palpite.split()
+                spalpites = int(userpalpite[1]) + spalpites
+            arquivo.close()
+            print(spalpites)            
+            
+            
+            #resetando cartas dos usuarios
+            reset = open ('Usuarioscartas.txt', 'r+')
+            reset.truncate(0)
+            reset.close()
+    elif contagem == 2:
+        tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus,
+           ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros, bw]
+        resetpalpite = open ('Usuariospalpites.txt', 'r+')
+        resetpalpite.truncate(0)
+        resetpalpite.close()
+        arquivou = open ('Usuarios.txt', 'r')
+        arquivo = open ('rodada.txt', 'a')
+        arquivo2 = open('Usuarioscartas.txt', 'a')
+        arquivo.write('3\n')
         arquivo.close()
+        keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
+
+        cbotao = (
+            ("0", "0"),
+            ("1", "1"),
+            ("2", "2"),
+            ("3", "3"),
+        )
+        ctexto = (types.InlineKeyboardButton(ctex, callback_data=cdat)
+                    for ctex, cdat in cbotao)
+
+        keyboard_markup.row(*ctexto)
+        lista = []
+        for linhas in arquivou:
+            userid = linhas.split()
+            lista.append(userid[0])
+            lista.append(userid[0])
+            lista.append(userid[0])
+            # lista.append(userid[0])
+            # lista.append(userid[0])
+            # lista.append(userid[0])
+
+
+        ncartas = (3*players)
+        i = 0
+        while ncartas > 0:
+            send = random.randrange(0, 28)
+            arquivo2.write(lista[i] + ' ' + tcartas[send] + "\n")
+            await bot.send_sticker(lista[i], tcartas[send])
+            del (tcartas[send])
+            ncartas -= 1
+            i += 1        
+
+        await message.reply("Quantas você vai fazer?", reply_markup=keyboard_markup)
+
+        @dp.callback_query_handler(text='0')
+        @dp.callback_query_handler(text='1')
+        @dp.callback_query_handler(text='2')
+        @dp.callback_query_handler(text='3')
+        async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
+            if os.path.exists('Usuariospalpites.txt') == False:
+                arquivo = open('Usuariospalpites.txt', 'w+')
+                arquivo.close()
+            user_data = query.data
+            await query.answer(f'Você respondeu com {user_data!r}')
+            arquivo = open("Usuariospalpites.txt", "a")
+            arquivo.write(str(query.from_user.id) +" " + str(user_data)+ "\n")
+            arquivo.close()
+           
+            arquivo = open("Usuariospalpites.txt", "r")
+            spalpites = 0
+            for palpite in arquivo:
+                userpalpite = palpite.split()
+                spalpites = int(userpalpite[1]) + spalpites
+            arquivo.close()
+            print(spalpites)
+
+            reset = open ('Usuarioscartas.txt', 'r+')
+            reset.truncate(0)
+            reset.close()
+    elif contagem == 3:
+        tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus,
+           ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros, bw]
+        resetpalpite = open ('Usuariospalpites.txt', 'r+')
+        resetpalpite.truncate(0)
+        resetpalpite.close()
+        arquivou = open ('Usuarios.txt', 'r')
+        arquivo = open ('rodada.txt', 'a')
+        arquivo2 = open('Usuarioscartas.txt', 'a')
+        arquivo.write('4\n')
+        arquivo.close()
+
+        keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
+
+        cbotao = (
+            ("0", "0"),
+            ("1", "1"),
+            ("2", "2"),
+            ("3", "3"),
+            ("4", "4"),
+        )
+        ctexto = (types.InlineKeyboardButton(ctex, callback_data=cdat)
+                    for ctex, cdat in cbotao)
+
+        keyboard_markup.row(*ctexto)
+        lista = []
+        for linhas in arquivou:
+            userid = linhas.split()
+            lista.append(userid[0])
+            lista.append(userid[0])
+            lista.append(userid[0])
+            lista.append(userid[0])
+
+
+        ncartas = (4*players)
+        i = 0
+        totcartas = 28
+        while ncartas > 0:
+            send = random.randrange(0, totcartas)
+            arquivo2.write(lista[i] + ' ' + tcartas[send] + "\n")
+            await bot.send_sticker(lista[i], tcartas[send])
+            del (tcartas[send])
+            ncartas -= 1
+            i += 1
+            totcartas -= 1
+
+        await message.reply("Quantas você vai fazer?", reply_markup=keyboard_markup)
+
+        @dp.callback_query_handler(text='0')
+        @dp.callback_query_handler(text='1')
+        @dp.callback_query_handler(text='2')
+        @dp.callback_query_handler(text='3')
+        @dp.callback_query_handler(text='4')
+        async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
+            if os.path.exists('Usuariospalpites.txt') == False:
+                arquivo = open('Usuariospalpites.txt', 'w+')
+                arquivo.close()
+            user_data = query.data
+            await query.answer(f'Você respondeu com {user_data!r}')
+            arquivo = open("Usuariospalpites.txt", "a")
+            arquivo.write(str(query.from_user.id) +" " + str(user_data)+ "\n")
+            arquivo.close()
+            
+            arquivo = open("Usuariospalpites.txt", "r")
+            spalpites = 0
+            for palpite in arquivo:
+                userpalpite = palpite.split()
+                spalpites = int(userpalpite[1]) + spalpites
+            arquivo.close()
+            print(spalpites)
+
+            reset = open ('Usuarioscartas.txt', 'r+')
+            reset.truncate(0)
+            reset.close()
+
+
+    elif contagem == 4:
+        tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus,
+           ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros, bw]
+        resetpalpite = open ('Usuariospalpites.txt', 'r+')
+        resetpalpite.truncate(0)
+        resetpalpite.close()
+        arquivou = open ('Usuarios.txt', 'r')
+        arquivo = open ('rodada.txt', 'a')
+        arquivo2 = open('Usuarioscartas.txt', 'a')
+        arquivo.write('5\n')
+        arquivo.close()
+        keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
+
+        cbotao = (
+            ("0", "0"),
+            ("1", "1"),
+            ("2", "2"),
+            ("3", "3"),
+            ("4", "4"),
+            ("5", "5"),
+        )
+        ctexto = (types.InlineKeyboardButton(ctex, callback_data=cdat)
+                    for ctex, cdat in cbotao)
+
+        keyboard_markup.row(*ctexto)
+        lista = []
+        for linhas in arquivou:
+            userid = linhas.split()
+            lista.append(userid[0])
+            lista.append(userid[0])
+            lista.append(userid[0])
+            lista.append(userid[0])
+            lista.append(userid[0])
+
+
+        ncartas = (5*players)
+        i = 0
+        totcartas = 28
+        while ncartas > 0:
+            send = random.randrange(0, totcartas)
+            arquivo2.write(lista[i] + ' ' + tcartas[send] + "\n")
+            await bot.send_sticker(lista[i], tcartas[send])
+            del (tcartas[send])
+            ncartas -= 1
+            i += 1
+            totcartas -=1
+
+        await message.reply("Quantas você vai fazer?", reply_markup=keyboard_markup)
+
+        @dp.callback_query_handler(text='0')
+        @dp.callback_query_handler(text='1')
+        @dp.callback_query_handler(text='2')
+        @dp.callback_query_handler(text='3')
+        @dp.callback_query_handler(text='4')
+        @dp.callback_query_handler(text='5')
+        async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
+            if os.path.exists('Usuariospalpites.txt') == False:
+                arquivo = open('Usuariospalpites.txt', 'w+')
+                arquivo.close()
+            user_data = query.data
+            await query.answer(f'Você respondeu com {user_data!r}')
+            arquivo = open("Usuariospalpites.txt", "a")
+            arquivo.write(str(query.from_user.id) +" " + str(user_data)+ "\n")
+            arquivo.close()
+            
+            arquivo = open("Usuariospalpites.txt", "r")
+            spalpites = 0
+            for palpite in arquivo:
+                userpalpite = palpite.split()
+                spalpites = int(userpalpite[1]) + spalpites
+            arquivo.close()
+            print(spalpites)
+            
+            reset = open ('Usuarioscartas.txt', 'r+')
+            reset.truncate(0)
+            reset.close()
+
+    elif contagem == 5:
+        print("RESETOU AS RODADAS")
+        reset = open ('rodada.txt', 'r+')
+        reset.truncate(0)
+        reset.close()
+        resetpalpite = open ('Usuariospalpites.txt', 'r+')
+        resetpalpite.truncate(0)
+        resetpalpite.close()
+        
 
 
 if __name__ == '__main__':
