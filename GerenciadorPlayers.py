@@ -4,7 +4,8 @@ import os.path
 # from time import sleep
 from aiogram import Bot, Dispatcher, executor, types
 
-API_TOKEN = '1255502823:AAFduKDPX5DJEkIio5xPG8fYRpHCse55Ba4'
+# API_TOKEN = '1255502823:AAFduKDPX5DJEkIio5xPG8fYRpHCse55Ba4'
+API_TOKEN = '1194976667:AAGrxoVyWVWjvVJL4EA2bvjxdglaVwTmytM'
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -125,7 +126,7 @@ async def criadorderodadas(message: types.Message):
     tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus,
                ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros, bw]
 
-    ordem = 0
+    ordem = 1
 
     if os.path.exists('rodada.txt') == False:
         arquivo = open('rodada.txt', 'w+')
@@ -198,6 +199,15 @@ async def criadorderodadas(message: types.Message):
         @dp.callback_query_handler(text='1')
         async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             verpalpite = 0
+            arquivoo = open ("ousuarios.txt", "r")
+            for vez in arquivoo:
+                read = vez.split()
+                posi = read[1]
+                posi = int(posi)
+                posvez [1] = int(read[1])
+                print(posvez)
+            arquivoo.close()
+
             if os.path.exists('Usuariospalpites.txt') == False:
                 arquivo = open('Usuariospalpites.txt', 'w+')
                 arquivo.close()
@@ -239,13 +249,16 @@ async def criadorderodadas(message: types.Message):
         arquivo.write('2\n')
         arquivo.close()
 
-        ousers = []  # Variavel que aramazena a ordem dada pelo arquivo criado na rodada anterior
+        ousers = []  # Vetor que aramazena a ordem dada pelo arquivo criado na rodada anterior
         posicao = 0  # Posicao na array ousers
 
         arquivoo = open('ousuarios.txt', 'r')
         for users in arquivoo:  # Ciclo que adiciona os valores das ordens e diminui um no seu valor, para criar a nova ordem
             usersid2 = users.split()
-            ousers.append(int(usersid2[1]) - 1)
+            if int(usersid2[1]) == 1:
+                ousers.append(players)
+            else:
+                ousers.append(int(usersid2[1]) - 1)
         arquivoo.close()
 
         arquivoo = open('ousuarios.txt', 'r+')
@@ -255,7 +268,7 @@ async def criadorderodadas(message: types.Message):
         arquivoo = open('ousuarios.txt', 'a')
         for ids in arquivou:  # Ciclo que adiciona o user id com a nova ordem de cada player
             ids2 = ids.split()
-            arquivoo.write(str(ids2[0]) + ' ' + str(ousers[posicao]))
+            arquivoo.write(str(ids2[0]) + ' ' + str(ousers[posicao]) + "\n")
             posicao += 1
         arquivoo.close()
         arquivou.close()
@@ -339,7 +352,11 @@ async def criadorderodadas(message: types.Message):
         arquivoo = open('ousuarios.txt', 'r')
         for users in arquivoo:  # Ciclo que adiciona os valores das ordens e diminui um no seu valor, para criar a nova ordem
             usersid2 = users.split()
-            ousers.append(int(usersid2[1]) - 1)
+            if int(usersid2[1]) == 1:
+                ousers.append(players)
+            else:
+                ousers.append(int(usersid2[1]) - 1)
+            # ousers.append(int(usersid2[1]) - 1)
         arquivoo.close()
 
         arquivoo = open('ousuarios.txt', 'r+')
@@ -349,7 +366,7 @@ async def criadorderodadas(message: types.Message):
         arquivoo = open('ousuarios.txt', 'a')
         for ids in arquivou:  # Ciclo que adiciona o user id com a nova ordem de cada player
             ids2 = ids.split()
-            arquivoo.write(str(ids2[0]) + ' ' + str(ousers[posicao]))
+            arquivoo.write(str(ids2[0]) + ' ' + str(ousers[posicao]) + "\n")
             posicao += 1
         arquivoo.close()
         arquivou.close()
@@ -437,7 +454,11 @@ async def criadorderodadas(message: types.Message):
         arquivoo = open('ousuarios.txt', 'r')
         for users in arquivoo:  # Ciclo que adiciona os valores das ordens e diminui um no seu valor, para criar a nova ordem
             usersid2 = users.split()
-            ousers.append(int(usersid2[1]) - 1)
+            if int(usersid2[1]) == 1:
+                ousers.append(players)
+            else:
+                ousers.append(int(usersid2[1]) - 1)
+            # ousers.append(int(usersid2[1]) - 1)
         arquivoo.close()
 
         arquivoo = open('ousuarios.txt', 'r+')
@@ -535,7 +556,11 @@ async def criadorderodadas(message: types.Message):
         arquivoo = open('ousuarios.txt', 'r')
         for users in arquivoo:  # Ciclo que adiciona os valores das ordens e diminui um no seu valor, para criar a nova ordem
             usersid2 = users.split()
-            ousers.append(int(usersid2[1]) - 1)
+            if int(usersid2[1]) == 1:
+                ousers.append(players)
+            else:
+                ousers.append(int(usersid2[1]) - 1)
+            # ousers.append(int(usersid2[1]) - 1)
         arquivoo.close()
 
         arquivoo = open('ousuarios.txt', 'r+')
@@ -545,7 +570,7 @@ async def criadorderodadas(message: types.Message):
         arquivoo = open('ousuarios.txt', 'a')
         for ids in arquivou:  # Ciclo que adiciona o user id com a nova ordem de cada player
             ids2 = ids.split()
-            arquivoo.write(str(ids2[0]) + ' ' + str(ousers[posicao]))
+            arquivoo.write(str(ids2[0]) + ' ' + str(ousers[posicao]) + "\n")
             posicao += 1
         arquivoo.close()
         arquivou.close()
