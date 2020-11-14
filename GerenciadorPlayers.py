@@ -1,7 +1,7 @@
 import logging
 import random
 import os.path
-# from time import sleep
+from time import sleep
 from aiogram import Bot, Dispatcher, executor, types
 
 # API_TOKEN = '1255502823:AAFduKDPX5DJEkIio5xPG8fYRpHCse55Ba4'
@@ -59,6 +59,10 @@ async def send_welcome(message: types.Message):
     """
     if os.path.exists('rodada.txt') == False:
         arquivo = open('rodada.txt', 'w+')
+        arquivo.close()
+    if os.path.exists('vezjogada.txt') == False:
+        arquivo = open('vezjogada.txt', 'w+')
+        arquivo.write("1")
         arquivo.close()
     await message.reply("Olá!\nEu sou o FDPBOT!\nDesenvolvido pela FDBot Developer Team.\nÉ muito legal ter você aqui comigo :)"
                         "\nEu utilizo a API da aiogram,\nVocê pode consulta-la aqui: https://docs.aiogram.dev/en/latest/index.html, VOCE INICIOU O BOT")
@@ -169,7 +173,7 @@ async def criadorderodadas(message: types.Message):
             print("ENTROU AQUI")
             usersid = user.split()
             arquivoo = open('ousuarios.txt', 'a')
-            arquivoo.write(str(usersid[0]) + ' ' + str(ordem) + "\n")
+            arquivoo.write(str(usersid[0]) + ' ' + str(ordem) + " " + str(usersid[1]) +"\n")
             ordem += 1
             arquivoo.close()
 
@@ -192,6 +196,7 @@ async def criadorderodadas(message: types.Message):
         await message.reply("Quantas você vai fazer?", reply_markup=keyboard_markup)
         print("ENVIOU O PALPITE")
 
+
         arquivou.close()
         arquivo2.close()
 
@@ -199,35 +204,48 @@ async def criadorderodadas(message: types.Message):
         @dp.callback_query_handler(text='1')
         async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             verpalpite = 0
-            arquivoo = open ("ousuarios.txt", "r")
-            for vez in arquivoo:
-                read = vez.split()
-                posi = read[1]
-                posi = int(posi)
-                posvez [1] = int(read[1])
-                print(posvez)
-            arquivoo.close()
-
-            if os.path.exists('Usuariospalpites.txt') == False:
-                arquivo = open('Usuariospalpites.txt', 'w+')
-                arquivo.close()
             user_data = query.data
-            await query.answer(f'Você respondeu com {user_data!r}')
-            with open('Usuariospalpites.txt') as f:
-                contagem = sum(1 for _ in f)
+            
+            arquivovez = open('vezjogada.txt', 'r')
+            for leituravez in arquivovez:
+                vez = leituravez.split()
+                arquivoo = open('ousuarios.txt', 'r')
+                for linha in arquivoo:
+                    posicao = linha.split()
 
-            if contagem > 0:
-                arquivo = open("Usuariospalpites.txt", "r")
-                for linha in arquivo:
-                    ver = linha.split()
-                    if(str(query.from_user.id) == str(ver[0])):
-                        await bot.send_message(query.from_user.id, "Você já deu seu palpite, não tem volta haha")
-                        verpalpite = 1
-                arquivo.close()
-            if verpalpite == 0:
-                arquivo = open("Usuariospalpites.txt", "a")
-                arquivo.write(str(query.from_user.id) +
-                              " " + str(user_data) + "\n")
+                    uservez = str(query.from_user.id) + " " + str(vez[0])
+                    userposicao = str(posicao[0])+ " " + str(posicao[1])
+                    print(uservez)
+                    print(userposicao)
+
+                    if userposicao == uservez:
+                        print("O cara deu palpite na hora certa")
+                        arquivovez = open('vezjogada.txt', 'w')
+                        contxx = int(str(vez[0])) + 1 #Tava sem criatividade pra variavel xD, mas ela converte o VEZ para string (para aparecer
+                        #somente o necessario e então converte para inteiro para que possa ser somada)
+                        arquivovez.write(str(contxx))
+                        arquivovez.close()
+                        if contagem > 0:
+                            arquivo = open("Usuariospalpites.txt", "r")
+                            for linha in arquivo:
+                                ver = linha.split()
+                                if(str(query.from_user.id) == str(ver[0])):
+                                    await bot.send_message(query.from_user.id, "Você já deu seu palpite, não tem volta haha")
+                                    verpalpite = 1
+                            arquivo.close()
+                        if verpalpite == 0:
+                            arquivo = open("Usuariospalpites.txt", "a")
+                            arquivo.write(str(query.from_user.id) +
+                                          " " + str(user_data) + "\n")
+                    else:
+                        print("Não é a vez do cara")
+                        await bot.send_message(query.from_user.id, "Não é sua vez de dar o palpite, por favor espere =)")
+                arquivoo.close()
+            arquivovez.close()
+
+
+            await query.answer(f'Você respondeu com {user_data!r}')
+
 
             arquivo = open("Usuariospalpites.txt", "r")
             spalpites = 0
@@ -468,7 +486,7 @@ async def criadorderodadas(message: types.Message):
         arquivoo = open('ousuarios.txt', 'a')
         for ids in arquivou:  # Ciclo que adiciona o user id com a nova ordem de cada player
             ids2 = ids.split()
-            arquivoo.write(str(ids2[0]) + ' ' + str(ousers[posicao]))
+            arquivoo.write(str(ids2[0]) + ' ' + str(ousers[posicao]) + "\n")
             posicao += 1
         arquivoo.close()
         arquivou.close()
