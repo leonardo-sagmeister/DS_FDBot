@@ -236,7 +236,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     if user_data == 'simZap':
         # ------> Adicionar aqui verificação de turno!!!
-        u ={}
+        u = {}
 
         arquivo = open('Usuarioscartas.txt', 'r')
         
@@ -275,75 +275,81 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             await bot.send_message(query.from_user.id, "Você não tem essa carta! Escolha outra com base nas enviadas no privado!")
 
     elif user_data == 'naoZap':
-        await bot.send_message(query.from_user.id, "Ok, pode escolher outra!")
+        await bot.send_message(query.from_user.id, "Ué, mudou de ideia?! Ok, pode escolher outra!")
 
     else:
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
+    
+
+@dp.message_handler(commands='coringa')
+async def start_cmd_handler(message: types.Message):
+    keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
+
+    ctexto = (
+        ('SIM!', 'simCoringa'),
+        ('NÃO!', 'naoCoringa'),
+    )
+
+    cbotao = (types.InlineKeyboardButton(ctex, callback_data=cdat) for ctex, cdat in ctexto)
+
+    keyboard_markup.row(*cbotao)
+    
+    await message.reply("Deseja jogar um coringa?", reply_markup=keyboard_markup)
+
+
+@dp.callback_query_handler(text='simCoringa')
+@dp.callback_query_handler(text='naoCoringa')
+
+async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
+    user_data = query.data
+    cont = 0
+    await query.answer(f'Você respondeu com {user_data!r}')
+
+    if user_data == 'simCoringa':
+        # ------> Adicionar aqui verificação de turno!!!
+        u ={}
+
+        arquivo = open('Usuarioscartas.txt', 'r')
         
+        # Pegando a lista de cartas na mão do User
+        for linha in arquivo: #Lendo os arquivo que tem as cartas
+            usercarddata = linha.split() #Lendo linha por linha
+            if usercarddata[0] not in u:
+                u[usercarddata[0]] = list()
+            u[usercarddata[0]].append(usercarddata[1])
 
-
-    # for key, value in u.items():
-    #     envioC = value
-        #cbotao = (types.InlineKeyboardButton(ctex, callback_data=cdat) for ctex, cdat in zip(envioC, envioC))
-
-        #keyboard_markup.row(*cbotao)
-
-
-
-# @dp.callback_query_handler(text='AAA')
-# @dp.callback_query_handler(text='BBB')
-# @dp.callback_query_handler(text='CCC')
-# @dp.callback_query_handler(text='DDD')
-
-        # @dp.callback_query_handler(text='CAACAgEAAxkBAAOjX40im97tNxuWNUKwOU8-5vyYAAE6AAIhAAOCFRY2Ezylu98G3FIbBA')
-        # @dp.callback_query_handler(text='CAACAgEAAxkBAAOkX40iuVC-sD4RxSxxWknzswbPmikAAg4AA4IVFjadPcs09HwT6xsE')
-        # @dp.callback_query_handler(text='CAACAgEAAxkBAAO1X43J8Gqs5fML2F4Qbvv5ScBMMwgAAhEAA4IVFjaCjVIgaC0x-BsE')
-        # @dp.callback_query_handler(text='CAACAgEAAxkBAAPBX43LuyEOXiLKYs1oHaltlTjGENkAAg8AA4IVFjZOjRImz1DqhBsE')
-        # @dp.callback_query_handler(text='CAACAgEAAxkBAAPAX43Lt-pvzdh34GkKtNgXrRmtL04AAhQAA4IVFjY0nFnyVFB2thsE')
-        # @dp.callback_query_handler(text='CAACAgEAAxkBAAO_X43LamqbvpIj-PAr18qwcVuvW2oAAg0AA4IVFjaW4avxCN1XcxsE')
-       
-    #     await bot.send_message(key, value)
-
-    # envioC = (
-    #     ('copas'),
-    #     ('espadas'),
-    #     ('ouros'),
-    #     ('paus'),
-    #     ('zap'),
-    #     ('coringa'),
-    # )
-
-    # cbotao = (types.InlineKeyboardButton(ctex, callback_data=cdat) for ctex, cdat in zip(envioC, envioC))
-
-    # keyboard_markup.row(*cbotao)
-
-    # await message.reply("Por Favor, selecione a carta desejada", ,reply_markup=keyboard_markup)
-
-
-# @dp.callback_query_handler(text='copas')
-# @dp.callback_query_handler(text='espadas')
-# @dp.callback_query_handler(text='ouros')
-# @dp.callback_query_handler(text='paus')
-# @dp.callback_query_handler(text='zap')
-# @dp.callback_query_handler(text='coringa')
-# async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
-#     user_data_naipe = query.data
-#     await query.answer(f'Você respondeu com {user_data_naipe!r}')
-    
-#     u ={}
-
-#     arquivo = open('Usuarioscartas.txt', 'r')
-    
-#     for linha in arquivo: #Lendo os arquivo que tem as cartas
-#         usercarddata = linha.split() #Lendo linha por linha
-#         if usercarddata[0] not in u:
-#             u[usercarddata[0]] = list()
-#         u[usercarddata[0]].append(usercarddata[1])
+        cartas = u[str(query.from_user.id)]
         
-#     for key, value in u.items():
-#         await bot.send_message(key, value)
+        if "CAACAgEAAxkBAAPAX43Lt-pvzdh34GkKtNgXrRmtL04AAhQAA4IVFjY0nFnyVFB2thsE" in cartas:
 
-    
+            if os.path.exists('Jogadas.txt') == False:
+                arquivoJogadas = open('Jogadas.txt', 'w+')
+                arquivoJogadas.close()
+
+            jogaram = []
+            arquivoJogadas = open('Jogadas.txt', 'r')
+            for linha in arquivoJogadas:
+                userid = linha.split()
+                jogaram.append(userid[0])
+
+            if str(query.from_user.id) in jogaram:
+                await bot.send_message(query.from_user.id, "EPA! Você já jogou nessa rodada! Espere todos jogarem, e utilize o comando de finalizar a rodada!")
+
+            else:
+                arquivoJogadas = open('Jogadas.txt', 'a')
+                arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAPAX43Lt-pvzdh34GkKtNgXrRmtL04AAhQAA4IVFjY0nFnyVFB2thsE\n')
+
+                # ------> Alterar do id do user pro id do chat!!!!
+                await bot.send_sticker(query.from_user.id, "CAACAgEAAxkBAAPAX43Lt-pvzdh34GkKtNgXrRmtL04AAhQAA4IVFjY0nFnyVFB2thsE")
+
+        else:
+            await bot.send_message(query.from_user.id, "Você não tem essa carta! Escolha outra com base nas enviadas no privado!")
+
+    elif user_data == 'naoCoringa':
+        await bot.send_message(query.from_user.id, "Ué, mudou de ideia?! Ok, pode escolher outra!")
+
+    else:
+        await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
 
 async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     user_data_naipe = query.data
