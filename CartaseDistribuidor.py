@@ -499,31 +499,31 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
 
 
-@dp.message_handler(commands='picaFumo')
+@dp.message_handler(commands='ouros')
 async def start_cmd_handler(message: types.Message):
     keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
 
     ctexto = (
-        ('SIM!', 'simPicaFumo'),
-        ('NÃO!', 'naoPicaFumo'),
+        ('SIM!', 'simOuros'),
+        ('NÃO!', 'naoOuros'),
     )
 
     cbotao = (types.InlineKeyboardButton(ctex, callback_data=cdat) for ctex, cdat in ctexto)
 
     keyboard_markup.row(*cbotao)
     
-    await message.reply("Deseja jogar um pica-fumo?", reply_markup=keyboard_markup)
+    await message.reply("Deseja jogar um ouros?", reply_markup=keyboard_markup)
 
 
-@dp.callback_query_handler(text='simPicaFumo')
-@dp.callback_query_handler(text='naoPicaFumo')
+@dp.callback_query_handler(text='simOuros')
+@dp.callback_query_handler(text='naoOuros')
 
 async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     user_data = query.data
     cont = 0
     await query.answer(f'Você respondeu com {user_data!r}')
 
-    if user_data == 'simPicaFumo':
+    if user_data == 'simOuros':
         # ------> Adicionar aqui verificação de turno!!!
         u = {}
 
@@ -563,7 +563,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
         else:
             await bot.send_message(query.from_user.id, "Você não tem essa carta! Escolha outra com base nas enviadas no privado!")
 
-    elif user_data == 'naoPicaFumo':
+    elif user_data == 'naoOuros':
         await bot.send_message(query.from_user.id, "Ué, mudou de ideia?! Ok, pode escolher outra!")
 
     else:
