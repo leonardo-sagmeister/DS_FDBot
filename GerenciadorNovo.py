@@ -170,21 +170,38 @@ async def criadorderodadas(message: types.Message):
         arquivovez = open('vezjogada.txt', 'r')
         for leituravez in arquivovez:
             vez = leituravez.split()
-            print(leituravez)
             for linha in arquivoo:
                 posicao = linha.split()
                 if leituravez == linha:
                     proximo = int(vez[1]) + 1
-
-                elif proximo == int(posicao[1]):
-                    idproximo = posicao[0]
+                    if proximo == int(posicao[1]):
+                        idproximo = posicao[0]
+                        arquivovez = open('vezjogada.txt', 'w')
+                        arquivovez.write(str(idproximo) + " " + str(proximo) + "\n")
+                    else:
+                        arquivovez = open('vezjogada.txt', 'w')                        
+                        arquivovez.write("idproximo" + " " + str(proximo))
+                
                 else:
                     pass
         arquivovez.close()
-        arquivovez = open('vezjogada.txt', 'w')
-        arquivovez.write(str(idproximo) + " " + str(proximo) + "\n")
+        # arquivovez = open('vezjogada.txt', 'w')
+        # arquivovez.write(str(idproximo) + " " + str(proximo) + "\n")
         arquivovez.close()
         print('Proximo da rodada definido')
+    def soma_palpites():
+        arquivo = open("Usuariospalpites.txt", "r")            
+        spalpites = 0
+        for palpite in arquivo:
+            print('--------------------------')
+            print(palpite)
+            print(int(palpite[10]))
+            spalpites += int(palpite[10])
+        
+        print('A soma dos palpites e: {}'.format(spalpites))
+        return spalpites
+        arquivo.close()            
+    
     if contagem == 0:
         tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus,
                    ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros, bw]
@@ -273,6 +290,7 @@ async def criadorderodadas(message: types.Message):
                             return True
 
                         else:
+                            print('False')
                             return False
                 arquivoo.close()
                 arquivovez.close()
@@ -297,16 +315,19 @@ async def criadorderodadas(message: types.Message):
                 await bot.send_message(query.from_user.id, "Não é sua vez de dar o palpite, por favor espere =)")
             arquivoo.close()
             arquivovez.close()
-
+            
+            # soma_palpites
+            arquivo = open("Usuariospalpites.txt", "r")            
+            spalpites = 0
+            for palpite in arquivo:
+                print(palpite)
+                spalpites += int(palpite[10])
+            
+            print(spalpites)
+            arquivo.close()
+            
             await query.answer(f'Você respondeu com {user_data!r}')
 
-        arquivo = open("Usuariospalpites.txt", "r")
-        spalpites = 0
-        for palpite in arquivo:
-            userpalpite = palpite.split()
-            spalpites = int(userpalpite[1]) + spalpites
-        arquivo.close()
-        print(spalpites)
     resetar_vez()
 
     if contagem == 1:
@@ -430,19 +451,17 @@ async def criadorderodadas(message: types.Message):
                 print("Não é a vez do cara")
                 await bot.send_message(query.from_user.id, "Não é sua vez de dar o palpite, por favor espere =)")
             arquivoo.close()
-            arquivovez.close()
 
-            await query.answer(f'Você respondeu com {user_data!r}')
-
-            arquivo.close()
-
-            arquivo = open("Usuariospalpites.txt", "r")
+            arquivo = open("Usuariospalpites.txt", "r")            
             spalpites = 0
             for palpite in arquivo:
-                userpalpite = palpite.split()
-                spalpites = int(userpalpite[1]) + spalpites
-            arquivo.close()
+                print(palpite)
+                spalpites += int(palpite[10])
+            
             print(spalpites)
+            arquivo.close()
+            
+            await query.answer(f'Você respondeu com {user_data!r}')
 
             # resetando cartas dos usuarios
             reset = open('Usuarioscartas.txt', 'r+')
@@ -582,17 +601,19 @@ async def criadorderodadas(message: types.Message):
                 print("Não é a vez do cara")
                 await bot.send_message(query.from_user.id, "Não é sua vez de dar o palpite, por favor espere =)")
             arquivoo.close()
-            arquivovez.close()
+
+            #Somar palpites
+            arquivo = open("Usuariospalpites.txt", "r")            
+            spalpites = 0
+            for palpite in arquivo:
+                print(palpite)
+                spalpites += int(palpite[10])
+            
+            print(spalpites)
+            arquivo.close()            
 
             await query.answer(f'Você respondeu com {user_data!r}')
 
-            arquivo = open("Usuariospalpites.txt", "r")
-            spalpites = 0
-            for palpite in arquivo:
-                userpalpite = palpite.split()
-                spalpites = int(userpalpite[1]) + spalpites
-            arquivo.close()
-            print(spalpites)
 
             reset = open('Usuarioscartas.txt', 'r+')
             reset.truncate(0)
@@ -730,17 +751,19 @@ async def criadorderodadas(message: types.Message):
                 print("Não é a vez do cara")
                 await bot.send_message(query.from_user.id, "Não é sua vez de dar o palpite, por favor espere =)")
             arquivoo.close()
-            arquivovez.close()
 
-            await query.answer(f'Você respondeu com {user_data!r}')
-
-            arquivo = open("Usuariospalpites.txt", "r")
+            #Somar palpites
+            arquivo = open("Usuariospalpites.txt", "r")            
             spalpites = 0
             for palpite in arquivo:
-                userpalpite = palpite.split()
-                spalpites = int(userpalpite[1]) + spalpites
-            arquivo.close()
+                print(palpite)
+                spalpites += int(palpite[10])
+            
             print(spalpites)
+            arquivo.close()             
+            
+            await query.answer(f'Você respondeu com {user_data!r}')
+
 
             reset = open('Usuarioscartas.txt', 'r+')
             reset.truncate(0)
@@ -882,6 +905,16 @@ async def criadorderodadas(message: types.Message):
                 print("Não é a vez do cara")
                 await bot.send_message(query.from_user.id, "Não é sua vez de dar o palpite, por favor espere =)")
             arquivoo.close()
+
+            #Somar palpites
+            arquivo = open("Usuariospalpites.txt", "r")            
+            spalpites = 0
+            for palpite in arquivo:
+                print(palpite)
+                spalpites += int(palpite[10])
+            
+            print(spalpites)
+            arquivo.close() 
 
             await query.answer(f'Você respondeu com {user_data!r}')
 
