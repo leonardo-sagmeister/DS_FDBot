@@ -248,8 +248,6 @@ async def criadorderodadas(message: types.Message):
 
         arquivou = open('Usuarios.txt', 'r')
         while ncartas > 0:
-            print("ENVIANDO CARTAS")
-
             for linha in arquivou:
                 userid = linha.split()
                 send = random.randrange(0, totcartas)
@@ -315,13 +313,12 @@ async def criadorderodadas(message: types.Message):
                 await bot.send_message(query.from_user.id, "Não é sua vez de dar o palpite, por favor espere =)")
             arquivoo.close()
             arquivovez.close()
-            
             # soma_palpites
             arquivo = open("Usuariospalpites.txt", "r")            
             spalpites = 0
-            for palpite in arquivo:
-                print(palpite)
-                spalpites += int(palpite[10])
+            for linha4 in arquivo:
+                palpite = linha4.split()
+                spalpites += int(palpite[1])
             
             print(spalpites)
             arquivo.close()
@@ -344,6 +341,9 @@ async def criadorderodadas(message: types.Message):
         resetjogada = open('Jogada.txt','w')
         resetjogada.truncate()
         resetjogada.close()
+        arquivocreset = open('Usuarioscartas.txt','w')
+        arquivocreset.truncate(0)
+        arquivocreset.close()
 
         ousers = []  # Vetor que aramazena a ordem dada pelo arquivo criado na rodada anterior
         posicao = 0  # Posicao na array ousers
@@ -391,7 +391,10 @@ async def criadorderodadas(message: types.Message):
         ncartas = (2*players)
         i = 0
         totcartas = 28
+        arquivou.close()
+        
         while ncartas > 0:
+            arquivou = open('Usuarios.txt','r')            
             for linha in arquivou:
                 send = random.randrange(0, totcartas)
                 arquivo2.write(lista[i] + ' ' + tcartas[send] + "\n")
@@ -400,11 +403,11 @@ async def criadorderodadas(message: types.Message):
                 ncartas -= 1
                 i += 1
                 totcartas -= 1
+            arquivou.close()
+        
 
         await message.reply("Quantas você vai fazer?", reply_markup=keyboard_markup)
-        arquivou.close()
         arquivo2.close()
-
         @dp.callback_query_handler(text='0')
         @dp.callback_query_handler(text='1')
         @dp.callback_query_handler(text='2')
@@ -455,12 +458,11 @@ async def criadorderodadas(message: types.Message):
                 print("Não é a vez do cara")
                 await bot.send_message(query.from_user.id, "Não é sua vez de dar o palpite, por favor espere =)")
             arquivoo.close()
-
             arquivo = open("Usuariospalpites.txt", "r")            
             spalpites = 0
-            for palpite in arquivo:
-                print(palpite)
-                spalpites += int(palpite[10])
+            for linha4 in arquivo:
+                palpite = linha4.split()
+                spalpites += int(palpite[1])
             
             print(spalpites)
             arquivo.close()
@@ -481,6 +483,9 @@ async def criadorderodadas(message: types.Message):
         arquivou = open('Usuarios.txt', 'r')
         arquivo = open('rodada.txt', 'a')
         arquivo2 = open('Usuarioscartas.txt', 'a')
+        arquivocreset = open('Usuarioscartas.txt','w')
+        arquivocreset.truncate(0)
+        arquivocreset.close()
 
         # Resetando a vez da jogada
 
@@ -539,19 +544,23 @@ async def criadorderodadas(message: types.Message):
             # lista.append(userid[0])
             # lista.append(userid[0])
             # lista.append(userid[0])
-
+        totcartas = 28
         ncartas = (3*players)
         i = 0
         while ncartas > 0:
-            send = random.randrange(0, 28)
-            arquivo2.write(lista[i] + ' ' + tcartas[send] + "\n")
-            await bot.send_sticker(lista[i], tcartas[send])
-            del (tcartas[send])
-            ncartas -= 1
-            i += 1
+            arquivou = open('Usuarios.txt','r')
+            for linha4 in arquivou:
+                send = random.randrange(0, totcartas)
+                arquivo2.write(lista[i] + ' ' + tcartas[send] + "\n")
+                await bot.send_sticker(lista[i], tcartas[send])
+                del (tcartas[send])
+                ncartas -= 1
+                i += 1
+                totcartas -= 1
+            arquivou.close()
 
         await message.reply("Quantas você vai fazer?", reply_markup=keyboard_markup)
-
+        
         @dp.callback_query_handler(text='0')
         @dp.callback_query_handler(text='1')
         @dp.callback_query_handler(text='2')
@@ -609,9 +618,9 @@ async def criadorderodadas(message: types.Message):
             #Somar palpites
             arquivo = open("Usuariospalpites.txt", "r")            
             spalpites = 0
-            for palpite in arquivo:
-                print(palpite)
-                spalpites += int(palpite[10])
+            for linha4 in arquivo:
+                palpite = linha4.split()
+                spalpites += int(palpite[1])
             
             print(spalpites)
             arquivo.close()            
@@ -634,6 +643,9 @@ async def criadorderodadas(message: types.Message):
         arquivo2 = open('Usuarioscartas.txt', 'a')
         arquivo.write('4\n')
         arquivo.close()
+        arquivocreset = open('Usuarioscartas.txt','w')
+        arquivocreset.truncate(0)
+        arquivocreset.close()
 
         # #Resetando a vez da jogada
 
@@ -693,16 +705,18 @@ async def criadorderodadas(message: types.Message):
         i = 0
         totcartas = 28
         while ncartas > 0:
-            send = random.randrange(0, totcartas)
-            arquivo2.write(lista[i] + ' ' + tcartas[send] + "\n")
-            await bot.send_sticker(lista[i], tcartas[send])
-            del (tcartas[send])
-            ncartas -= 1
-            i += 1
-            totcartas -= 1
+            arquivou = open('Usuarios.txt','r')
+            for linha4 in arquivou:
+                send = random.randrange(0, totcartas)
+                arquivo2.write(lista[i] + ' ' + tcartas[send] + "\n")
+                await bot.send_sticker(lista[i], tcartas[send])
+                del (tcartas[send])
+                ncartas -= 1
+                i += 1
+                totcartas -= 1
+            arquivou.close()
 
         await message.reply("Quantas você vai fazer?", reply_markup=keyboard_markup)
-
         @dp.callback_query_handler(text='0')
         @dp.callback_query_handler(text='1')
         @dp.callback_query_handler(text='2')
@@ -759,9 +773,9 @@ async def criadorderodadas(message: types.Message):
             #Somar palpites
             arquivo = open("Usuariospalpites.txt", "r")            
             spalpites = 0
-            for palpite in arquivo:
-                print(palpite)
-                spalpites += int(palpite[10])
+            for linha4 in arquivo:
+                palpite = linha4.split()
+                spalpites += int(palpite[1])
             
             print(spalpites)
             arquivo.close()             
@@ -785,6 +799,9 @@ async def criadorderodadas(message: types.Message):
         arquivo2 = open('Usuarioscartas.txt', 'a')
         arquivo.write('5\n')
         arquivo.close()
+        arquivocreset = open('Usuarioscartas.txt','w')
+        arquivocreset.truncate(0)
+        arquivocreset.close()
 
         # #Resetando a vez da jogada
 
@@ -846,16 +863,18 @@ async def criadorderodadas(message: types.Message):
         i = 0
         totcartas = 28
         while ncartas > 0:
-            send = random.randrange(0, totcartas)
-            arquivo2.write(lista[i] + ' ' + tcartas[send] + "\n")
-            await bot.send_sticker(lista[i], tcartas[send])
-            del (tcartas[send])
-            ncartas -= 1
-            i += 1
-            totcartas -= 1
+            arquivou = open('Usuarios.txt','r')
+            for linha4 in arquivou:
+                send = random.randrange(0, totcartas)
+                arquivo2.write(lista[i] + ' ' + tcartas[send] + "\n")
+                await bot.send_sticker(lista[i], tcartas[send])
+                del (tcartas[send])
+                ncartas -= 1
+                i += 1
+                totcartas -= 1
+            arquivou.close()
 
         await message.reply("Quantas você vai fazer?", reply_markup=keyboard_markup)
-
         @dp.callback_query_handler(text='0')
         @dp.callback_query_handler(text='1')
         @dp.callback_query_handler(text='2')
@@ -913,9 +932,9 @@ async def criadorderodadas(message: types.Message):
             #Somar palpites
             arquivo = open("Usuariospalpites.txt", "r")            
             spalpites = 0
-            for palpite in arquivo:
-                print(palpite)
-                spalpites += int(palpite[10])
+            for linha4 in arquivo:
+                palpite = linha4.split()
+                spalpites += int(palpite[1])
             
             print(spalpites)
             arquivo.close() 
@@ -930,10 +949,7 @@ async def criadorderodadas(message: types.Message):
             arquivo.close()
             print(spalpites)
 
-            reset = open('Usuarioscartas.txt', 'r+')
-            reset.truncate(0)
-            reset.close()
-        resetar_vez
+        resetar_vez()
 
     elif contagem == 5:
         print("RESETOU AS RODADAS")
