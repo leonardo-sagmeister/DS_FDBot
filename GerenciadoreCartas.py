@@ -128,8 +128,8 @@ async def criadorderodadas(message: types.Message):
 
     ordem = 1
 
-    if os.path.exists('vezjogada.txt') == False:
-        arquivo = open('vezjogada.txt', 'w')
+    if os.path.exists('vezpalpite.txt') == False:
+        arquivo = open('vezpalpite.txt', 'w')
         arquivo.close()
 
     if os.path.exists('rodada.txt') == False:
@@ -153,21 +153,21 @@ async def criadorderodadas(message: types.Message):
 
     def resetar_vez():
         arquivoo = open('ousuarios.txt', 'r')
-        arquivovez = open('vezjogada.txt', 'w+')
+        arquivovez = open('vezpalpite.txt', 'w+')
         for linha1 in arquivoo:
             split = linha1.split()
             if split[1] == str(1):
                 arquivovez.write(linha1)
             else:
                 pass
-            print('Arquivo vezjogada.txt resetado')
+            print('Arquivo vezpalpite.txt resetado')
         arquivovez.close()
         arquivoo.close()
 
     def definir_proximo():
 
         arquivoo = open('ousuarios.txt', 'r')
-        arquivovez = open('vezjogada.txt', 'r')
+        arquivovez = open('vezpalpite.txt', 'r')
         for leituravez in arquivovez:
             vez = leituravez.split()
             for linha in arquivoo:
@@ -176,18 +176,17 @@ async def criadorderodadas(message: types.Message):
                     proximo = int(vez[1]) + 1
                     if proximo == int(posicao[1]):
                         idproximo = posicao[0]
-                        arquivovez = open('vezjogada.txt', 'w')
+                        arquivovez = open('vezpalpite.txt', 'w')
                         arquivovez.write(str(idproximo) + " " + str(proximo) + "\n")
                     else:
-                        arquivovez = open('vezjogada.txt', 'w')                        
+                        arquivovez = open('vezpalpite.txt', 'w')                        
                         arquivovez.write("idproximo" + " " + str(proximo))
                 
                 else:
                     pass
         arquivovez.close()
-        # arquivovez = open('vezjogada.txt', 'w')
+        # arquivovez = open('vezjogada', 'w')
         # arquivovez.write(str(idproximo) + " " + str(proximo) + "\n")
-        arquivovez.close()
         print('Proximo da rodada definido')
     def soma_palpites():
         arquivo = open("Usuariospalpites.txt", "r")            
@@ -236,7 +235,7 @@ async def criadorderodadas(message: types.Message):
         arquivou.close()
 
         arquivoo = open('ousuarios.txt', 'r')
-        arquivovez = open('vezjogada.txt', 'a')
+        arquivovez = open('vezpalpite.txt', 'a')
         for linha1 in arquivoo:
             split = linha1.split()
             if split[1] == str(1):
@@ -244,6 +243,17 @@ async def criadorderodadas(message: types.Message):
             else:
                 pass
         arquivovez.close()
+        arquivoo.close()
+        
+        arquivoo = open('ousuarios.txt', 'r')
+        arquivojogada = open('vezjogada.txt', 'a')
+        for linha1 in arquivoo:
+            split = linha1.split()
+            if split[1] == str(1):
+                arquivovez.write(linha1)
+            else:
+                pass
+        arquivojogada.close()
         arquivoo.close()
 
         arquivou = open('Usuarios.txt', 'r')
@@ -254,7 +264,6 @@ async def criadorderodadas(message: types.Message):
 
                 arquivo2.write(userid[0] + ' ' + tcartas[send] + "\n")
                 await message.reply_sticker(tcartas[send])
-
                 del (tcartas[send])
                 ncartas -= 1
                 totcartas -= 1
@@ -274,7 +283,7 @@ async def criadorderodadas(message: types.Message):
             def leitura_vez():
 
                 arquivoo = open('ousuarios.txt', 'r')
-                arquivovez = open('vezjogada.txt', 'r')
+                arquivovez = open('vezpalpite.txt', 'r')
                 for leituravez in arquivovez:
                     vez = leituravez.split()
                     print(leituravez)
@@ -421,7 +430,7 @@ async def criadorderodadas(message: types.Message):
             def leitura_vez():
 
                 arquivoo = open('ousuarios.txt', 'r')
-                arquivovez = open('vezjogada.txt', 'r')
+                arquivovez = open('vezpalpite.txt', 'r')
                 for leituravez in arquivovez:
                     vez = leituravez.split()
                     print(leituravez)
@@ -489,7 +498,7 @@ async def criadorderodadas(message: types.Message):
 
         # Resetando a vez da jogada
 
-        # arquivovez = open("vezjogada.txt",'w+')
+        # arquivovez = open("vezpalpite.txt",'w+')
         # arquivovez.write('1')
         # arquivovez.close()
 
@@ -577,7 +586,7 @@ async def criadorderodadas(message: types.Message):
             def leitura_vez():
 
                 arquivoo = open('ousuarios.txt', 'r')
-                arquivovez = open('vezjogada.txt', 'r')
+                arquivovez = open('vezpalpite.txt', 'r')
                 for leituravez in arquivovez:
                     vez = leituravez.split()
                     print(leituravez)
@@ -649,7 +658,7 @@ async def criadorderodadas(message: types.Message):
 
         # #Resetando a vez da jogada
 
-        # arquivovez = open("vezjogada.txt",'w+')
+        # arquivovez = open("vezjogada",'w+')
         # arquivovez.write('1')
         # arquivovez.close()
 
@@ -732,7 +741,7 @@ async def criadorderodadas(message: types.Message):
             def leitura_vez():
 
                 arquivoo = open('ousuarios.txt', 'r')
-                arquivovez = open('vezjogada.txt', 'r')
+                arquivovez = open('vezpalpite.txt', 'r')
                 for leituravez in arquivovez:
                     vez = leituravez.split()
                     print(leituravez)
@@ -805,7 +814,7 @@ async def criadorderodadas(message: types.Message):
 
         # #Resetando a vez da jogada
 
-        # arquivovez = open("vezjogada.txt",'w+')
+        # arquivovez = open("vezjogada",'w+')
         # arquivovez.write('1')
         # arquivovez.close()
 
@@ -891,7 +900,7 @@ async def criadorderodadas(message: types.Message):
             def leitura_vez():
 
                 arquivoo = open('ousuarios.txt', 'r')
-                arquivovez = open('vezjogada.txt', 'r')
+                arquivovez = open('vezpalpite.txt', 'r')
                 for leituravez in arquivovez:
                     vez = leituravez.split()
                     print(leituravez)
@@ -981,10 +990,101 @@ async def start_cmd_handler(message: types.Message):
 async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     user_data = query.data
     cont = 0
-    await query.answer(f'Você respondeu com {user_data!r}')
+    
+    ##PREVIO DEFINIDOR DO GANHADOR DA RODADA
+    
+    with open('Usuarioscartas.txt') as f:              
+        ncartas = sum(1 for _ in f)                           # Para cada \n no arquivo Usuarioscartas, ele soma 1
+    arquivoc = open('Usuarioscartas.txt','r')
+    ids = []
+    cartas = []
+    x = 0                                                     # valor atribuido ao contador                                                                    
+    y = 0                                                     # valor atribuido ao contador de quantas cartas a carta em questão matou
+    while x < ncartas:                                        # enquanto o contador for menor do que o ncartas(quantidade de \n no Usuarioscartas)
+        for line in arquivoc:                                 # Ciclo que pega tanto id quanto a carta que o usuario enviou e adiciona 1 no contador
+            split = line.split()
+            ids.append(int(split[0]))
+            cartas.append(str(split[1]))
+            x+=1
+            for carta in cartas:             # Ciclo que verifica se a carta no qual se passa o ciclo e maior que todas as outras da lista cartas
+                for id1 in ids:
+                    if carta >= carta[ncartas]:
+                        y+=1
+                    else:
+                        y = 0
+                        del(carta)
+                        del(id1)
+    if x == y:                       # Verificar se o contador ta com o mesmo valor de que a quantidade de cartas que a carta em questão matou
+        print("O usuário {} ganhou com a carta {}".format(ids,cartas))
+    
+    else:
+        pass
 
+
+    await query.answer(f'Você respondeu com {user_data!r}')
+            
     if user_data == 'simZap':
-        # ------> Adicionar aqui verificação de turno!!!
+        def leitura_vez_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivovez = open('vezpalpite.txt', 'r')
+            for leituravez in arquivovez:
+                vez = leituravez.split()
+                print(leituravez)
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    print(query.from_user.id)
+                    print(vez[0])
+                    if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
+
+                        print('True')
+                        return True
+
+                    else:
+                        print('False')
+                        return False
+        def definir_proximo_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivojogada = open('vezjogada.txt', 'r')
+            for leituravez in arquivojogada:
+                vez = leituravez.split()
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    if leituravez == linha:
+                        proximo = int(vez[1]) + 1
+                        if proximo == int(posicao[1]):
+                            idproximo = posicao[0]
+                            arquivojogada = open('vezjogada.txt', 'w')
+                            arquivojogada.write(str(idproximo) + " " + str(proximo) + "\n")
+                        else:
+                            arquivojogada = open('vezjogada.txt', 'w')                        
+                            arquivojogada.write("idproximo" + " " + str(proximo))
+                    
+                    else:
+                        pass
+                arquivoo.close()
+                arquivojogada.close()
+        
+        if leitura_vez_jogada() == True:
+            verjogada = 0
+            print("O cara jogou as cartas na hora correta")
+            arquivo = open("Jogadas", "r")
+            for linha in arquivo:
+                ver = linha.split()
+                if(str(query.from_user.id) == str(ver[0])):
+                    await bot.send_message(query.from_user.id, "Voce ja jogou nesse turno")
+                    verjogada = 1
+            arquivo.close()
+            if verjogada == 0:
+                arquivo = open("Jogadas.txt", "a")
+                arquivo.write(str(query.from_user.id) +
+                                " " + str(user_data) + "\n")
+            definir_proximo_jogada()
+        else:
+            print("Não é a vez do cara")
+            await bot.send_message(query.from_user.id, "Não é sua vez de jogar as cartas, por favor espere =)")
+            
         u = {}
 
         arquivo = open('Usuarioscartas.txt', 'r')
@@ -1055,7 +1155,69 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.answer(f'Você respondeu com {user_data!r}')
 
     if user_data == 'simCoringa':
-        # ------> Adicionar aqui verificação de turno!!!
+        
+        def leitura_vez_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivovez = open('vezpalpite.txt', 'r')
+            for leituravez in arquivovez:
+                vez = leituravez.split()
+                print(leituravez)
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    print(query.from_user.id)
+                    print(vez[0])
+                    if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
+
+                        print('True')
+                        return True
+
+                    else:
+                        print('False')
+                        return False
+        def definir_proximo_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivojogada = open('vezjogada.txt', 'r')
+            for leituravez in arquivojogada:
+                vez = leituravez.split()
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    if leituravez == linha:
+                        proximo = int(vez[1]) + 1
+                        if proximo == int(posicao[1]):
+                            idproximo = posicao[0]
+                            arquivojogada = open('vezjogada.txt', 'w')
+                            arquivojogada.write(str(idproximo) + " " + str(proximo) + "\n")
+                        else:
+                            arquivojogada = open('vezjogada.txt', 'w')                        
+                            arquivojogada.write("idproximo" + " " + str(proximo))
+                    
+                    else:
+                        pass
+                arquivoo.close()
+                arquivojogada.close()
+        
+        if leitura_vez_jogada() == True:
+            verjogada = 0
+            print("O cara jogou as cartas na hora correta")
+            arquivo = open("Jogadas", "r")
+            for linha in arquivo:
+                ver = linha.split()
+                if(str(query.from_user.id) == str(ver[0])):
+                    await bot.send_message(query.from_user.id, "Voce ja jogou nesse turno")
+                    verjogada = 1
+            arquivo.close()
+            if verjogada == 0:
+                arquivo = open("Jogadas.txt", "a")
+                arquivo.write(str(query.from_user.id) +
+                                " " + str(user_data) + "\n")
+            definir_proximo_jogada()
+        else:
+            print("Não é a vez do cara")
+            await bot.send_message(query.from_user.id, "Não é sua vez de jogar as cartas, por favor espere =)")
+            
+            
         u ={}
 
         arquivo = open('Usuarioscartas.txt', 'r')
@@ -1130,7 +1292,69 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.answer(f'Você respondeu com {user_data!r}')
 
     if user_data == 'simCopas':
-        # ------> Adicionar aqui verificação de turno!!!
+        
+        def leitura_vez_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivovez = open('vezpalpite.txt', 'r')
+            for leituravez in arquivovez:
+                vez = leituravez.split()
+                print(leituravez)
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    print(query.from_user.id)
+                    print(vez[0])
+                    if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
+
+                        print('True')
+                        return True
+
+                    else:
+                        print('False')
+                        return False
+        def definir_proximo_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivojogada = open('vezjogada.txt', 'r')
+            for leituravez in arquivojogada:
+                vez = leituravez.split()
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    if leituravez == linha:
+                        proximo = int(vez[1]) + 1
+                        if proximo == int(posicao[1]):
+                            idproximo = posicao[0]
+                            arquivojogada = open('vezjogada.txt', 'w')
+                            arquivojogada.write(str(idproximo) + " " + str(proximo) + "\n")
+                        else:
+                            arquivojogada = open('vezjogada.txt', 'w')                        
+                            arquivojogada.write("idproximo" + " " + str(proximo))
+                    
+                    else:
+                        pass
+                arquivoo.close()
+                arquivojogada.close()
+        
+        if leitura_vez_jogada() == True:
+            verjogada = 0
+            print("O cara jogou as cartas na hora correta")
+            arquivo = open("Jogadas", "r")
+            for linha in arquivo:
+                ver = linha.split()
+                if(str(query.from_user.id) == str(ver[0])):
+                    await bot.send_message(query.from_user.id, "Voce ja jogou nesse turno")
+                    verjogada = 1
+            arquivo.close()
+            if verjogada == 0:
+                arquivo = open("Jogadas.txt", "a")
+                arquivo.write(str(query.from_user.id) +
+                                " " + str(user_data) + "\n")
+            definir_proximo_jogada()
+        else:
+            print("Não é a vez do cara")
+            await bot.send_message(query.from_user.id, "Não é sua vez de jogar as cartas, por favor espere =)")
+            
+            
         u = {}
 
         arquivo = open('Usuarioscartas.txt', 'r')
@@ -1202,7 +1426,69 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.answer(f'Você respondeu com {user_data!r}')
 
     if user_data == 'simEspadilha':
-        # ------> Adicionar aqui verificação de turno!!!
+        
+        def leitura_vez_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivovez = open('vezpalpite.txt', 'r')
+            for leituravez in arquivovez:
+                vez = leituravez.split()
+                print(leituravez)
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    print(query.from_user.id)
+                    print(vez[0])
+                    if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
+
+                        print('True')
+                        return True
+
+                    else:
+                        print('False')
+                        return False
+        def definir_proximo_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivojogada = open('vezjogada.txt', 'r')
+            for leituravez in arquivojogada:
+                vez = leituravez.split()
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    if leituravez == linha:
+                        proximo = int(vez[1]) + 1
+                        if proximo == int(posicao[1]):
+                            idproximo = posicao[0]
+                            arquivojogada = open('vezjogada.txt', 'w')
+                            arquivojogada.write(str(idproximo) + " " + str(proximo) + "\n")
+                        else:
+                            arquivojogada = open('vezjogada.txt', 'w')                        
+                            arquivojogada.write("idproximo" + " " + str(proximo))
+                    
+                    else:
+                        pass
+                arquivoo.close()
+                arquivojogada.close()
+        
+        if leitura_vez_jogada() == True:
+            verjogada = 0
+            print("O cara jogou as cartas na hora correta")
+            arquivo = open("Jogadas", "r")
+            for linha in arquivo:
+                ver = linha.split()
+                if(str(query.from_user.id) == str(ver[0])):
+                    await bot.send_message(query.from_user.id, "Voce ja jogou nesse turno")
+                    verjogada = 1
+            arquivo.close()
+            if verjogada == 0:
+                arquivo = open("Jogadas.txt", "a")
+                arquivo.write(str(query.from_user.id) +
+                                " " + str(user_data) + "\n")
+            definir_proximo_jogada()
+        else:
+            print("Não é a vez do cara")
+            await bot.send_message(query.from_user.id, "Não é sua vez de jogar as cartas, por favor espere =)")
+            
+            
         u = {}
 
         arquivo = open('Usuarioscartas.txt', 'r')
@@ -1273,7 +1559,69 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.answer(f'Você respondeu com {user_data!r}')
 
     if user_data == 'simOuros':
-        # ------> Adicionar aqui verificação de turno!!!
+        
+        def leitura_vez_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivovez = open('vezpalpite.txt', 'r')
+            for leituravez in arquivovez:
+                vez = leituravez.split()
+                print(leituravez)
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    print(query.from_user.id)
+                    print(vez[0])
+                    if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
+
+                        print('True')
+                        return True
+
+                    else:
+                        print('False')
+                        return False
+        def definir_proximo_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivojogada = open('vezjogada.txt', 'r')
+            for leituravez in arquivojogada:
+                vez = leituravez.split()
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    if leituravez == linha:
+                        proximo = int(vez[1]) + 1
+                        if proximo == int(posicao[1]):
+                            idproximo = posicao[0]
+                            arquivojogada = open('vezjogada.txt', 'w')
+                            arquivojogada.write(str(idproximo) + " " + str(proximo) + "\n")
+                        else:
+                            arquivojogada = open('vezjogada.txt', 'w')                        
+                            arquivojogada.write("idproximo" + " " + str(proximo))
+                    
+                    else:
+                        pass
+                arquivoo.close()
+                arquivojogada.close()
+        
+        if leitura_vez_jogada() == True:
+            verjogada = 0
+            print("O cara jogou as cartas na hora correta")
+            arquivo = open("Jogadas", "r")
+            for linha in arquivo:
+                ver = linha.split()
+                if(str(query.from_user.id) == str(ver[0])):
+                    await bot.send_message(query.from_user.id, "Voce ja jogou nesse turno")
+                    verjogada = 1
+            arquivo.close()
+            if verjogada == 0:
+                arquivo = open("Jogadas.txt", "a")
+                arquivo.write(str(query.from_user.id) +
+                                " " + str(user_data) + "\n")
+            definir_proximo_jogada()
+        else:
+            print("Não é a vez do cara")
+            await bot.send_message(query.from_user.id, "Não é sua vez de jogar as cartas, por favor espere =)")
+            
+            
         u = {}
 
         arquivo = open('Usuarioscartas.txt', 'r')
@@ -1345,7 +1693,69 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.answer(f'Você respondeu com {user_data!r}')
 
     if user_data == 'simTresDePaus':
-        # ------> Adicionar aqui verificação de turno!!!
+        
+        def leitura_vez_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivovez = open('vezpalpite.txt', 'r')
+            for leituravez in arquivovez:
+                vez = leituravez.split()
+                print(leituravez)
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    print(query.from_user.id)
+                    print(vez[0])
+                    if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
+
+                        print('True')
+                        return True
+
+                    else:
+                        print('False')
+                        return False
+        def definir_proximo_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivojogada = open('vezjogada.txt', 'r')
+            for leituravez in arquivojogada:
+                vez = leituravez.split()
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    if leituravez == linha:
+                        proximo = int(vez[1]) + 1
+                        if proximo == int(posicao[1]):
+                            idproximo = posicao[0]
+                            arquivojogada = open('vezjogada.txt', 'w')
+                            arquivojogada.write(str(idproximo) + " " + str(proximo) + "\n")
+                        else:
+                            arquivojogada = open('vezjogada.txt', 'w')                        
+                            arquivojogada.write("idproximo" + " " + str(proximo))
+                    
+                    else:
+                        pass
+                arquivoo.close()
+                arquivojogada.close()
+        
+        if leitura_vez_jogada() == True:
+            verjogada = 0
+            print("O cara jogou as cartas na hora correta")
+            arquivo = open("Jogadas", "r")
+            for linha in arquivo:
+                ver = linha.split()
+                if(str(query.from_user.id) == str(ver[0])):
+                    await bot.send_message(query.from_user.id, "Voce ja jogou nesse turno")
+                    verjogada = 1
+            arquivo.close()
+            if verjogada == 0:
+                arquivo = open("Jogadas.txt", "a")
+                arquivo.write(str(query.from_user.id) +
+                                " " + str(user_data) + "\n")
+            definir_proximo_jogada()
+        else:
+            print("Não é a vez do cara")
+            await bot.send_message(query.from_user.id, "Não é sua vez de jogar as cartas, por favor espere =)")
+            
+            
         u = {}
 
         arquivo = open('Usuarioscartas.txt', 'r')
@@ -1417,7 +1827,69 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.answer(f'Você respondeu com {user_data!r}')
 
     if user_data == 'simTresDeCopas':
-        # ------> Adicionar aqui verificação de turno!!!
+        
+        def leitura_vez_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivovez = open('vezpalpite.txt', 'r')
+            for leituravez in arquivovez:
+                vez = leituravez.split()
+                print(leituravez)
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    print(query.from_user.id)
+                    print(vez[0])
+                    if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
+
+                        print('True')
+                        return True
+
+                    else:
+                        print('False')
+                        return False
+        def definir_proximo_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivojogada = open('vezjogada.txt', 'r')
+            for leituravez in arquivojogada:
+                vez = leituravez.split()
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    if leituravez == linha:
+                        proximo = int(vez[1]) + 1
+                        if proximo == int(posicao[1]):
+                            idproximo = posicao[0]
+                            arquivojogada = open('vezjogada.txt', 'w')
+                            arquivojogada.write(str(idproximo) + " " + str(proximo) + "\n")
+                        else:
+                            arquivojogada = open('vezjogada.txt', 'w')                        
+                            arquivojogada.write("idproximo" + " " + str(proximo))
+                    
+                    else:
+                        pass
+                arquivoo.close()
+                arquivojogada.close()
+        
+        if leitura_vez_jogada() == True:
+            verjogada = 0
+            print("O cara jogou as cartas na hora correta")
+            arquivo = open("Jogadas", "r")
+            for linha in arquivo:
+                ver = linha.split()
+                if(str(query.from_user.id) == str(ver[0])):
+                    await bot.send_message(query.from_user.id, "Voce ja jogou nesse turno")
+                    verjogada = 1
+            arquivo.close()
+            if verjogada == 0:
+                arquivo = open("Jogadas.txt", "a")
+                arquivo.write(str(query.from_user.id) +
+                                " " + str(user_data) + "\n")
+            definir_proximo_jogada()
+        else:
+            print("Não é a vez do cara")
+            await bot.send_message(query.from_user.id, "Não é sua vez de jogar as cartas, por favor espere =)")
+            
+            
         u = {}
 
         arquivo = open('Usuarioscartas.txt', 'r')
@@ -1490,7 +1962,69 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.answer(f'Você respondeu com {user_data!r}')
 
     if user_data == 'simTresDeEspadas':
-        # ------> Adicionar aqui verificação de turno!!!
+        
+        def leitura_vez_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivovez = open('vezpalpite.txt', 'r')
+            for leituravez in arquivovez:
+                vez = leituravez.split()
+                print(leituravez)
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    print(query.from_user.id)
+                    print(vez[0])
+                    if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
+
+                        print('True')
+                        return True
+
+                    else:
+                        print('False')
+                        return False
+        def definir_proximo_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivojogada = open('vezjogada.txt', 'r')
+            for leituravez in arquivojogada:
+                vez = leituravez.split()
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    if leituravez == linha:
+                        proximo = int(vez[1]) + 1
+                        if proximo == int(posicao[1]):
+                            idproximo = posicao[0]
+                            arquivojogada = open('vezjogada.txt', 'w')
+                            arquivojogada.write(str(idproximo) + " " + str(proximo) + "\n")
+                        else:
+                            arquivojogada = open('vezjogada.txt', 'w')                        
+                            arquivojogada.write("idproximo" + " " + str(proximo))
+                    
+                    else:
+                        pass
+                arquivoo.close()
+                arquivojogada.close()
+        
+        if leitura_vez_jogada() == True:
+            verjogada = 0
+            print("O cara jogou as cartas na hora correta")
+            arquivo = open("Jogadas", "r")
+            for linha in arquivo:
+                ver = linha.split()
+                if(str(query.from_user.id) == str(ver[0])):
+                    await bot.send_message(query.from_user.id, "Voce ja jogou nesse turno")
+                    verjogada = 1
+            arquivo.close()
+            if verjogada == 0:
+                arquivo = open("Jogadas.txt", "a")
+                arquivo.write(str(query.from_user.id) +
+                                " " + str(user_data) + "\n")
+            definir_proximo_jogada()
+        else:
+            print("Não é a vez do cara")
+            await bot.send_message(query.from_user.id, "Não é sua vez de jogar as cartas, por favor espere =)")
+            
+            
         u = {}
 
         arquivo = open('Usuarioscartas.txt', 'r')
@@ -1563,7 +2097,69 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.answer(f'Você respondeu com {user_data!r}')
 
     if user_data == 'simTresDeOuros':
-        # ------> Adicionar aqui verificação de turno!!!
+        
+        def leitura_vez_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivovez = open('vezpalpite.txt', 'r')
+            for leituravez in arquivovez:
+                vez = leituravez.split()
+                print(leituravez)
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    print(query.from_user.id)
+                    print(vez[0])
+                    if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
+
+                        print('True')
+                        return True
+
+                    else:
+                        print('False')
+                        return False
+        def definir_proximo_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivojogada = open('vezjogada.txt', 'r')
+            for leituravez in arquivojogada:
+                vez = leituravez.split()
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    if leituravez == linha:
+                        proximo = int(vez[1]) + 1
+                        if proximo == int(posicao[1]):
+                            idproximo = posicao[0]
+                            arquivojogada = open('vezjogada.txt', 'w')
+                            arquivojogada.write(str(idproximo) + " " + str(proximo) + "\n")
+                        else:
+                            arquivojogada = open('vezjogada.txt', 'w')                        
+                            arquivojogada.write("idproximo" + " " + str(proximo))
+                    
+                    else:
+                        pass
+                arquivoo.close()
+                arquivojogada.close()
+        
+        if leitura_vez_jogada() == True:
+            verjogada = 0
+            print("O cara jogou as cartas na hora correta")
+            arquivo = open("Jogadas", "r")
+            for linha in arquivo:
+                ver = linha.split()
+                if(str(query.from_user.id) == str(ver[0])):
+                    await bot.send_message(query.from_user.id, "Voce ja jogou nesse turno")
+                    verjogada = 1
+            arquivo.close()
+            if verjogada == 0:
+                arquivo = open("Jogadas.txt", "a")
+                arquivo.write(str(query.from_user.id) +
+                                " " + str(user_data) + "\n")
+            definir_proximo_jogada()
+        else:
+            print("Não é a vez do cara")
+            await bot.send_message(query.from_user.id, "Não é sua vez de jogar as cartas, por favor espere =)")
+            
+            
         u = {}
 
         arquivo = open('Usuarioscartas.txt', 'r')
@@ -1636,7 +2232,69 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.answer(f'Você respondeu com {user_data!r}')
 
     if user_data == 'simDoisDePaus':
-        # ------> Adicionar aqui verificação de turno!!!
+        
+        def leitura_vez_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivovez = open('vezpalpite.txt', 'r')
+            for leituravez in arquivovez:
+                vez = leituravez.split()
+                print(leituravez)
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    print(query.from_user.id)
+                    print(vez[0])
+                    if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
+
+                        print('True')
+                        return True
+
+                    else:
+                        print('False')
+                        return False
+        def definir_proximo_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivojogada = open('vezjogada.txt', 'r')
+            for leituravez in arquivojogada:
+                vez = leituravez.split()
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    if leituravez == linha:
+                        proximo = int(vez[1]) + 1
+                        if proximo == int(posicao[1]):
+                            idproximo = posicao[0]
+                            arquivojogada = open('vezjogada.txt', 'w')
+                            arquivojogada.write(str(idproximo) + " " + str(proximo) + "\n")
+                        else:
+                            arquivojogada = open('vezjogada.txt', 'w')                        
+                            arquivojogada.write("idproximo" + " " + str(proximo))
+                    
+                    else:
+                        pass
+                arquivoo.close()
+                arquivojogada.close()
+        
+        if leitura_vez_jogada() == True:
+            verjogada = 0
+            print("O cara jogou as cartas na hora correta")
+            arquivo = open("Jogadas", "r")
+            for linha in arquivo:
+                ver = linha.split()
+                if(str(query.from_user.id) == str(ver[0])):
+                    await bot.send_message(query.from_user.id, "Voce ja jogou nesse turno")
+                    verjogada = 1
+            arquivo.close()
+            if verjogada == 0:
+                arquivo = open("Jogadas.txt", "a")
+                arquivo.write(str(query.from_user.id) +
+                                " " + str(user_data) + "\n")
+            definir_proximo_jogada()
+        else:
+            print("Não é a vez do cara")
+            await bot.send_message(query.from_user.id, "Não é sua vez de jogar as cartas, por favor espere =)")
+            
+            
         u = {}
 
         arquivo = open('Usuarioscartas.txt', 'r')
@@ -1708,7 +2366,69 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.answer(f'Você respondeu com {user_data!r}')
 
     if user_data == 'simDoisDeCopas':
-        # ------> Adicionar aqui verificação de turno!!!
+        
+        def leitura_vez_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivovez = open('vezpalpite.txt', 'r')
+            for leituravez in arquivovez:
+                vez = leituravez.split()
+                print(leituravez)
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    print(query.from_user.id)
+                    print(vez[0])
+                    if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
+
+                        print('True')
+                        return True
+
+                    else:
+                        print('False')
+                        return False
+        def definir_proximo_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivojogada = open('vezjogada.txt', 'r')
+            for leituravez in arquivojogada:
+                vez = leituravez.split()
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    if leituravez == linha:
+                        proximo = int(vez[1]) + 1
+                        if proximo == int(posicao[1]):
+                            idproximo = posicao[0]
+                            arquivojogada = open('vezjogada.txt', 'w')
+                            arquivojogada.write(str(idproximo) + " " + str(proximo) + "\n")
+                        else:
+                            arquivojogada = open('vezjogada.txt', 'w')                        
+                            arquivojogada.write("idproximo" + " " + str(proximo))
+                    
+                    else:
+                        pass
+                arquivoo.close()
+                arquivojogada.close()
+        
+        if leitura_vez_jogada() == True:
+            verjogada = 0
+            print("O cara jogou as cartas na hora correta")
+            arquivo = open("Jogadas", "r")
+            for linha in arquivo:
+                ver = linha.split()
+                if(str(query.from_user.id) == str(ver[0])):
+                    await bot.send_message(query.from_user.id, "Voce ja jogou nesse turno")
+                    verjogada = 1
+            arquivo.close()
+            if verjogada == 0:
+                arquivo = open("Jogadas.txt", "a")
+                arquivo.write(str(query.from_user.id) +
+                                " " + str(user_data) + "\n")
+            definir_proximo_jogada()
+        else:
+            print("Não é a vez do cara")
+            await bot.send_message(query.from_user.id, "Não é sua vez de jogar as cartas, por favor espere =)")
+            
+            
         u = {}
 
         arquivo = open('Usuarioscartas.txt', 'r')
@@ -1780,7 +2500,69 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.answer(f'Você respondeu com {user_data!r}')
 
     if user_data == 'simDoisDeEspadas':
-        # ------> Adicionar aqui verificação de turno!!!
+        
+        def leitura_vez_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivovez = open('vezpalpite.txt', 'r')
+            for leituravez in arquivovez:
+                vez = leituravez.split()
+                print(leituravez)
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    print(query.from_user.id)
+                    print(vez[0])
+                    if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
+
+                        print('True')
+                        return True
+
+                    else:
+                        print('False')
+                        return False
+        def definir_proximo_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivojogada = open('vezjogada.txt', 'r')
+            for leituravez in arquivojogada:
+                vez = leituravez.split()
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    if leituravez == linha:
+                        proximo = int(vez[1]) + 1
+                        if proximo == int(posicao[1]):
+                            idproximo = posicao[0]
+                            arquivojogada = open('vezjogada.txt', 'w')
+                            arquivojogada.write(str(idproximo) + " " + str(proximo) + "\n")
+                        else:
+                            arquivojogada = open('vezjogada.txt', 'w')                        
+                            arquivojogada.write("idproximo" + " " + str(proximo))
+                    
+                    else:
+                        pass
+                arquivoo.close()
+                arquivojogada.close()
+        
+        if leitura_vez_jogada() == True:
+            verjogada = 0
+            print("O cara jogou as cartas na hora correta")
+            arquivo = open("Jogadas", "r")
+            for linha in arquivo:
+                ver = linha.split()
+                if(str(query.from_user.id) == str(ver[0])):
+                    await bot.send_message(query.from_user.id, "Voce ja jogou nesse turno")
+                    verjogada = 1
+            arquivo.close()
+            if verjogada == 0:
+                arquivo = open("Jogadas.txt", "a")
+                arquivo.write(str(query.from_user.id) +
+                                " " + str(user_data) + "\n")
+            definir_proximo_jogada()
+        else:
+            print("Não é a vez do cara")
+            await bot.send_message(query.from_user.id, "Não é sua vez de jogar as cartas, por favor espere =)")
+            
+            
         u = {}
 
         arquivo = open('Usuarioscartas.txt', 'r')
@@ -1855,7 +2637,69 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.answer(f'Você respondeu com {user_data!r}')
 
     if user_data == 'simDoisDeOuros':
-        # ------> Adicionar aqui verificação de turno!!!
+        
+        def leitura_vez_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivovez = open('vezpalpite.txt', 'r')
+            for leituravez in arquivovez:
+                vez = leituravez.split()
+                print(leituravez)
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    print(query.from_user.id)
+                    print(vez[0])
+                    if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
+
+                        print('True')
+                        return True
+
+                    else:
+                        print('False')
+                        return False
+        def definir_proximo_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivojogada = open('vezjogada.txt', 'r')
+            for leituravez in arquivojogada:
+                vez = leituravez.split()
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    if leituravez == linha:
+                        proximo = int(vez[1]) + 1
+                        if proximo == int(posicao[1]):
+                            idproximo = posicao[0]
+                            arquivojogada = open('vezjogada.txt', 'w')
+                            arquivojogada.write(str(idproximo) + " " + str(proximo) + "\n")
+                        else:
+                            arquivojogada = open('vezjogada.txt', 'w')                        
+                            arquivojogada.write("idproximo" + " " + str(proximo))
+                    
+                    else:
+                        pass
+                arquivoo.close()
+                arquivojogada.close()
+        
+        if leitura_vez_jogada() == True:
+            verjogada = 0
+            print("O cara jogou as cartas na hora correta")
+            arquivo = open("Jogadas", "r")
+            for linha in arquivo:
+                ver = linha.split()
+                if(str(query.from_user.id) == str(ver[0])):
+                    await bot.send_message(query.from_user.id, "Voce ja jogou nesse turno")
+                    verjogada = 1
+            arquivo.close()
+            if verjogada == 0:
+                arquivo = open("Jogadas.txt", "a")
+                arquivo.write(str(query.from_user.id) +
+                                " " + str(user_data) + "\n")
+            definir_proximo_jogada()
+        else:
+            print("Não é a vez do cara")
+            await bot.send_message(query.from_user.id, "Não é sua vez de jogar as cartas, por favor espere =)")
+            
+            
         u = {}
 
         arquivo = open('Usuarioscartas.txt', 'r')
@@ -1927,7 +2771,69 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.answer(f'Você respondeu com {user_data!r}')
 
     if user_data == 'simAsDePaus':
-        # ------> Adicionar aqui verificação de turno!!!
+        
+        def leitura_vez_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivovez = open('vezpalpite.txt', 'r')
+            for leituravez in arquivovez:
+                vez = leituravez.split()
+                print(leituravez)
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    print(query.from_user.id)
+                    print(vez[0])
+                    if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
+
+                        print('True')
+                        return True
+
+                    else:
+                        print('False')
+                        return False
+        def definir_proximo_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivojogada = open('vezjogada.txt', 'r')
+            for leituravez in arquivojogada:
+                vez = leituravez.split()
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    if leituravez == linha:
+                        proximo = int(vez[1]) + 1
+                        if proximo == int(posicao[1]):
+                            idproximo = posicao[0]
+                            arquivojogada = open('vezjogada.txt', 'w')
+                            arquivojogada.write(str(idproximo) + " " + str(proximo) + "\n")
+                        else:
+                            arquivojogada = open('vezjogada.txt', 'w')                        
+                            arquivojogada.write("idproximo" + " " + str(proximo))
+                    
+                    else:
+                        pass
+                arquivoo.close()
+                arquivojogada.close()
+        
+        if leitura_vez_jogada() == True:
+            verjogada = 0
+            print("O cara jogou as cartas na hora correta")
+            arquivo = open("Jogadas", "r")
+            for linha in arquivo:
+                ver = linha.split()
+                if(str(query.from_user.id) == str(ver[0])):
+                    await bot.send_message(query.from_user.id, "Voce ja jogou nesse turno")
+                    verjogada = 1
+            arquivo.close()
+            if verjogada == 0:
+                arquivo = open("Jogadas.txt", "a")
+                arquivo.write(str(query.from_user.id) +
+                                " " + str(user_data) + "\n")
+            definir_proximo_jogada()
+        else:
+            print("Não é a vez do cara")
+            await bot.send_message(query.from_user.id, "Não é sua vez de jogar as cartas, por favor espere =)")
+            
+            
         u = {}
 
         arquivo = open('Usuarioscartas.txt', 'r')
@@ -1999,7 +2905,69 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.answer(f'Você respondeu com {user_data!r}')
 
     if user_data == 'simAsDeCopas':
-        # ------> Adicionar aqui verificação de turno!!!
+        
+        def leitura_vez_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivovez = open('vezpalpite.txt', 'r')
+            for leituravez in arquivovez:
+                vez = leituravez.split()
+                print(leituravez)
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    print(query.from_user.id)
+                    print(vez[0])
+                    if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
+
+                        print('True')
+                        return True
+
+                    else:
+                        print('False')
+                        return False
+        def definir_proximo_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivojogada = open('vezjogada.txt', 'r')
+            for leituravez in arquivojogada:
+                vez = leituravez.split()
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    if leituravez == linha:
+                        proximo = int(vez[1]) + 1
+                        if proximo == int(posicao[1]):
+                            idproximo = posicao[0]
+                            arquivojogada = open('vezjogada.txt', 'w')
+                            arquivojogada.write(str(idproximo) + " " + str(proximo) + "\n")
+                        else:
+                            arquivojogada = open('vezjogada.txt', 'w')                        
+                            arquivojogada.write("idproximo" + " " + str(proximo))
+                    
+                    else:
+                        pass
+                arquivoo.close()
+                arquivojogada.close()
+        
+        if leitura_vez_jogada() == True:
+            verjogada = 0
+            print("O cara jogou as cartas na hora correta")
+            arquivo = open("Jogadas", "r")
+            for linha in arquivo:
+                ver = linha.split()
+                if(str(query.from_user.id) == str(ver[0])):
+                    await bot.send_message(query.from_user.id, "Voce ja jogou nesse turno")
+                    verjogada = 1
+            arquivo.close()
+            if verjogada == 0:
+                arquivo = open("Jogadas.txt", "a")
+                arquivo.write(str(query.from_user.id) +
+                                " " + str(user_data) + "\n")
+            definir_proximo_jogada()
+        else:
+            print("Não é a vez do cara")
+            await bot.send_message(query.from_user.id, "Não é sua vez de jogar as cartas, por favor espere =)")
+            
+            
         u = {}
 
         arquivo = open('Usuarioscartas.txt', 'r')
@@ -2071,7 +3039,69 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.answer(f'Você respondeu com {user_data!r}')
 
     if user_data == 'simAsDeOuros':
-        # ------> Adicionar aqui verificação de turno!!!
+        
+        def leitura_vez_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivovez = open('vezpalpite.txt', 'r')
+            for leituravez in arquivovez:
+                vez = leituravez.split()
+                print(leituravez)
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    print(query.from_user.id)
+                    print(vez[0])
+                    if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
+
+                        print('True')
+                        return True
+
+                    else:
+                        print('False')
+                        return False
+        def definir_proximo_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivojogada = open('vezjogada.txt', 'r')
+            for leituravez in arquivojogada:
+                vez = leituravez.split()
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    if leituravez == linha:
+                        proximo = int(vez[1]) + 1
+                        if proximo == int(posicao[1]):
+                            idproximo = posicao[0]
+                            arquivojogada = open('vezjogada.txt', 'w')
+                            arquivojogada.write(str(idproximo) + " " + str(proximo) + "\n")
+                        else:
+                            arquivojogada = open('vezjogada.txt', 'w')                        
+                            arquivojogada.write("idproximo" + " " + str(proximo))
+                    
+                    else:
+                        pass
+                arquivoo.close()
+                arquivojogada.close()
+        
+        if leitura_vez_jogada() == True:
+            verjogada = 0
+            print("O cara jogou as cartas na hora correta")
+            arquivo = open("Jogadas", "r")
+            for linha in arquivo:
+                ver = linha.split()
+                if(str(query.from_user.id) == str(ver[0])):
+                    await bot.send_message(query.from_user.id, "Voce ja jogou nesse turno")
+                    verjogada = 1
+            arquivo.close()
+            if verjogada == 0:
+                arquivo = open("Jogadas.txt", "a")
+                arquivo.write(str(query.from_user.id) +
+                                " " + str(user_data) + "\n")
+            definir_proximo_jogada()
+        else:
+            print("Não é a vez do cara")
+            await bot.send_message(query.from_user.id, "Não é sua vez de jogar as cartas, por favor espere =)")
+            
+            
         u = {}
 
         arquivo = open('Usuarioscartas.txt', 'r')
@@ -2143,7 +3173,69 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.answer(f'Você respondeu com {user_data!r}')
 
     if user_data == 'simReiDePaus':
-        # ------> Adicionar aqui verificação de turno!!!
+        
+        def leitura_vez_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivovez = open('vezpalpite.txt', 'r')
+            for leituravez in arquivovez:
+                vez = leituravez.split()
+                print(leituravez)
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    print(query.from_user.id)
+                    print(vez[0])
+                    if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
+
+                        print('True')
+                        return True
+
+                    else:
+                        print('False')
+                        return False
+        def definir_proximo_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivojogada = open('vezjogada.txt', 'r')
+            for leituravez in arquivojogada:
+                vez = leituravez.split()
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    if leituravez == linha:
+                        proximo = int(vez[1]) + 1
+                        if proximo == int(posicao[1]):
+                            idproximo = posicao[0]
+                            arquivojogada = open('vezjogada.txt', 'w')
+                            arquivojogada.write(str(idproximo) + " " + str(proximo) + "\n")
+                        else:
+                            arquivojogada = open('vezjogada.txt', 'w')                        
+                            arquivojogada.write("idproximo" + " " + str(proximo))
+                    
+                    else:
+                        pass
+                arquivoo.close()
+                arquivojogada.close()
+        
+        if leitura_vez_jogada() == True:
+            verjogada = 0
+            print("O cara jogou as cartas na hora correta")
+            arquivo = open("Jogadas", "r")
+            for linha in arquivo:
+                ver = linha.split()
+                if(str(query.from_user.id) == str(ver[0])):
+                    await bot.send_message(query.from_user.id, "Voce ja jogou nesse turno")
+                    verjogada = 1
+            arquivo.close()
+            if verjogada == 0:
+                arquivo = open("Jogadas.txt", "a")
+                arquivo.write(str(query.from_user.id) +
+                                " " + str(user_data) + "\n")
+            definir_proximo_jogada()
+        else:
+            print("Não é a vez do cara")
+            await bot.send_message(query.from_user.id, "Não é sua vez de jogar as cartas, por favor espere =)")
+            
+            
         u = {}
 
         arquivo = open('Usuarioscartas.txt', 'r')
@@ -2215,7 +3307,69 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.answer(f'Você respondeu com {user_data!r}')
 
     if user_data == 'simReiDeCopas':
-        # ------> Adicionar aqui verificação de turno!!!
+        
+        def leitura_vez_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivovez = open('vezpalpite.txt', 'r')
+            for leituravez in arquivovez:
+                vez = leituravez.split()
+                print(leituravez)
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    print(query.from_user.id)
+                    print(vez[0])
+                    if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
+
+                        print('True')
+                        return True
+
+                    else:
+                        print('False')
+                        return False
+        def definir_proximo_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivojogada = open('vezjogada.txt', 'r')
+            for leituravez in arquivojogada:
+                vez = leituravez.split()
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    if leituravez == linha:
+                        proximo = int(vez[1]) + 1
+                        if proximo == int(posicao[1]):
+                            idproximo = posicao[0]
+                            arquivojogada = open('vezjogada.txt', 'w')
+                            arquivojogada.write(str(idproximo) + " " + str(proximo) + "\n")
+                        else:
+                            arquivojogada = open('vezjogada.txt', 'w')                        
+                            arquivojogada.write("idproximo" + " " + str(proximo))
+                    
+                    else:
+                        pass
+                arquivoo.close()
+                arquivojogada.close()
+        
+        if leitura_vez_jogada() == True:
+            verjogada = 0
+            print("O cara jogou as cartas na hora correta")
+            arquivo = open("Jogadas", "r")
+            for linha in arquivo:
+                ver = linha.split()
+                if(str(query.from_user.id) == str(ver[0])):
+                    await bot.send_message(query.from_user.id, "Voce ja jogou nesse turno")
+                    verjogada = 1
+            arquivo.close()
+            if verjogada == 0:
+                arquivo = open("Jogadas.txt", "a")
+                arquivo.write(str(query.from_user.id) +
+                                " " + str(user_data) + "\n")
+            definir_proximo_jogada()
+        else:
+            print("Não é a vez do cara")
+            await bot.send_message(query.from_user.id, "Não é sua vez de jogar as cartas, por favor espere =)")
+            
+            
         u = {}
 
         arquivo = open('Usuarioscartas.txt', 'r')
@@ -2287,7 +3441,69 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.answer(f'Você respondeu com {user_data!r}')
 
     if user_data == 'simReiDeEspadas':
-        # ------> Adicionar aqui verificação de turno!!!
+        
+        def leitura_vez_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivovez = open('vezpalpite.txt', 'r')
+            for leituravez in arquivovez:
+                vez = leituravez.split()
+                print(leituravez)
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    print(query.from_user.id)
+                    print(vez[0])
+                    if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
+
+                        print('True')
+                        return True
+
+                    else:
+                        print('False')
+                        return False
+        def definir_proximo_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivojogada = open('vezjogada.txt', 'r')
+            for leituravez in arquivojogada:
+                vez = leituravez.split()
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    if leituravez == linha:
+                        proximo = int(vez[1]) + 1
+                        if proximo == int(posicao[1]):
+                            idproximo = posicao[0]
+                            arquivojogada = open('vezjogada.txt', 'w')
+                            arquivojogada.write(str(idproximo) + " " + str(proximo) + "\n")
+                        else:
+                            arquivojogada = open('vezjogada.txt', 'w')                        
+                            arquivojogada.write("idproximo" + " " + str(proximo))
+                    
+                    else:
+                        pass
+                arquivoo.close()
+                arquivojogada.close()
+        
+        if leitura_vez_jogada() == True:
+            verjogada = 0
+            print("O cara jogou as cartas na hora correta")
+            arquivo = open("Jogadas", "r")
+            for linha in arquivo:
+                ver = linha.split()
+                if(str(query.from_user.id) == str(ver[0])):
+                    await bot.send_message(query.from_user.id, "Voce ja jogou nesse turno")
+                    verjogada = 1
+            arquivo.close()
+            if verjogada == 0:
+                arquivo = open("Jogadas.txt", "a")
+                arquivo.write(str(query.from_user.id) +
+                                " " + str(user_data) + "\n")
+            definir_proximo_jogada()
+        else:
+            print("Não é a vez do cara")
+            await bot.send_message(query.from_user.id, "Não é sua vez de jogar as cartas, por favor espere =)")
+            
+            
         u = {}
 
         arquivo = open('Usuarioscartas.txt', 'r')
@@ -2359,7 +3575,69 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.answer(f'Você respondeu com {user_data!r}')
 
     if user_data == 'simReiDeOuros':
-        # ------> Adicionar aqui verificação de turno!!!
+        
+        def leitura_vez_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivovez = open('vezpalpite.txt', 'r')
+            for leituravez in arquivovez:
+                vez = leituravez.split()
+                print(leituravez)
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    print(query.from_user.id)
+                    print(vez[0])
+                    if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
+
+                        print('True')
+                        return True
+
+                    else:
+                        print('False')
+                        return False
+        def definir_proximo_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivojogada = open('vezjogada.txt', 'r')
+            for leituravez in arquivojogada:
+                vez = leituravez.split()
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    if leituravez == linha:
+                        proximo = int(vez[1]) + 1
+                        if proximo == int(posicao[1]):
+                            idproximo = posicao[0]
+                            arquivojogada = open('vezjogada.txt', 'w')
+                            arquivojogada.write(str(idproximo) + " " + str(proximo) + "\n")
+                        else:
+                            arquivojogada = open('vezjogada.txt', 'w')                        
+                            arquivojogada.write("idproximo" + " " + str(proximo))
+                    
+                    else:
+                        pass
+                arquivoo.close()
+                arquivojogada.close()
+        
+        if leitura_vez_jogada() == True:
+            verjogada = 0
+            print("O cara jogou as cartas na hora correta")
+            arquivo = open("Jogadas", "r")
+            for linha in arquivo:
+                ver = linha.split()
+                if(str(query.from_user.id) == str(ver[0])):
+                    await bot.send_message(query.from_user.id, "Voce ja jogou nesse turno")
+                    verjogada = 1
+            arquivo.close()
+            if verjogada == 0:
+                arquivo = open("Jogadas.txt", "a")
+                arquivo.write(str(query.from_user.id) +
+                                " " + str(user_data) + "\n")
+            definir_proximo_jogada()
+        else:
+            print("Não é a vez do cara")
+            await bot.send_message(query.from_user.id, "Não é sua vez de jogar as cartas, por favor espere =)")
+            
+            
         u = {}
 
         arquivo = open('Usuarioscartas.txt', 'r')
@@ -2431,7 +3709,69 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.answer(f'Você respondeu com {user_data!r}')
 
     if user_data == 'simValeteDePaus':
-        # ------> Adicionar aqui verificação de turno!!!
+        
+        def leitura_vez_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivovez = open('vezpalpite.txt', 'r')
+            for leituravez in arquivovez:
+                vez = leituravez.split()
+                print(leituravez)
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    print(query.from_user.id)
+                    print(vez[0])
+                    if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
+
+                        print('True')
+                        return True
+
+                    else:
+                        print('False')
+                        return False
+        def definir_proximo_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivojogada = open('vezjogada.txt', 'r')
+            for leituravez in arquivojogada:
+                vez = leituravez.split()
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    if leituravez == linha:
+                        proximo = int(vez[1]) + 1
+                        if proximo == int(posicao[1]):
+                            idproximo = posicao[0]
+                            arquivojogada = open('vezjogada.txt', 'w')
+                            arquivojogada.write(str(idproximo) + " " + str(proximo) + "\n")
+                        else:
+                            arquivojogada = open('vezjogada.txt', 'w')                        
+                            arquivojogada.write("idproximo" + " " + str(proximo))
+                    
+                    else:
+                        pass
+                arquivoo.close()
+                arquivojogada.close()
+        
+        if leitura_vez_jogada() == True:
+            verjogada = 0
+            print("O cara jogou as cartas na hora correta")
+            arquivo = open("Jogadas", "r")
+            for linha in arquivo:
+                ver = linha.split()
+                if(str(query.from_user.id) == str(ver[0])):
+                    await bot.send_message(query.from_user.id, "Voce ja jogou nesse turno")
+                    verjogada = 1
+            arquivo.close()
+            if verjogada == 0:
+                arquivo = open("Jogadas.txt", "a")
+                arquivo.write(str(query.from_user.id) +
+                                " " + str(user_data) + "\n")
+            definir_proximo_jogada()
+        else:
+            print("Não é a vez do cara")
+            await bot.send_message(query.from_user.id, "Não é sua vez de jogar as cartas, por favor espere =)")
+            
+            
         u = {}
 
         arquivo = open('Usuarioscartas.txt', 'r')
@@ -2503,7 +3843,69 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.answer(f'Você respondeu com {user_data!r}')
 
     if user_data == 'simValeteDeCopas':
-        # ------> Adicionar aqui verificação de turno!!!
+        
+        def leitura_vez_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivovez = open('vezpalpite.txt', 'r')
+            for leituravez in arquivovez:
+                vez = leituravez.split()
+                print(leituravez)
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    print(query.from_user.id)
+                    print(vez[0])
+                    if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
+
+                        print('True')
+                        return True
+
+                    else:
+                        print('False')
+                        return False
+        def definir_proximo_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivojogada = open('vezjogada.txt', 'r')
+            for leituravez in arquivojogada:
+                vez = leituravez.split()
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    if leituravez == linha:
+                        proximo = int(vez[1]) + 1
+                        if proximo == int(posicao[1]):
+                            idproximo = posicao[0]
+                            arquivojogada = open('vezjogada.txt', 'w')
+                            arquivojogada.write(str(idproximo) + " " + str(proximo) + "\n")
+                        else:
+                            arquivojogada = open('vezjogada.txt', 'w')                        
+                            arquivojogada.write("idproximo" + " " + str(proximo))
+                    
+                    else:
+                        pass
+                arquivoo.close()
+                arquivojogada.close()
+        
+        if leitura_vez_jogada() == True:
+            verjogada = 0
+            print("O cara jogou as cartas na hora correta")
+            arquivo = open("Jogadas", "r")
+            for linha in arquivo:
+                ver = linha.split()
+                if(str(query.from_user.id) == str(ver[0])):
+                    await bot.send_message(query.from_user.id, "Voce ja jogou nesse turno")
+                    verjogada = 1
+            arquivo.close()
+            if verjogada == 0:
+                arquivo = open("Jogadas.txt", "a")
+                arquivo.write(str(query.from_user.id) +
+                                " " + str(user_data) + "\n")
+            definir_proximo_jogada()
+        else:
+            print("Não é a vez do cara")
+            await bot.send_message(query.from_user.id, "Não é sua vez de jogar as cartas, por favor espere =)")
+            
+            
         u = {}
 
         arquivo = open('Usuarioscartas.txt', 'r')
@@ -2575,7 +3977,69 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.answer(f'Você respondeu com {user_data!r}')
 
     if user_data == 'simValeteDeEspadas':
-        # ------> Adicionar aqui verificação de turno!!!
+        
+        def leitura_vez_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivovez = open('vezpalpite.txt', 'r')
+            for leituravez in arquivovez:
+                vez = leituravez.split()
+                print(leituravez)
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    print(query.from_user.id)
+                    print(vez[0])
+                    if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
+
+                        print('True')
+                        return True
+
+                    else:
+                        print('False')
+                        return False
+        def definir_proximo_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivojogada = open('vezjogada.txt', 'r')
+            for leituravez in arquivojogada:
+                vez = leituravez.split()
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    if leituravez == linha:
+                        proximo = int(vez[1]) + 1
+                        if proximo == int(posicao[1]):
+                            idproximo = posicao[0]
+                            arquivojogada = open('vezjogada.txt', 'w')
+                            arquivojogada.write(str(idproximo) + " " + str(proximo) + "\n")
+                        else:
+                            arquivojogada = open('vezjogada.txt', 'w')                        
+                            arquivojogada.write("idproximo" + " " + str(proximo))
+                    
+                    else:
+                        pass
+                arquivoo.close()
+                arquivojogada.close()
+        
+        if leitura_vez_jogada() == True:
+            verjogada = 0
+            print("O cara jogou as cartas na hora correta")
+            arquivo = open("Jogadas", "r")
+            for linha in arquivo:
+                ver = linha.split()
+                if(str(query.from_user.id) == str(ver[0])):
+                    await bot.send_message(query.from_user.id, "Voce ja jogou nesse turno")
+                    verjogada = 1
+            arquivo.close()
+            if verjogada == 0:
+                arquivo = open("Jogadas.txt", "a")
+                arquivo.write(str(query.from_user.id) +
+                                " " + str(user_data) + "\n")
+            definir_proximo_jogada()
+        else:
+            print("Não é a vez do cara")
+            await bot.send_message(query.from_user.id, "Não é sua vez de jogar as cartas, por favor espere =)")
+            
+            
         u = {}
 
         arquivo = open('Usuarioscartas.txt', 'r')
@@ -2647,7 +4111,69 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.answer(f'Você respondeu com {user_data!r}')
 
     if user_data == 'simValeteDeOuros':
-        # ------> Adicionar aqui verificação de turno!!!
+        
+        def leitura_vez_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivovez = open('vezpalpite.txt', 'r')
+            for leituravez in arquivovez:
+                vez = leituravez.split()
+                print(leituravez)
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    print(query.from_user.id)
+                    print(vez[0])
+                    if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
+
+                        print('True')
+                        return True
+
+                    else:
+                        print('False')
+                        return False
+        def definir_proximo_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivojogada = open('vezjogada.txt', 'r')
+            for leituravez in arquivojogada:
+                vez = leituravez.split()
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    if leituravez == linha:
+                        proximo = int(vez[1]) + 1
+                        if proximo == int(posicao[1]):
+                            idproximo = posicao[0]
+                            arquivojogada = open('vezjogada.txt', 'w')
+                            arquivojogada.write(str(idproximo) + " " + str(proximo) + "\n")
+                        else:
+                            arquivojogada = open('vezjogada.txt', 'w')                        
+                            arquivojogada.write("idproximo" + " " + str(proximo))
+                    
+                    else:
+                        pass
+                arquivoo.close()
+                arquivojogada.close()
+        
+        if leitura_vez_jogada() == True:
+            verjogada = 0
+            print("O cara jogou as cartas na hora correta")
+            arquivo = open("Jogadas", "r")
+            for linha in arquivo:
+                ver = linha.split()
+                if(str(query.from_user.id) == str(ver[0])):
+                    await bot.send_message(query.from_user.id, "Voce ja jogou nesse turno")
+                    verjogada = 1
+            arquivo.close()
+            if verjogada == 0:
+                arquivo = open("Jogadas.txt", "a")
+                arquivo.write(str(query.from_user.id) +
+                                " " + str(user_data) + "\n")
+            definir_proximo_jogada()
+        else:
+            print("Não é a vez do cara")
+            await bot.send_message(query.from_user.id, "Não é sua vez de jogar as cartas, por favor espere =)")
+            
+            
         u = {}
 
         arquivo = open('Usuarioscartas.txt', 'r')
@@ -2719,7 +4245,69 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.answer(f'Você respondeu com {user_data!r}')
 
     if user_data == 'simDamaDePaus':
-        # ------> Adicionar aqui verificação de turno!!!
+        
+        def leitura_vez_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivovez = open('vezpalpite.txt', 'r')
+            for leituravez in arquivovez:
+                vez = leituravez.split()
+                print(leituravez)
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    print(query.from_user.id)
+                    print(vez[0])
+                    if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
+
+                        print('True')
+                        return True
+
+                    else:
+                        print('False')
+                        return False
+        def definir_proximo_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivojogada = open('vezjogada.txt', 'r')
+            for leituravez in arquivojogada:
+                vez = leituravez.split()
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    if leituravez == linha:
+                        proximo = int(vez[1]) + 1
+                        if proximo == int(posicao[1]):
+                            idproximo = posicao[0]
+                            arquivojogada = open('vezjogada.txt', 'w')
+                            arquivojogada.write(str(idproximo) + " " + str(proximo) + "\n")
+                        else:
+                            arquivojogada = open('vezjogada.txt', 'w')                        
+                            arquivojogada.write("idproximo" + " " + str(proximo))
+                    
+                    else:
+                        pass
+                arquivoo.close()
+                arquivojogada.close()
+        
+        if leitura_vez_jogada() == True:
+            verjogada = 0
+            print("O cara jogou as cartas na hora correta")
+            arquivo = open("Jogadas", "r")
+            for linha in arquivo:
+                ver = linha.split()
+                if(str(query.from_user.id) == str(ver[0])):
+                    await bot.send_message(query.from_user.id, "Voce ja jogou nesse turno")
+                    verjogada = 1
+            arquivo.close()
+            if verjogada == 0:
+                arquivo = open("Jogadas.txt", "a")
+                arquivo.write(str(query.from_user.id) +
+                                " " + str(user_data) + "\n")
+            definir_proximo_jogada()
+        else:
+            print("Não é a vez do cara")
+            await bot.send_message(query.from_user.id, "Não é sua vez de jogar as cartas, por favor espere =)")
+            
+            
         u = {}
 
         arquivo = open('Usuarioscartas.txt', 'r')
@@ -2791,7 +4379,69 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.answer(f'Você respondeu com {user_data!r}')
 
     if user_data == 'simDamaDeCopas':
-        # ------> Adicionar aqui verificação de turno!!!
+        
+        def leitura_vez_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivovez = open('vezpalpite.txt', 'r')
+            for leituravez in arquivovez:
+                vez = leituravez.split()
+                print(leituravez)
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    print(query.from_user.id)
+                    print(vez[0])
+                    if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
+
+                        print('True')
+                        return True
+
+                    else:
+                        print('False')
+                        return False
+        def definir_proximo_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivojogada = open('vezjogada.txt', 'r')
+            for leituravez in arquivojogada:
+                vez = leituravez.split()
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    if leituravez == linha:
+                        proximo = int(vez[1]) + 1
+                        if proximo == int(posicao[1]):
+                            idproximo = posicao[0]
+                            arquivojogada = open('vezjogada.txt', 'w')
+                            arquivojogada.write(str(idproximo) + " " + str(proximo) + "\n")
+                        else:
+                            arquivojogada = open('vezjogada.txt', 'w')                        
+                            arquivojogada.write("idproximo" + " " + str(proximo))
+                    
+                    else:
+                        pass
+                arquivoo.close()
+                arquivojogada.close()
+        
+        if leitura_vez_jogada() == True:
+            verjogada = 0
+            print("O cara jogou as cartas na hora correta")
+            arquivo = open("Jogadas", "r")
+            for linha in arquivo:
+                ver = linha.split()
+                if(str(query.from_user.id) == str(ver[0])):
+                    await bot.send_message(query.from_user.id, "Voce ja jogou nesse turno")
+                    verjogada = 1
+            arquivo.close()
+            if verjogada == 0:
+                arquivo = open("Jogadas.txt", "a")
+                arquivo.write(str(query.from_user.id) +
+                                " " + str(user_data) + "\n")
+            definir_proximo_jogada()
+        else:
+            print("Não é a vez do cara")
+            await bot.send_message(query.from_user.id, "Não é sua vez de jogar as cartas, por favor espere =)")
+            
+            
         u = {}
 
         arquivo = open('Usuarioscartas.txt', 'r')
@@ -2863,7 +4513,69 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.answer(f'Você respondeu com {user_data!r}')
 
     if user_data == 'simDamaDeEspadas':
-        # ------> Adicionar aqui verificação de turno!!!
+        
+        def leitura_vez_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivovez = open('vezpalpite.txt', 'r')
+            for leituravez in arquivovez:
+                vez = leituravez.split()
+                print(leituravez)
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    print(query.from_user.id)
+                    print(vez[0])
+                    if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
+
+                        print('True')
+                        return True
+
+                    else:
+                        print('False')
+                        return False
+        def definir_proximo_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivojogada = open('vezjogada.txt', 'r')
+            for leituravez in arquivojogada:
+                vez = leituravez.split()
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    if leituravez == linha:
+                        proximo = int(vez[1]) + 1
+                        if proximo == int(posicao[1]):
+                            idproximo = posicao[0]
+                            arquivojogada = open('vezjogada.txt', 'w')
+                            arquivojogada.write(str(idproximo) + " " + str(proximo) + "\n")
+                        else:
+                            arquivojogada = open('vezjogada.txt', 'w')                        
+                            arquivojogada.write("idproximo" + " " + str(proximo))
+                    
+                    else:
+                        pass
+                arquivoo.close()
+                arquivojogada.close()
+        
+        if leitura_vez_jogada() == True:
+            verjogada = 0
+            print("O cara jogou as cartas na hora correta")
+            arquivo = open("Jogadas", "r")
+            for linha in arquivo:
+                ver = linha.split()
+                if(str(query.from_user.id) == str(ver[0])):
+                    await bot.send_message(query.from_user.id, "Voce ja jogou nesse turno")
+                    verjogada = 1
+            arquivo.close()
+            if verjogada == 0:
+                arquivo = open("Jogadas.txt", "a")
+                arquivo.write(str(query.from_user.id) +
+                                " " + str(user_data) + "\n")
+            definir_proximo_jogada()
+        else:
+            print("Não é a vez do cara")
+            await bot.send_message(query.from_user.id, "Não é sua vez de jogar as cartas, por favor espere =)")
+            
+            
         u = {}
 
         arquivo = open('Usuarioscartas.txt', 'r')
@@ -2935,7 +4647,69 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.answer(f'Você respondeu com {user_data!r}')
 
     if user_data == 'simDamaDeOuros':
-        # ------> Adicionar aqui verificação de turno!!!
+        
+        def leitura_vez_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivovez = open('vezpalpite.txt', 'r')
+            for leituravez in arquivovez:
+                vez = leituravez.split()
+                print(leituravez)
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    print(query.from_user.id)
+                    print(vez[0])
+                    if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
+
+                        print('True')
+                        return True
+
+                    else:
+                        print('False')
+                        return False
+        def definir_proximo_jogada():
+
+            arquivoo = open('ousuarios.txt', 'r')
+            arquivojogada = open('vezjogada.txt', 'r')
+            for leituravez in arquivojogada:
+                vez = leituravez.split()
+                for linha in arquivoo:
+                    posicao = linha.split()
+                    if leituravez == linha:
+                        proximo = int(vez[1]) + 1
+                        if proximo == int(posicao[1]):
+                            idproximo = posicao[0]
+                            arquivojogada = open('vezjogada.txt', 'w')
+                            arquivojogada.write(str(idproximo) + " " + str(proximo) + "\n")
+                        else:
+                            arquivojogada = open('vezjogada.txt', 'w')                        
+                            arquivojogada.write("idproximo" + " " + str(proximo))
+                    
+                    else:
+                        pass
+                arquivoo.close()
+                arquivojogada.close()
+        
+        if leitura_vez_jogada() == True:
+            verjogada = 0
+            print("O cara jogou as cartas na hora correta")
+            arquivo = open("Jogadas", "r")
+            for linha in arquivo:
+                ver = linha.split()
+                if(str(query.from_user.id) == str(ver[0])):
+                    await bot.send_message(query.from_user.id, "Voce ja jogou nesse turno")
+                    verjogada = 1
+            arquivo.close()
+            if verjogada == 0:
+                arquivo = open("Jogadas.txt", "a")
+                arquivo.write(str(query.from_user.id) +
+                                " " + str(user_data) + "\n")
+            definir_proximo_jogada()
+        else:
+            print("Não é a vez do cara")
+            await bot.send_message(query.from_user.id, "Não é sua vez de jogar as cartas, por favor espere =)")
+            
+            
         u = {}
 
         arquivo = open('Usuarioscartas.txt', 'r')
