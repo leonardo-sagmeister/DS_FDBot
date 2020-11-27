@@ -4,8 +4,9 @@ import os.path
 from time import sleep
 from aiogram import Bot, Dispatcher, executor, types
 
-# API_TOKEN = '1255502823:AAFduKDPX5DJEkIio5xPG8fYRpHCse55Ba4'
-API_TOKEN = '1217146552:AAHnCqhnKifnogXmDz6ZC2i1qXTSOF-KfMg'
+API_TOKEN = input("Insira o TOKEN do seu BOT: ")
+
+#ATRIBUIR ARQUIVO COM NUMERO DA CARTA E BLA E BLA VC VAI LEMBRAR NA HORA
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -51,6 +52,7 @@ zap > copas > espadilha > ouros7 > joker > paus3 > copas3 > espadas3 > ouros3 > 
 # tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus,
 #            ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros, bw]
 
+print("Bot iniciado, tenha um bom jogo =D")
 
 @dp.message_handler(commands=['start', 'help', 'Ola'])
 async def send_welcome(message: types.Message):
@@ -161,56 +163,56 @@ async def criadorderodadas(message: types.Message):
     with open('Usuarios.txt') as f:
         players = sum(1 for _ in f)
 
-    def resetar_vez():
-        arquivoo = open('ousuarios.txt', 'r')
-        arquivovez = open('vezjogada.txt', 'w+')
-        for linha1 in arquivoo:
-            split = linha1.split()
-            if split[1] == str(1):
-                arquivovez.write(linha1)
-            else:
-                pass
-            print('Arquivo vezjogada.txt resetado')
-        arquivovez.close()
-        arquivoo.close()
+    # def resetar_vez():
+    #     arquivoo = open('ousuarios.txt', 'r')
+    #     arquivovez = open('vezjogada.txt', 'w+')
+    #     for linha1 in arquivoo:
+    #         split = linha1.split()
+    #         if split[1] == str(1):
+    #             arquivovez.write(linha1)
+    #         else:
+    #             pass
+    #         print('Arquivo vezjogada.txt resetado')
+    #     arquivovez.close()
+    #     arquivoo.close()
 
-    def definir_proximo():
+    # def definir_proximo():
 
-        arquivoo = open('ousuarios.txt', 'r')
-        arquivovez = open('vezjogada.txt', 'r')
-        for leituravez in arquivovez:
-            vez = leituravez.split()
-            for linha in arquivoo:
-                posicao = linha.split()
-                if leituravez == linha:
-                    proximo = int(vez[1]) + 1
-                    if proximo == int(posicao[1]):
-                        idproximo = posicao[0]
-                        arquivovez = open('vezjogada.txt', 'w')
-                        arquivovez.write(str(idproximo) + " " + str(proximo) + "\n")
-                    else:
-                        arquivovez = open('vezjogada.txt', 'w')                        
-                        arquivovez.write("idproximo" + " " + str(proximo))
+    #     arquivoo = open('ousuarios.txt', 'r')
+    #     arquivovez = open('vezjogada.txt', 'r')
+    #     for leituravez in arquivovez:
+    #         vez = leituravez.split()
+    #         for linha in arquivoo:
+    #             posicao = linha.split()
+    #             if leituravez == linha:
+    #                 proximo = int(vez[1]) + 1
+    #                 if proximo == int(posicao[1]):
+    #                     idproximo = posicao[0]
+    #                     arquivovez = open('vezjogada.txt', 'w')
+    #                     arquivovez.write(str(idproximo) + " " + str(proximo) + "\n")
+    #                 else:
+    #                     arquivovez = open('vezjogada.txt', 'w')                        
+    #                     arquivovez.write("idproximo" + " " + str(proximo))
                 
-                else:
-                    pass
-        arquivovez.close()
-        # arquivovez = open('vezjogada.txt', 'w')
-        # arquivovez.write(str(idproximo) + " " + str(proximo) + "\n")
-        arquivovez.close()
-        print('Proximo da rodada definido')
-    def soma_palpites():
-        arquivo = open("Usuariospalpites.txt", "r")            
-        spalpites = 0
-        for palpite in arquivo:
-            print('--------------------------')
-            print(palpite)
-            print(int(palpite[10]))
-            spalpites += int(palpite[10])
+    #             else:
+    #                 pass
+    #     arquivovez.close()
+    #     arquivovez = open('vezjogada.txt', 'w')
+    #     arquivovez.write(str(idproximo) + " " + str(proximo) + "\n")
+    #     arquivovez.close()
+    #     print('Proximo da rodada definido')
+    # def soma_palpites():
+    #     arquivo = open("Usuariospalpites.txt", "r")            
+    #     spalpites = 0
+    #     for palpite in arquivo:
+    #         print('--------------------------')
+    #         print(palpite)
+    #         print(int(palpite[10]))
+    #         spalpites += int(palpite[10])
         
-        print('A soma dos palpites e: {}'.format(spalpites))
-        return spalpites
-        arquivo.close()            
+    #     print('A soma dos palpites e: {}'.format(spalpites))
+    #     return spalpites
+    #     arquivo.close()            
     
     if contagem == 0:
         tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus,
@@ -282,63 +284,51 @@ async def criadorderodadas(message: types.Message):
         async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             verpalpite = 0
             user_data = query.data
-
-            def leitura_vez():
-
-                arquivoo = open('ousuarios.txt', 'r')
-                arquivovez = open('vezjogada.txt', 'r')
-                for leituravez in arquivovez:
-                    vez = leituravez.split()
-                    print(leituravez)
-                    for linha in arquivoo:
-                        posicao = linha.split()
-                        print(query.from_user.id)
-                        print(vez[0])
-                        if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
-
-                            print('True')
-                            return True
-
-                        else:
-                            print('False')
-                            return False
-                arquivoo.close()
-                arquivovez.close()
-
-            if leitura_vez() == True:
-                print("O cara deu palpite na hora certa")
-                if contagem > 0:
-                    arquivo = open("Usuariospalpites.txt", "r")
-                    for linha in arquivo:
-                        ver = linha.split()
-                        if(str(query.from_user.id) == str(ver[0])):
-                            await bot.send_message(query.from_user.id, "Você já deu seu palpite, não tem volta haha")
-                            verpalpite = 1
-                    arquivo.close()
-                if verpalpite == 0:
-                    arquivo = open("Usuariospalpites.txt", "a")
-                    arquivo.write(str(query.from_user.id) +
-                                  " " + str(user_data) + "\n")
-                definir_proximo()
-            else:
-                print("Não é a vez do cara")
-                await bot.send_message(query.from_user.id, "Não é sua vez de dar o palpite, por favor espere =)")
-            arquivoo.close()
-            arquivovez.close()
-            
-            # soma_palpites
+            #-------------------GODOY E LEO MODIFICARAM AQUI-------------------
+            if os.path.exists('vez.txt') == False:
+                arquivo = open('vez.txt', 'w+')
+                arquivo.write("1")
+                arquivo.close()
+            arquivovezz = open("vez.txt", 'r')
+            for linha in arquivovezz:
+                vezz = linha
+            arquivovezz.close()
+            usertentativa = str(query.from_user.id) + " " + str(vezz)
+            print (usertentativa)
+            sleep(1)
+            arquivoou = open('ousuarios.txt', 'r')
+            for linha in arquivoou:
+                userver = linha.split()
+                print(userver)
+                sleep(1)
+                if str(userver[0]) + " " + str(userver[1]) == usertentativa:
+                    print("Na hora certa")
+                    arquivopalpite = open('Usuariospalpites.txt', 'a')
+                    npalpite = str(query.from_user.id) + " " + str(user_data) + "\n"
+                    arquivopalpite.write(npalpite)
+                    arquivovezz = open("vez.txt", 'w')
+                    vezz = int(vezz)
+                    vezz +=1
+                    arquivovezz.write(str(vezz))
+                    arquivovezz.close()
+                    
+                else:
+                    print("Na hora errada")
+            arquivoou.close()
+            #-------------------GODOY E LEO MODIFICARAM AQUI-------------------
+            #---------GODOY TAVA MEXENDO AQUI-------------
             arquivo = open("Usuariospalpites.txt", "r")            
             spalpites = 0
             for palpite in arquivo:
+                spalpite = palpite.split()
                 print(palpite)
-                spalpites += int(palpite[10])
+                spalpites += int(spalpite[1])
             
             print(spalpites)
             arquivo.close()
-            
+            #---------GODOY TAVA MEXENDO AQUI-------------
             await query.answer(f'Você respondeu com {user_data!r}')
 
-    resetar_vez()
 
     if contagem == 1:
         tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus,
@@ -415,52 +405,40 @@ async def criadorderodadas(message: types.Message):
         @dp.callback_query_handler(text='1')
         @dp.callback_query_handler(text='2')
         async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
-            if os.path.exists('Usuariospalpites.txt') == False:
-                arquivo = open('Usuariospalpites.txt', 'w+')
-                arquivo.close()
             verpalpite = 0
             user_data = query.data
-
-            def leitura_vez():
-
-                arquivoo = open('ousuarios.txt', 'r')
-                arquivovez = open('vezjogada.txt', 'r')
-                for leituravez in arquivovez:
-                    vez = leituravez.split()
-                    print(leituravez)
-                    for linha in arquivoo:
-                        posicao = linha.split()
-                        print(query.from_user.id)
-                        print(vez[0])
-                        if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
-
-                            print('True')
-                            return True
-
-                        else:
-                            return False
-                arquivoo.close()
-                arquivovez.close()
-
-            if leitura_vez() == True:
-                print("O cara deu palpite na hora certa")
-                if contagem > 0:
-                    arquivo = open("Usuariospalpites.txt", "r")
-                    for linha in arquivo:
-                        ver = linha.split()
-                        if(str(query.from_user.id) == str(ver[0])):
-                            await bot.send_message(query.from_user.id, "Você já deu seu palpite, não tem volta haha")
-                            verpalpite = 1
-                    arquivo.close()
-                if verpalpite == 0:
-                    arquivo = open("Usuariospalpites.txt", "a")
-                    arquivo.write(str(query.from_user.id) +
-                                  " " + str(user_data) + "\n")
-                definir_proximo()
-            else:
-                print("Não é a vez do cara")
-                await bot.send_message(query.from_user.id, "Não é sua vez de dar o palpite, por favor espere =)")
-            arquivoo.close()
+            #-------------------GODOY E LEO MODIFICARAM AQUI-------------------
+            if os.path.exists('vez.txt') == False:
+                arquivo = open('vez.txt', 'w+')
+                arquivo.write("1")
+                arquivo.close()
+            arquivovezz = open("vez.txt", 'r')
+            for linha in arquivovezz:
+                vezz = linha
+            arquivovezz.close()
+            usertentativa = str(query.from_user.id) + " " + str(vezz)
+            print (usertentativa)
+            sleep(1)
+            arquivoou = open('ousuarios.txt', 'r')
+            for linha in arquivoou:
+                userver = linha.split()
+                print(userver)
+                sleep(1)
+                if str(userver[0]) + " " + str(userver[1]) == usertentativa:
+                    print("Na hora certa")
+                    arquivopalpite = open('Usuariospalpites.txt', 'a')
+                    npalpite = str(query.from_user.id) + " " + str(user_data) + "\n"
+                    arquivopalpite.write(npalpite)
+                    arquivovezz = open("vez.txt", 'w')
+                    vezz = int(vezz)
+                    vezz +=1
+                    arquivovezz.write(str(vezz))
+                    arquivovezz.close()
+                    
+                else:
+                    print("Na hora errada")
+            arquivoou.close()
+            #-------------------GODOY E LEO MODIFICARAM AQUI-------------------
 
             arquivo = open("Usuariospalpites.txt", "r")            
             spalpites = 0
@@ -477,7 +455,7 @@ async def criadorderodadas(message: types.Message):
             reset = open('Usuarioscartas.txt', 'r+')
             reset.truncate(0)
             reset.close()
-        resetar_vez()
+        # resetar_vez()
     elif contagem == 2:
         tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus,
                    ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros, bw]
@@ -563,54 +541,40 @@ async def criadorderodadas(message: types.Message):
         @dp.callback_query_handler(text='2')
         @dp.callback_query_handler(text='3')
         async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
-
-            if os.path.exists('Usuariospalpites.txt') == False:
-                arquivo = open('Usuariospalpites.txt', 'w+')
-                arquivo.close()
-
-            user_data = query.data
             verpalpite = 0
-
-            def leitura_vez():
-
-                arquivoo = open('ousuarios.txt', 'r')
-                arquivovez = open('vezjogada.txt', 'r')
-                for leituravez in arquivovez:
-                    vez = leituravez.split()
-                    print(leituravez)
-                    for linha in arquivoo:
-                        posicao = linha.split()
-                        print(query.from_user.id)
-                        print(vez[0])
-                        if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
-
-                            print('True')
-                            return True
-
-                        else:
-                            return False
-                arquivoo.close()
-                arquivovez.close()
-
-            if leitura_vez() == True:
-                print("O cara deu palpite na hora certa")
-                if contagem > 0:
-                    arquivo = open("Usuariospalpites.txt", "r")
-                    for linha in arquivo:
-                        ver = linha.split()
-                        if(str(query.from_user.id) == str(ver[0])):
-                            await bot.send_message(query.from_user.id, "Você já deu seu palpite, não tem volta haha")
-                            verpalpite = 1
-                    arquivo.close()
-                if verpalpite == 0:
-                    arquivo = open("Usuariospalpites.txt", "a")
-                    arquivo.write(str(query.from_user.id) +
-                                  " " + str(user_data) + "\n")
-                definir_proximo()
-            else:
-                print("Não é a vez do cara")
-                await bot.send_message(query.from_user.id, "Não é sua vez de dar o palpite, por favor espere =)")
-            arquivoo.close()
+            user_data = query.data
+            #-------------------GODOY E LEO MODIFICARAM AQUI-------------------
+            if os.path.exists('vez.txt') == False:
+                arquivo = open('vez.txt', 'w+')
+                arquivo.write("1")
+                arquivo.close()
+            arquivovezz = open("vez.txt", 'r')
+            for linha in arquivovezz:
+                vezz = linha
+            arquivovezz.close()
+            usertentativa = str(query.from_user.id) + " " + str(vezz)
+            print (usertentativa)
+            sleep(1)
+            arquivoou = open('ousuarios.txt', 'r')
+            for linha in arquivoou:
+                userver = linha.split()
+                print(userver)
+                sleep(1)
+                if str(userver[0]) + " " + str(userver[1]) == usertentativa:
+                    print("Na hora certa")
+                    arquivopalpite = open('Usuariospalpites.txt', 'a')
+                    npalpite = str(query.from_user.id) + " " + str(user_data) + "\n"
+                    arquivopalpite.write(npalpite)
+                    arquivovezz = open("vez.txt", 'w')
+                    vezz = int(vezz)
+                    vezz +=1
+                    arquivovezz.write(str(vezz))
+                    arquivovezz.close()
+                    
+                else:
+                    print("Na hora errada")
+            arquivoou.close()
+            #-------------------GODOY E LEO MODIFICARAM AQUI-------------------
 
             #Somar palpites
             arquivo = open("Usuariospalpites.txt", "r")            
@@ -628,7 +592,7 @@ async def criadorderodadas(message: types.Message):
             reset = open('Usuarioscartas.txt', 'r+')
             reset.truncate(0)
             reset.close()
-        resetar_vez()
+        # resetar_vez()
     elif contagem == 3:
         tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus,
                    ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros, bw]
@@ -869,53 +833,42 @@ async def criadorderodadas(message: types.Message):
         @dp.callback_query_handler(text='4')
         @dp.callback_query_handler(text='5')
         async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
-            if os.path.exists('Usuariospalpites.txt') == False:
-                arquivo = open('Usuariospalpites.txt', 'w+')
-                arquivo.close()
-            user_data = query.data
             verpalpite = 0
+            user_data = query.data
+            #-------------------GODOY E LEO MODIFICARAM AQUI-------------------
+            if os.path.exists('vez.txt') == False:
+                arquivo = open('vez.txt', 'w+')
+                arquivo.write("1")
+                arquivo.close()
+            arquivovezz = open("vez.txt", 'r')
+            for linha in arquivovezz:
+                vezz = linha
+            arquivovezz.close()
+            usertentativa = str(query.from_user.id) + " " + str(vezz)
+            print (usertentativa)
+            sleep(1)
+            arquivoou = open('ousuarios.txt', 'r')
+            for linha in arquivoou:
+                userver = linha.split()
+                print(userver)
+                sleep(1)
+                if str(userver[0]) + " " + str(userver[1]) == usertentativa:
+                    print("Na hora certa")
+                    arquivopalpite = open('Usuariospalpites.txt', 'a')
+                    npalpite = str(query.from_user.id) + " " + str(user_data) + "\n"
+                    arquivopalpite.write(npalpite)
+                    arquivovezz = open("vez.txt", 'w')
+                    vezz = int(vezz)
+                    vezz +=1
+                    arquivovezz.write(str(vezz))
+                    arquivovezz.close()
+                    
+                else:
+                    print("Na hora errada")
+            arquivoou.close()
+            #-------------------GODOY E LEO MODIFICARAM AQUI-------------------
 
-            def leitura_vez():
-
-                arquivoo = open('ousuarios.txt', 'r')
-                arquivovez = open('vezjogada.txt', 'r')
-                for leituravez in arquivovez:
-                    vez = leituravez.split()
-                    print(leituravez)
-                    for linha in arquivoo:
-                        posicao = linha.split()
-                        print(query.from_user.id)
-                        print(vez[0])
-                        if str(query.from_user.id) + posicao[1] == vez[0] + vez[1]:
-
-                            print('True')
-                            return True
-
-                        else:
-                            return False
-                arquivoo.close()
-                arquivovez.close()
-
-            if leitura_vez() == True:
-                print("O cara deu palpite na hora certa")
-                if contagem > 0:
-                    arquivo = open("Usuariospalpites.txt", "r")
-                    for linha in arquivo:
-                        ver = linha.split()
-                        if(str(query.from_user.id) == str(ver[0])):
-                            await bot.send_message(query.from_user.id, "Você já deu seu palpite, não tem volta haha")
-                            verpalpite = 1
-                    arquivo.close()
-                if verpalpite == 0:
-                    arquivo = open("Usuariospalpites.txt", "a")
-                    arquivo.write(str(query.from_user.id) +
-                                  " " + str(user_data) + "\n")
-                definir_proximo()
-            else:
-                print("Não é a vez do cara")
-                await bot.send_message(query.from_user.id, "Não é sua vez de dar o palpite, por favor espere =)")
-            arquivoo.close()
-
+            
             #Somar palpites
             arquivo = open("Usuariospalpites.txt", "r")            
             spalpites = 0
