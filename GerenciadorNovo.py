@@ -66,6 +66,11 @@ async def send_welcome(message: types.Message):
     if os.path.exists('Usuariosvidas.txt') == False:
         arquivo = open('Usuariosvidas.txt', 'w+')
         arquivo.close()
+
+    if os.path.exists('ganhadorRodada.txt') == False:
+            arquivoGanhador = open('ganhadorRodada.txt', 'w+')
+            arquivoGanhador.close()
+
     await message.reply("Olá!\nEu sou o FDPBOT!\nDesenvolvido pela FDBot Developer Team.\nÉ muito legal ter você aqui comigo :)"
                         "\nEu utilizo a API da aiogram,\nVocê pode consulta-la aqui: https://docs.aiogram.dev/en/latest/index.html, VOCE INICIOU O BOT")
 
@@ -112,13 +117,20 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
             linha = arquivo.readline()
         arquivo.close
+
+        if os.path.exists('UsuariosVitorias.txt') == False:
+            arquivoVitorias = open('UsuariosVitorias.txt', 'w+')
+            arquivoVitorias.close()
+
         arquivo = open('Usuarios.txt', 'a')
+        arquivoVitorias = open('UsuariosVitorias.txt', 'a')
 
         if cont != 1:
             arquivo.write(str(query.from_user.id) + " " +
                           str(query.from_user.full_name) + "\n")
 
             arquivovidas.write(str(query.from_user.id) + " " + "4" + "\n")
+            arquivoVitorias.write(str(query.from_user.id) + " " + "0" + "\n")
             texto1 = "TOP DEMAIS MANO, BORA JOGAR!"
 
         elif cont == 1:
@@ -912,7 +924,7 @@ async def start_conta_vidas(message: types.Message):
 
     for palpite in arquivopalpites:
         lpalpite = palpite.split()
-        arquivofez = open('usuariosfez.txt', 'r')
+        arquivofez = open('usuariosVitorias.txt', 'r')
         for userfez in arquivofez:
             ufez = userfez.split()
             if ufez[0] == lpalpite[0]: #Se os ids são iguais então eu posso comparar o palpite com o quantas fez
@@ -1008,7 +1020,52 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             else:
                 arquivoJogadas = open('Jogadas.txt', 'a')
                 arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAOjX40im97tNxuWNUKwOU8-5vyYAAE6AAIhAAOCFRY2Ezylu98G3FIbBA\n')
+                arquivoJogadas.close()      
 
+                arquivoGanhador = open('ganhadorRodada.txt', 'w')
+                arquivoGanhador.write(str(query.from_user.id))
+                arquivoGanhador.close()
+
+                numUsuarios = 0
+                usuarios = open('Usuarios.txt', 'r')
+                for linha in usuarios:
+                    numUsuarios += 1
+                usuarios.close()
+        
+                numJogadas = 0
+                arquivoJogadas = open('Jogadas.txt', 'r')
+                for linhaJogadas in arquivoJogadas:
+                    numJogadas += 1
+                arquivoJogadas.close()
+
+                vitoriasDeUsuarios = {}      # Eu vou salvar os users aqui nesse dict pra incrementar o número de vezes que eles ganharam no arquivo!
+                arquivoGanhador = open('ganhadorRodada.txt', 'r')  # Ter um arquivo pro ganhador da jogada facilita a verificação
+                ganhador = arquivoGanhador.readline()
+                arquivoGanhador.close()
+
+                print('ganhador: ' + ganhador)
+
+                if numJogadas == numUsuarios:     # Verificando se todos já jogaram
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'r')
+                    for linhaVitorias in arquivoVitorias:
+                        vitorias = linhaVitorias.split()
+                        print('Vitorias[0] = ' + vitorias[0] + '\n' + 'Vitorias[1] = ' + vitorias[1])
+                        if vitorias[0] != ganhador:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1])
+                        else:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1]) + 1   # Adicionando uma nova vitória para o ganhador
+                    arquivoVitorias.close()
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'w')
+                    for key, value in vitoriasDeUsuarios.items():
+                        arquivoVitorias.write(str(key) + ' ' + str(value) + '\n')
+                    arquivoVitorias.close()
+
+                    resetJogadas = open('Jogadas.txt', 'r+')   # Resetando arquivo de jogadas
+                    resetJogadas.truncate(0)
+                    resetJogadas.close()
+
+
+                
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAOjX40im97tNxuWNUKwOU8-5vyYAAE6AAIhAAOCFRY2Ezylu98G3FIbBA")
         
@@ -1079,6 +1136,52 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             else:
                 arquivoJogadas = open('Jogadas.txt', 'a')
                 arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAPAX43Lt-pvzdh34GkKtNgXrRmtL04AAhQAA4IVFjY0nFnyVFB2thsE\n')
+
+                # Adicionar AQUI!!!
+                arquivoJogadas.close()      
+
+                arquivoGanhador = open('ganhadorRodada.txt', 'w')
+                arquivoGanhador.write(str(query.from_user.id))
+                arquivoGanhador.close()
+
+                numUsuarios = 0
+                usuarios = open('Usuarios.txt', 'r')
+                for linha in usuarios:
+                    numUsuarios += 1
+                usuarios.close()
+        
+                numJogadas = 0
+                arquivoJogadas = open('Jogadas.txt', 'r')
+                for linhaJogadas in arquivoJogadas:
+                    numJogadas += 1
+                arquivoJogadas.close()
+
+                vitoriasDeUsuarios = {}      # Eu vou salvar os users aqui nesse dict pra incrementar o número de vezes que eles ganharam no arquivo!
+                arquivoGanhador = open('ganhadorRodada.txt', 'r')  # Ter um arquivo pro ganhador da jogada facilita a verificação
+                ganhador = arquivoGanhador.readline()
+                arquivoGanhador.close()
+
+                print('ganhador: ' + ganhador)
+
+                if numJogadas == numUsuarios:     # Verificando se todos já jogaram
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'r')
+                    for linhaVitorias in arquivoVitorias:
+                        vitorias = linhaVitorias.split()
+                        print('Vitorias[0] = ' + vitorias[0] + '\n' + 'Vitorias[1] = ' + vitorias[1])
+                        if vitorias[0] != ganhador:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1])
+                        else:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1]) + 1   # Adicionando uma nova vitória para o ganhador
+                    arquivoVitorias.close()
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'w')
+                    for key, value in vitoriasDeUsuarios.items():
+                        arquivoVitorias.write(str(key) + ' ' + str(value) + '\n')
+                    arquivoVitorias.close()
+
+                    resetJogadas = open('Jogadas.txt', 'r+')   # Resetando arquivo de jogadas
+                    resetJogadas.truncate(0)
+                    resetJogadas.close()
+
 
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAPAX43Lt-pvzdh34GkKtNgXrRmtL04AAhQAA4IVFjY0nFnyVFB2thsE")
@@ -1155,6 +1258,52 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
                 arquivoJogadas = open('Jogadas.txt', 'a')
                 arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAOkX40iuVC-sD4RxSxxWknzswbPmikAAg4AA4IVFjadPcs09HwT6xsE\n')
 
+                # Adicionar AQUI!!!
+                arquivoJogadas.close()      
+
+                arquivoGanhador = open('ganhadorRodada.txt', 'w')
+                arquivoGanhador.write(str(query.from_user.id))
+                arquivoGanhador.close()
+
+                numUsuarios = 0
+                usuarios = open('Usuarios.txt', 'r')
+                for linha in usuarios:
+                    numUsuarios += 1
+                usuarios.close()
+        
+                numJogadas = 0
+                arquivoJogadas = open('Jogadas.txt', 'r')
+                for linhaJogadas in arquivoJogadas:
+                    numJogadas += 1
+                arquivoJogadas.close()
+
+                vitoriasDeUsuarios = {}      # Eu vou salvar os users aqui nesse dict pra incrementar o número de vezes que eles ganharam no arquivo!
+                arquivoGanhador = open('ganhadorRodada.txt', 'r')  # Ter um arquivo pro ganhador da jogada facilita a verificação
+                ganhador = arquivoGanhador.readline()
+                arquivoGanhador.close()
+
+                print('ganhador: ' + ganhador)
+
+                if numJogadas == numUsuarios:     # Verificando se todos já jogaram
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'r')
+                    for linhaVitorias in arquivoVitorias:
+                        vitorias = linhaVitorias.split()
+                        print('Vitorias[0] = ' + vitorias[0] + '\n' + 'Vitorias[1] = ' + vitorias[1])
+                        if vitorias[0] != ganhador:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1])
+                        else:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1]) + 1   # Adicionando uma nova vitória para o ganhador
+                    arquivoVitorias.close()
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'w')
+                    for key, value in vitoriasDeUsuarios.items():
+                        arquivoVitorias.write(str(key) + ' ' + str(value) + '\n')
+                    arquivoVitorias.close()
+
+                    resetJogadas = open('Jogadas.txt', 'r+')   # Resetando arquivo de jogadas
+                    resetJogadas.truncate(0)
+                    resetJogadas.close()
+
+
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAOkX40iuVC-sD4RxSxxWknzswbPmikAAg4AA4IVFjadPcs09HwT6xsE")
         
@@ -1227,6 +1376,52 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
                 arquivoJogadas = open('Jogadas.txt', 'a')
                 arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAO1X43J8Gqs5fML2F4Qbvv5ScBMMwgAAhEAA4IVFjaCjVIgaC0x-BsE\n')
 
+                # Adicionar AQUI!!!
+                arquivoJogadas.close()      
+
+                arquivoGanhador = open('ganhadorRodada.txt', 'w')
+                arquivoGanhador.write(str(query.from_user.id))
+                arquivoGanhador.close()
+
+                numUsuarios = 0
+                usuarios = open('Usuarios.txt', 'r')
+                for linha in usuarios:
+                    numUsuarios += 1
+                usuarios.close()
+        
+                numJogadas = 0
+                arquivoJogadas = open('Jogadas.txt', 'r')
+                for linhaJogadas in arquivoJogadas:
+                    numJogadas += 1
+                arquivoJogadas.close()
+
+                vitoriasDeUsuarios = {}      # Eu vou salvar os users aqui nesse dict pra incrementar o número de vezes que eles ganharam no arquivo!
+                arquivoGanhador = open('ganhadorRodada.txt', 'r')  # Ter um arquivo pro ganhador da jogada facilita a verificação
+                ganhador = arquivoGanhador.readline()
+                arquivoGanhador.close()
+
+                print('ganhador: ' + ganhador)
+
+                if numJogadas == numUsuarios:     # Verificando se todos já jogaram
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'r')
+                    for linhaVitorias in arquivoVitorias:
+                        vitorias = linhaVitorias.split()
+                        print('Vitorias[0] = ' + vitorias[0] + '\n' + 'Vitorias[1] = ' + vitorias[1])
+                        if vitorias[0] != ganhador:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1])
+                        else:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1]) + 1   # Adicionando uma nova vitória para o ganhador
+                    arquivoVitorias.close()
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'w')
+                    for key, value in vitoriasDeUsuarios.items():
+                        arquivoVitorias.write(str(key) + ' ' + str(value) + '\n')
+                    arquivoVitorias.close()
+
+                    resetJogadas = open('Jogadas.txt', 'r+')   # Resetando arquivo de jogadas
+                    resetJogadas.truncate(0)
+                    resetJogadas.close()
+
+
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAO1X43J8Gqs5fML2F4Qbvv5ScBMMwgAAhEAA4IVFjaCjVIgaC0x-BsE")
         
@@ -1297,6 +1492,52 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             else:
                 arquivoJogadas = open('Jogadas.txt', 'a')
                 arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAPBX43LuyEOXiLKYs1oHaltlTjGENkAAg8AA4IVFjZOjRImz1DqhBsE\n')
+
+                # Adicionar AQUI!!!
+                arquivoJogadas.close()      
+
+                arquivoGanhador = open('ganhadorRodada.txt', 'w')
+                arquivoGanhador.write(str(query.from_user.id))
+                arquivoGanhador.close()
+
+                numUsuarios = 0
+                usuarios = open('Usuarios.txt', 'r')
+                for linha in usuarios:
+                    numUsuarios += 1
+                usuarios.close()
+        
+                numJogadas = 0
+                arquivoJogadas = open('Jogadas.txt', 'r')
+                for linhaJogadas in arquivoJogadas:
+                    numJogadas += 1
+                arquivoJogadas.close()
+
+                vitoriasDeUsuarios = {}      # Eu vou salvar os users aqui nesse dict pra incrementar o número de vezes que eles ganharam no arquivo!
+                arquivoGanhador = open('ganhadorRodada.txt', 'r')  # Ter um arquivo pro ganhador da jogada facilita a verificação
+                ganhador = arquivoGanhador.readline()
+                arquivoGanhador.close()
+
+                print('ganhador: ' + ganhador)
+
+                if numJogadas == numUsuarios:     # Verificando se todos já jogaram
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'r')
+                    for linhaVitorias in arquivoVitorias:
+                        vitorias = linhaVitorias.split()
+                        print('Vitorias[0] = ' + vitorias[0] + '\n' + 'Vitorias[1] = ' + vitorias[1])
+                        if vitorias[0] != ganhador:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1])
+                        else:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1]) + 1   # Adicionando uma nova vitória para o ganhador
+                    arquivoVitorias.close()
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'w')
+                    for key, value in vitoriasDeUsuarios.items():
+                        arquivoVitorias.write(str(key) + ' ' + str(value) + '\n')
+                    arquivoVitorias.close()
+
+                    resetJogadas = open('Jogadas.txt', 'r+')   # Resetando arquivo de jogadas
+                    resetJogadas.truncate(0)
+                    resetJogadas.close()
+
 
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAPBX43LuyEOXiLKYs1oHaltlTjGENkAAg8AA4IVFjZOjRImz1DqhBsE")
@@ -1370,6 +1611,52 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
                 arquivoJogadas = open('Jogadas.txt', 'a')
                 arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAO_X43LamqbvpIj-PAr18qwcVuvW2oAAg0AA4IVFjaW4avxCN1XcxsE\n')
 
+                # Adicionar AQUI!!!
+                arquivoJogadas.close()      
+
+                arquivoGanhador = open('ganhadorRodada.txt', 'w')
+                arquivoGanhador.write(str(query.from_user.id))
+                arquivoGanhador.close()
+
+                numUsuarios = 0
+                usuarios = open('Usuarios.txt', 'r')
+                for linha in usuarios:
+                    numUsuarios += 1
+                usuarios.close()
+        
+                numJogadas = 0
+                arquivoJogadas = open('Jogadas.txt', 'r')
+                for linhaJogadas in arquivoJogadas:
+                    numJogadas += 1
+                arquivoJogadas.close()
+
+                vitoriasDeUsuarios = {}      # Eu vou salvar os users aqui nesse dict pra incrementar o número de vezes que eles ganharam no arquivo!
+                arquivoGanhador = open('ganhadorRodada.txt', 'r')  # Ter um arquivo pro ganhador da jogada facilita a verificação
+                ganhador = arquivoGanhador.readline()
+                arquivoGanhador.close()
+
+                print('ganhador: ' + ganhador)
+
+                if numJogadas == numUsuarios:     # Verificando se todos já jogaram
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'r')
+                    for linhaVitorias in arquivoVitorias:
+                        vitorias = linhaVitorias.split()
+                        print('Vitorias[0] = ' + vitorias[0] + '\n' + 'Vitorias[1] = ' + vitorias[1])
+                        if vitorias[0] != ganhador:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1])
+                        else:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1]) + 1   # Adicionando uma nova vitória para o ganhador
+                    arquivoVitorias.close()
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'w')
+                    for key, value in vitoriasDeUsuarios.items():
+                        arquivoVitorias.write(str(key) + ' ' + str(value) + '\n')
+                    arquivoVitorias.close()
+
+                    resetJogadas = open('Jogadas.txt', 'r+')   # Resetando arquivo de jogadas
+                    resetJogadas.truncate(0)
+                    resetJogadas.close()
+
+
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAO_X43LamqbvpIj-PAr18qwcVuvW2oAAg0AA4IVFjaW4avxCN1XcxsE")
         
@@ -1441,6 +1728,52 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             else:
                 arquivoJogadas = open('Jogadas.txt', 'a')
                 arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAO-X43LaNnSJjF89gY5gcQFMdqYT-AAAgoAA4IVFjYUWC1QSdQhChsE\n')
+
+                # Adicionar AQUI!!!
+                arquivoJogadas.close()      
+
+                arquivoGanhador = open('ganhadorRodada.txt', 'w')
+                arquivoGanhador.write(str(query.from_user.id))
+                arquivoGanhador.close()
+
+                numUsuarios = 0
+                usuarios = open('Usuarios.txt', 'r')
+                for linha in usuarios:
+                    numUsuarios += 1
+                usuarios.close()
+        
+                numJogadas = 0
+                arquivoJogadas = open('Jogadas.txt', 'r')
+                for linhaJogadas in arquivoJogadas:
+                    numJogadas += 1
+                arquivoJogadas.close()
+
+                vitoriasDeUsuarios = {}      # Eu vou salvar os users aqui nesse dict pra incrementar o número de vezes que eles ganharam no arquivo!
+                arquivoGanhador = open('ganhadorRodada.txt', 'r')  # Ter um arquivo pro ganhador da jogada facilita a verificação
+                ganhador = arquivoGanhador.readline()
+                arquivoGanhador.close()
+
+                print('ganhador: ' + ganhador)
+
+                if numJogadas == numUsuarios:     # Verificando se todos já jogaram
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'r')
+                    for linhaVitorias in arquivoVitorias:
+                        vitorias = linhaVitorias.split()
+                        print('Vitorias[0] = ' + vitorias[0] + '\n' + 'Vitorias[1] = ' + vitorias[1])
+                        if vitorias[0] != ganhador:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1])
+                        else:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1]) + 1   # Adicionando uma nova vitória para o ganhador
+                    arquivoVitorias.close()
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'w')
+                    for key, value in vitoriasDeUsuarios.items():
+                        arquivoVitorias.write(str(key) + ' ' + str(value) + '\n')
+                    arquivoVitorias.close()
+
+                    resetJogadas = open('Jogadas.txt', 'r+')   # Resetando arquivo de jogadas
+                    resetJogadas.truncate(0)
+                    resetJogadas.close()
+
 
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAO-X43LaNnSJjF89gY5gcQFMdqYT-AAAgoAA4IVFjYUWC1QSdQhChsE")
@@ -1515,6 +1848,52 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
                 arquivoJogadas = open('Jogadas.txt', 'a')
                 arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAO9X43LZqZKPJbJNsZf8VzlEwHjVDoAAgsAA4IVFjZ__wMHThM67xsE\n')
 
+                # Adicionar AQUI!!!
+                arquivoJogadas.close()      
+
+                arquivoGanhador = open('ganhadorRodada.txt', 'w')
+                arquivoGanhador.write(str(query.from_user.id))
+                arquivoGanhador.close()
+
+                numUsuarios = 0
+                usuarios = open('Usuarios.txt', 'r')
+                for linha in usuarios:
+                    numUsuarios += 1
+                usuarios.close()
+        
+                numJogadas = 0
+                arquivoJogadas = open('Jogadas.txt', 'r')
+                for linhaJogadas in arquivoJogadas:
+                    numJogadas += 1
+                arquivoJogadas.close()
+
+                vitoriasDeUsuarios = {}      # Eu vou salvar os users aqui nesse dict pra incrementar o número de vezes que eles ganharam no arquivo!
+                arquivoGanhador = open('ganhadorRodada.txt', 'r')  # Ter um arquivo pro ganhador da jogada facilita a verificação
+                ganhador = arquivoGanhador.readline()
+                arquivoGanhador.close()
+
+                print('ganhador: ' + ganhador)
+
+                if numJogadas == numUsuarios:     # Verificando se todos já jogaram
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'r')
+                    for linhaVitorias in arquivoVitorias:
+                        vitorias = linhaVitorias.split()
+                        print('Vitorias[0] = ' + vitorias[0] + '\n' + 'Vitorias[1] = ' + vitorias[1])
+                        if vitorias[0] != ganhador:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1])
+                        else:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1]) + 1   # Adicionando uma nova vitória para o ganhador
+                    arquivoVitorias.close()
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'w')
+                    for key, value in vitoriasDeUsuarios.items():
+                        arquivoVitorias.write(str(key) + ' ' + str(value) + '\n')
+                    arquivoVitorias.close()
+
+                    resetJogadas = open('Jogadas.txt', 'r+')   # Resetando arquivo de jogadas
+                    resetJogadas.truncate(0)
+                    resetJogadas.close()
+
+
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAO9X43LZqZKPJbJNsZf8VzlEwHjVDoAAgsAA4IVFjZ__wMHThM67xsE")
         
@@ -1587,6 +1966,52 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             else:
                 arquivoJogadas = open('Jogadas.txt', 'a')
                 arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAO8X43LZDWFEet2pYK_lEhpUKoU4RcAAgwAA4IVFjbwaLMp1YeJFhsE\n')
+
+                # Adicionar AQUI!!!
+                arquivoJogadas.close()      
+
+                arquivoGanhador = open('ganhadorRodada.txt', 'w')
+                arquivoGanhador.write(str(query.from_user.id))
+                arquivoGanhador.close()
+
+                numUsuarios = 0
+                usuarios = open('Usuarios.txt', 'r')
+                for linha in usuarios:
+                    numUsuarios += 1
+                usuarios.close()
+        
+                numJogadas = 0
+                arquivoJogadas = open('Jogadas.txt', 'r')
+                for linhaJogadas in arquivoJogadas:
+                    numJogadas += 1
+                arquivoJogadas.close()
+
+                vitoriasDeUsuarios = {}      # Eu vou salvar os users aqui nesse dict pra incrementar o número de vezes que eles ganharam no arquivo!
+                arquivoGanhador = open('ganhadorRodada.txt', 'r')  # Ter um arquivo pro ganhador da jogada facilita a verificação
+                ganhador = arquivoGanhador.readline()
+                arquivoGanhador.close()
+
+                print('ganhador: ' + ganhador)
+
+                if numJogadas == numUsuarios:     # Verificando se todos já jogaram
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'r')
+                    for linhaVitorias in arquivoVitorias:
+                        vitorias = linhaVitorias.split()
+                        print('Vitorias[0] = ' + vitorias[0] + '\n' + 'Vitorias[1] = ' + vitorias[1])
+                        if vitorias[0] != ganhador:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1])
+                        else:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1]) + 1   # Adicionando uma nova vitória para o ganhador
+                    arquivoVitorias.close()
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'w')
+                    for key, value in vitoriasDeUsuarios.items():
+                        arquivoVitorias.write(str(key) + ' ' + str(value) + '\n')
+                    arquivoVitorias.close()
+
+                    resetJogadas = open('Jogadas.txt', 'r+')   # Resetando arquivo de jogadas
+                    resetJogadas.truncate(0)
+                    resetJogadas.close()
+
 
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAO8X43LZDWFEet2pYK_lEhpUKoU4RcAAgwAA4IVFjbwaLMp1YeJFhsE")
@@ -1661,6 +2086,52 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
                 arquivoJogadas = open('Jogadas.txt', 'a')
                 arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAO7X43KpLkrJfSdv99imAi7wufxWBQAAgkAA4IVFjZTLQnSuERnVRsE\n')
 
+                # Adicionar AQUI!!!
+                arquivoJogadas.close()      
+
+                arquivoGanhador = open('ganhadorRodada.txt', 'w')
+                arquivoGanhador.write(str(query.from_user.id))
+                arquivoGanhador.close()
+
+                numUsuarios = 0
+                usuarios = open('Usuarios.txt', 'r')
+                for linha in usuarios:
+                    numUsuarios += 1
+                usuarios.close()
+        
+                numJogadas = 0
+                arquivoJogadas = open('Jogadas.txt', 'r')
+                for linhaJogadas in arquivoJogadas:
+                    numJogadas += 1
+                arquivoJogadas.close()
+
+                vitoriasDeUsuarios = {}      # Eu vou salvar os users aqui nesse dict pra incrementar o número de vezes que eles ganharam no arquivo!
+                arquivoGanhador = open('ganhadorRodada.txt', 'r')  # Ter um arquivo pro ganhador da jogada facilita a verificação
+                ganhador = arquivoGanhador.readline()
+                arquivoGanhador.close()
+
+                print('ganhador: ' + ganhador)
+
+                if numJogadas == numUsuarios:     # Verificando se todos já jogaram
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'r')
+                    for linhaVitorias in arquivoVitorias:
+                        vitorias = linhaVitorias.split()
+                        print('Vitorias[0] = ' + vitorias[0] + '\n' + 'Vitorias[1] = ' + vitorias[1])
+                        if vitorias[0] != ganhador:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1])
+                        else:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1]) + 1   # Adicionando uma nova vitória para o ganhador
+                    arquivoVitorias.close()
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'w')
+                    for key, value in vitoriasDeUsuarios.items():
+                        arquivoVitorias.write(str(key) + ' ' + str(value) + '\n')
+                    arquivoVitorias.close()
+
+                    resetJogadas = open('Jogadas.txt', 'r+')   # Resetando arquivo de jogadas
+                    resetJogadas.truncate(0)
+                    resetJogadas.close()
+
+
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAO7X43KpLkrJfSdv99imAi7wufxWBQAAgkAA4IVFjZTLQnSuERnVRsE")
         
@@ -1733,6 +2204,52 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
                 arquivoJogadas = open('Jogadas.txt', 'a')
                 arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAO6X43Kob570RlEDS0ByiPGjN8jpukAAgYAA4IVFjag0l3hWjeLaxsE\n')
 
+                # Adicionar AQUI!!!
+                arquivoJogadas.close()      
+
+                arquivoGanhador = open('ganhadorRodada.txt', 'w')
+                arquivoGanhador.write(str(query.from_user.id))
+                arquivoGanhador.close()
+
+                numUsuarios = 0
+                usuarios = open('Usuarios.txt', 'r')
+                for linha in usuarios:
+                    numUsuarios += 1
+                usuarios.close()
+        
+                numJogadas = 0
+                arquivoJogadas = open('Jogadas.txt', 'r')
+                for linhaJogadas in arquivoJogadas:
+                    numJogadas += 1
+                arquivoJogadas.close()
+
+                vitoriasDeUsuarios = {}      # Eu vou salvar os users aqui nesse dict pra incrementar o número de vezes que eles ganharam no arquivo!
+                arquivoGanhador = open('ganhadorRodada.txt', 'r')  # Ter um arquivo pro ganhador da jogada facilita a verificação
+                ganhador = arquivoGanhador.readline()
+                arquivoGanhador.close()
+
+                print('ganhador: ' + ganhador)
+
+                if numJogadas == numUsuarios:     # Verificando se todos já jogaram
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'r')
+                    for linhaVitorias in arquivoVitorias:
+                        vitorias = linhaVitorias.split()
+                        print('Vitorias[0] = ' + vitorias[0] + '\n' + 'Vitorias[1] = ' + vitorias[1])
+                        if vitorias[0] != ganhador:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1])
+                        else:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1]) + 1   # Adicionando uma nova vitória para o ganhador
+                    arquivoVitorias.close()
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'w')
+                    for key, value in vitoriasDeUsuarios.items():
+                        arquivoVitorias.write(str(key) + ' ' + str(value) + '\n')
+                    arquivoVitorias.close()
+
+                    resetJogadas = open('Jogadas.txt', 'r+')   # Resetando arquivo de jogadas
+                    resetJogadas.truncate(0)
+                    resetJogadas.close()
+
+
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAO6X43Kob570RlEDS0ByiPGjN8jpukAAgYAA4IVFjag0l3hWjeLaxsE")
         
@@ -1804,6 +2321,52 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             else:
                 arquivoJogadas = open('Jogadas.txt', 'a')
                 arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAO5X43KnmVXF3YGFrieZ1_TvfqKEJcAAgcAA4IVFjYPq6yKzjZRUhsE\n')
+
+                # Adicionar AQUI!!!
+                arquivoJogadas.close()      
+
+                arquivoGanhador = open('ganhadorRodada.txt', 'w')
+                arquivoGanhador.write(str(query.from_user.id))
+                arquivoGanhador.close()
+
+                numUsuarios = 0
+                usuarios = open('Usuarios.txt', 'r')
+                for linha in usuarios:
+                    numUsuarios += 1
+                usuarios.close()
+        
+                numJogadas = 0
+                arquivoJogadas = open('Jogadas.txt', 'r')
+                for linhaJogadas in arquivoJogadas:
+                    numJogadas += 1
+                arquivoJogadas.close()
+
+                vitoriasDeUsuarios = {}      # Eu vou salvar os users aqui nesse dict pra incrementar o número de vezes que eles ganharam no arquivo!
+                arquivoGanhador = open('ganhadorRodada.txt', 'r')  # Ter um arquivo pro ganhador da jogada facilita a verificação
+                ganhador = arquivoGanhador.readline()
+                arquivoGanhador.close()
+
+                print('ganhador: ' + ganhador)
+
+                if numJogadas == numUsuarios:     # Verificando se todos já jogaram
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'r')
+                    for linhaVitorias in arquivoVitorias:
+                        vitorias = linhaVitorias.split()
+                        print('Vitorias[0] = ' + vitorias[0] + '\n' + 'Vitorias[1] = ' + vitorias[1])
+                        if vitorias[0] != ganhador:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1])
+                        else:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1]) + 1   # Adicionando uma nova vitória para o ganhador
+                    arquivoVitorias.close()
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'w')
+                    for key, value in vitoriasDeUsuarios.items():
+                        arquivoVitorias.write(str(key) + ' ' + str(value) + '\n')
+                    arquivoVitorias.close()
+
+                    resetJogadas = open('Jogadas.txt', 'r+')   # Resetando arquivo de jogadas
+                    resetJogadas.truncate(0)
+                    resetJogadas.close()
+
 
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAO5X43KnmVXF3YGFrieZ1_TvfqKEJcAAgcAA4IVFjYPq6yKzjZRUhsE")
@@ -1878,6 +2441,52 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
                 arquivoJogadas = open('Jogadas.txt', 'a')
                 arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAO4X43Km2KVTYCog2j2ij3Mssx2bBQAAggAA4IVFjZKI5muQ65F_BsE\n')
 
+                # Adicionar AQUI!!!
+                arquivoJogadas.close()      
+
+                arquivoGanhador = open('ganhadorRodada.txt', 'w')
+                arquivoGanhador.write(str(query.from_user.id))
+                arquivoGanhador.close()
+
+                numUsuarios = 0
+                usuarios = open('Usuarios.txt', 'r')
+                for linha in usuarios:
+                    numUsuarios += 1
+                usuarios.close()
+        
+                numJogadas = 0
+                arquivoJogadas = open('Jogadas.txt', 'r')
+                for linhaJogadas in arquivoJogadas:
+                    numJogadas += 1
+                arquivoJogadas.close()
+
+                vitoriasDeUsuarios = {}      # Eu vou salvar os users aqui nesse dict pra incrementar o número de vezes que eles ganharam no arquivo!
+                arquivoGanhador = open('ganhadorRodada.txt', 'r')  # Ter um arquivo pro ganhador da jogada facilita a verificação
+                ganhador = arquivoGanhador.readline()
+                arquivoGanhador.close()
+
+                print('ganhador: ' + ganhador)
+
+                if numJogadas == numUsuarios:     # Verificando se todos já jogaram
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'r')
+                    for linhaVitorias in arquivoVitorias:
+                        vitorias = linhaVitorias.split()
+                        print('Vitorias[0] = ' + vitorias[0] + '\n' + 'Vitorias[1] = ' + vitorias[1])
+                        if vitorias[0] != ganhador:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1])
+                        else:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1]) + 1   # Adicionando uma nova vitória para o ganhador
+                    arquivoVitorias.close()
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'w')
+                    for key, value in vitoriasDeUsuarios.items():
+                        arquivoVitorias.write(str(key) + ' ' + str(value) + '\n')
+                    arquivoVitorias.close()
+
+                    resetJogadas = open('Jogadas.txt', 'r+')   # Resetando arquivo de jogadas
+                    resetJogadas.truncate(0)
+                    resetJogadas.close()
+
+
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAO4X43Km2KVTYCog2j2ij3Mssx2bBQAAggAA4IVFjZKI5muQ65F_BsE")
         
@@ -1949,6 +2558,52 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             else:
                 arquivoJogadas = open('Jogadas.txt', 'a')
                 arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAO3X43J93iQH2fUs8nj4gZvEZUU8g8AAhMAA4IVFjbzqnpsekpO9RsE\n')
+
+                # Adicionar AQUI!!!
+                arquivoJogadas.close()      
+
+                arquivoGanhador = open('ganhadorRodada.txt', 'w')
+                arquivoGanhador.write(str(query.from_user.id))
+                arquivoGanhador.close()
+
+                numUsuarios = 0
+                usuarios = open('Usuarios.txt', 'r')
+                for linha in usuarios:
+                    numUsuarios += 1
+                usuarios.close()
+        
+                numJogadas = 0
+                arquivoJogadas = open('Jogadas.txt', 'r')
+                for linhaJogadas in arquivoJogadas:
+                    numJogadas += 1
+                arquivoJogadas.close()
+
+                vitoriasDeUsuarios = {}      # Eu vou salvar os users aqui nesse dict pra incrementar o número de vezes que eles ganharam no arquivo!
+                arquivoGanhador = open('ganhadorRodada.txt', 'r')  # Ter um arquivo pro ganhador da jogada facilita a verificação
+                ganhador = arquivoGanhador.readline()
+                arquivoGanhador.close()
+
+                print('ganhador: ' + ganhador)
+
+                if numJogadas == numUsuarios:     # Verificando se todos já jogaram
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'r')
+                    for linhaVitorias in arquivoVitorias:
+                        vitorias = linhaVitorias.split()
+                        print('Vitorias[0] = ' + vitorias[0] + '\n' + 'Vitorias[1] = ' + vitorias[1])
+                        if vitorias[0] != ganhador:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1])
+                        else:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1]) + 1   # Adicionando uma nova vitória para o ganhador
+                    arquivoVitorias.close()
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'w')
+                    for key, value in vitoriasDeUsuarios.items():
+                        arquivoVitorias.write(str(key) + ' ' + str(value) + '\n')
+                    arquivoVitorias.close()
+
+                    resetJogadas = open('Jogadas.txt', 'r+')   # Resetando arquivo de jogadas
+                    resetJogadas.truncate(0)
+                    resetJogadas.close()
+
 
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAO3X43J93iQH2fUs8nj4gZvEZUU8g8AAhMAA4IVFjbzqnpsekpO9RsE")
@@ -2022,6 +2677,52 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
                 arquivoJogadas = open('Jogadas.txt', 'a')
                 arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAO2X43J9Jy25nLigjyYJ2Xn_FMp1XgAAhAAA4IVFjayn7taqb_SQRsE\n')
 
+                # Adicionar AQUI!!!
+                arquivoJogadas.close()      
+
+                arquivoGanhador = open('ganhadorRodada.txt', 'w')
+                arquivoGanhador.write(str(query.from_user.id))
+                arquivoGanhador.close()
+
+                numUsuarios = 0
+                usuarios = open('Usuarios.txt', 'r')
+                for linha in usuarios:
+                    numUsuarios += 1
+                usuarios.close()
+        
+                numJogadas = 0
+                arquivoJogadas = open('Jogadas.txt', 'r')
+                for linhaJogadas in arquivoJogadas:
+                    numJogadas += 1
+                arquivoJogadas.close()
+
+                vitoriasDeUsuarios = {}      # Eu vou salvar os users aqui nesse dict pra incrementar o número de vezes que eles ganharam no arquivo!
+                arquivoGanhador = open('ganhadorRodada.txt', 'r')  # Ter um arquivo pro ganhador da jogada facilita a verificação
+                ganhador = arquivoGanhador.readline()
+                arquivoGanhador.close()
+
+                print('ganhador: ' + ganhador)
+
+                if numJogadas == numUsuarios:     # Verificando se todos já jogaram
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'r')
+                    for linhaVitorias in arquivoVitorias:
+                        vitorias = linhaVitorias.split()
+                        print('Vitorias[0] = ' + vitorias[0] + '\n' + 'Vitorias[1] = ' + vitorias[1])
+                        if vitorias[0] != ganhador:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1])
+                        else:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1]) + 1   # Adicionando uma nova vitória para o ganhador
+                    arquivoVitorias.close()
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'w')
+                    for key, value in vitoriasDeUsuarios.items():
+                        arquivoVitorias.write(str(key) + ' ' + str(value) + '\n')
+                    arquivoVitorias.close()
+
+                    resetJogadas = open('Jogadas.txt', 'r+')   # Resetando arquivo de jogadas
+                    resetJogadas.truncate(0)
+                    resetJogadas.close()
+
+
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAO2X43J9Jy25nLigjyYJ2Xn_FMp1XgAAhAAA4IVFjayn7taqb_SQRsE")
         
@@ -2093,6 +2794,52 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             else:
                 arquivoJogadas = open('Jogadas.txt', 'a')
                 arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAO0X43J7PY2Kjrt01Q_l9xPhsQsQ6kAAhIAA4IVFjZY5T-EbvfgKhsE\n')
+
+                # Adicionar AQUI!!!
+                arquivoJogadas.close()      
+
+                arquivoGanhador = open('ganhadorRodada.txt', 'w')
+                arquivoGanhador.write(str(query.from_user.id))
+                arquivoGanhador.close()
+
+                numUsuarios = 0
+                usuarios = open('Usuarios.txt', 'r')
+                for linha in usuarios:
+                    numUsuarios += 1
+                usuarios.close()
+        
+                numJogadas = 0
+                arquivoJogadas = open('Jogadas.txt', 'r')
+                for linhaJogadas in arquivoJogadas:
+                    numJogadas += 1
+                arquivoJogadas.close()
+
+                vitoriasDeUsuarios = {}      # Eu vou salvar os users aqui nesse dict pra incrementar o número de vezes que eles ganharam no arquivo!
+                arquivoGanhador = open('ganhadorRodada.txt', 'r')  # Ter um arquivo pro ganhador da jogada facilita a verificação
+                ganhador = arquivoGanhador.readline()
+                arquivoGanhador.close()
+
+                print('ganhador: ' + ganhador)
+
+                if numJogadas == numUsuarios:     # Verificando se todos já jogaram
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'r')
+                    for linhaVitorias in arquivoVitorias:
+                        vitorias = linhaVitorias.split()
+                        print('Vitorias[0] = ' + vitorias[0] + '\n' + 'Vitorias[1] = ' + vitorias[1])
+                        if vitorias[0] != ganhador:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1])
+                        else:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1]) + 1   # Adicionando uma nova vitória para o ganhador
+                    arquivoVitorias.close()
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'w')
+                    for key, value in vitoriasDeUsuarios.items():
+                        arquivoVitorias.write(str(key) + ' ' + str(value) + '\n')
+                    arquivoVitorias.close()
+
+                    resetJogadas = open('Jogadas.txt', 'r+')   # Resetando arquivo de jogadas
+                    resetJogadas.truncate(0)
+                    resetJogadas.close()
+
 
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAO0X43J7PY2Kjrt01Q_l9xPhsQsQ6kAAhIAA4IVFjZY5T-EbvfgKhsE")
@@ -2166,6 +2913,52 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
                 arquivoJogadas = open('Jogadas.txt', 'a')
                 arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAOzX43Jhx6Ipg5cY8e3hU9DWRzFbMsAAhwAA4IVFjZGDfDS2hm28BsE\n')
 
+                # Adicionar AQUI!!!
+                arquivoJogadas.close()      
+
+                arquivoGanhador = open('ganhadorRodada.txt', 'w')
+                arquivoGanhador.write(str(query.from_user.id))
+                arquivoGanhador.close()
+
+                numUsuarios = 0
+                usuarios = open('Usuarios.txt', 'r')
+                for linha in usuarios:
+                    numUsuarios += 1
+                usuarios.close()
+        
+                numJogadas = 0
+                arquivoJogadas = open('Jogadas.txt', 'r')
+                for linhaJogadas in arquivoJogadas:
+                    numJogadas += 1
+                arquivoJogadas.close()
+
+                vitoriasDeUsuarios = {}      # Eu vou salvar os users aqui nesse dict pra incrementar o número de vezes que eles ganharam no arquivo!
+                arquivoGanhador = open('ganhadorRodada.txt', 'r')  # Ter um arquivo pro ganhador da jogada facilita a verificação
+                ganhador = arquivoGanhador.readline()
+                arquivoGanhador.close()
+
+                print('ganhador: ' + ganhador)
+
+                if numJogadas == numUsuarios:     # Verificando se todos já jogaram
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'r')
+                    for linhaVitorias in arquivoVitorias:
+                        vitorias = linhaVitorias.split()
+                        print('Vitorias[0] = ' + vitorias[0] + '\n' + 'Vitorias[1] = ' + vitorias[1])
+                        if vitorias[0] != ganhador:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1])
+                        else:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1]) + 1   # Adicionando uma nova vitória para o ganhador
+                    arquivoVitorias.close()
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'w')
+                    for key, value in vitoriasDeUsuarios.items():
+                        arquivoVitorias.write(str(key) + ' ' + str(value) + '\n')
+                    arquivoVitorias.close()
+
+                    resetJogadas = open('Jogadas.txt', 'r+')   # Resetando arquivo de jogadas
+                    resetJogadas.truncate(0)
+                    resetJogadas.close()
+
+
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAOzX43Jhx6Ipg5cY8e3hU9DWRzFbMsAAhwAA4IVFjZGDfDS2hm28BsE")
         
@@ -2237,6 +3030,52 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             else:
                 arquivoJogadas = open('Jogadas.txt', 'a')
                 arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAOyX43JhLaJtdwivesqUgPI16QWG9AAAhkAA4IVFjZgDwABp0RVogMbBA\n')
+
+                # Adicionar AQUI!!!
+                arquivoJogadas.close()      
+
+                arquivoGanhador = open('ganhadorRodada.txt', 'w')
+                arquivoGanhador.write(str(query.from_user.id))
+                arquivoGanhador.close()
+
+                numUsuarios = 0
+                usuarios = open('Usuarios.txt', 'r')
+                for linha in usuarios:
+                    numUsuarios += 1
+                usuarios.close()
+        
+                numJogadas = 0
+                arquivoJogadas = open('Jogadas.txt', 'r')
+                for linhaJogadas in arquivoJogadas:
+                    numJogadas += 1
+                arquivoJogadas.close()
+
+                vitoriasDeUsuarios = {}      # Eu vou salvar os users aqui nesse dict pra incrementar o número de vezes que eles ganharam no arquivo!
+                arquivoGanhador = open('ganhadorRodada.txt', 'r')  # Ter um arquivo pro ganhador da jogada facilita a verificação
+                ganhador = arquivoGanhador.readline()
+                arquivoGanhador.close()
+
+                print('ganhador: ' + ganhador)
+
+                if numJogadas == numUsuarios:     # Verificando se todos já jogaram
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'r')
+                    for linhaVitorias in arquivoVitorias:
+                        vitorias = linhaVitorias.split()
+                        print('Vitorias[0] = ' + vitorias[0] + '\n' + 'Vitorias[1] = ' + vitorias[1])
+                        if vitorias[0] != ganhador:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1])
+                        else:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1]) + 1   # Adicionando uma nova vitória para o ganhador
+                    arquivoVitorias.close()
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'w')
+                    for key, value in vitoriasDeUsuarios.items():
+                        arquivoVitorias.write(str(key) + ' ' + str(value) + '\n')
+                    arquivoVitorias.close()
+
+                    resetJogadas = open('Jogadas.txt', 'r+')   # Resetando arquivo de jogadas
+                    resetJogadas.truncate(0)
+                    resetJogadas.close()
+
 
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAOyX43JhLaJtdwivesqUgPI16QWG9AAAhkAA4IVFjZgDwABp0RVogMbBA")
@@ -2310,6 +3149,52 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
                 arquivoJogadas = open('Jogadas.txt', 'a')
                 arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAOvX43ILuwDcNel-OY-bwQNwOAM33gAAhoAA4IVFjaDJFm0rb14BxsE\n')
 
+                # Adicionar AQUI!!!
+                arquivoJogadas.close()      
+
+                arquivoGanhador = open('ganhadorRodada.txt', 'w')
+                arquivoGanhador.write(str(query.from_user.id))
+                arquivoGanhador.close()
+
+                numUsuarios = 0
+                usuarios = open('Usuarios.txt', 'r')
+                for linha in usuarios:
+                    numUsuarios += 1
+                usuarios.close()
+        
+                numJogadas = 0
+                arquivoJogadas = open('Jogadas.txt', 'r')
+                for linhaJogadas in arquivoJogadas:
+                    numJogadas += 1
+                arquivoJogadas.close()
+
+                vitoriasDeUsuarios = {}      # Eu vou salvar os users aqui nesse dict pra incrementar o número de vezes que eles ganharam no arquivo!
+                arquivoGanhador = open('ganhadorRodada.txt', 'r')  # Ter um arquivo pro ganhador da jogada facilita a verificação
+                ganhador = arquivoGanhador.readline()
+                arquivoGanhador.close()
+
+                print('ganhador: ' + ganhador)
+
+                if numJogadas == numUsuarios:     # Verificando se todos já jogaram
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'r')
+                    for linhaVitorias in arquivoVitorias:
+                        vitorias = linhaVitorias.split()
+                        print('Vitorias[0] = ' + vitorias[0] + '\n' + 'Vitorias[1] = ' + vitorias[1])
+                        if vitorias[0] != ganhador:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1])
+                        else:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1]) + 1   # Adicionando uma nova vitória para o ganhador
+                    arquivoVitorias.close()
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'w')
+                    for key, value in vitoriasDeUsuarios.items():
+                        arquivoVitorias.write(str(key) + ' ' + str(value) + '\n')
+                    arquivoVitorias.close()
+
+                    resetJogadas = open('Jogadas.txt', 'r+')   # Resetando arquivo de jogadas
+                    resetJogadas.truncate(0)
+                    resetJogadas.close()
+
+
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAOvX43ILuwDcNel-OY-bwQNwOAM33gAAhoAA4IVFjaDJFm0rb14BxsE")
         
@@ -2381,6 +3266,52 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             else:
                 arquivoJogadas = open('Jogadas.txt', 'a')
                 arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAPCX43Pi2EqxTZbg1DcXojoVUhSHywAAhsAA4IVFjaN5tjjcoNjGhsE\n')
+
+                # Adicionar AQUI!!!
+                arquivoJogadas.close()      
+
+                arquivoGanhador = open('ganhadorRodada.txt', 'w')
+                arquivoGanhador.write(str(query.from_user.id))
+                arquivoGanhador.close()
+
+                numUsuarios = 0
+                usuarios = open('Usuarios.txt', 'r')
+                for linha in usuarios:
+                    numUsuarios += 1
+                usuarios.close()
+        
+                numJogadas = 0
+                arquivoJogadas = open('Jogadas.txt', 'r')
+                for linhaJogadas in arquivoJogadas:
+                    numJogadas += 1
+                arquivoJogadas.close()
+
+                vitoriasDeUsuarios = {}      # Eu vou salvar os users aqui nesse dict pra incrementar o número de vezes que eles ganharam no arquivo!
+                arquivoGanhador = open('ganhadorRodada.txt', 'r')  # Ter um arquivo pro ganhador da jogada facilita a verificação
+                ganhador = arquivoGanhador.readline()
+                arquivoGanhador.close()
+
+                print('ganhador: ' + ganhador)
+
+                if numJogadas == numUsuarios:     # Verificando se todos já jogaram
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'r')
+                    for linhaVitorias in arquivoVitorias:
+                        vitorias = linhaVitorias.split()
+                        print('Vitorias[0] = ' + vitorias[0] + '\n' + 'Vitorias[1] = ' + vitorias[1])
+                        if vitorias[0] != ganhador:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1])
+                        else:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1]) + 1   # Adicionando uma nova vitória para o ganhador
+                    arquivoVitorias.close()
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'w')
+                    for key, value in vitoriasDeUsuarios.items():
+                        arquivoVitorias.write(str(key) + ' ' + str(value) + '\n')
+                    arquivoVitorias.close()
+
+                    resetJogadas = open('Jogadas.txt', 'r+')   # Resetando arquivo de jogadas
+                    resetJogadas.truncate(0)
+                    resetJogadas.close()
+
 
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAPCX43Pi2EqxTZbg1DcXojoVUhSHywAAhsAA4IVFjaN5tjjcoNjGhsE")
@@ -2454,6 +3385,52 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
                 arquivoJogadas = open('Jogadas.txt', 'a')
                 arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAOtX43HSe83D2AjO7WNMji7GjyKQEEAAh8AA4IVFjZ_9lyldZnmyBsE\n')
 
+                # Adicionar AQUI!!!
+                arquivoJogadas.close()      
+
+                arquivoGanhador = open('ganhadorRodada.txt', 'w')
+                arquivoGanhador.write(str(query.from_user.id))
+                arquivoGanhador.close()
+
+                numUsuarios = 0
+                usuarios = open('Usuarios.txt', 'r')
+                for linha in usuarios:
+                    numUsuarios += 1
+                usuarios.close()
+        
+                numJogadas = 0
+                arquivoJogadas = open('Jogadas.txt', 'r')
+                for linhaJogadas in arquivoJogadas:
+                    numJogadas += 1
+                arquivoJogadas.close()
+
+                vitoriasDeUsuarios = {}      # Eu vou salvar os users aqui nesse dict pra incrementar o número de vezes que eles ganharam no arquivo!
+                arquivoGanhador = open('ganhadorRodada.txt', 'r')  # Ter um arquivo pro ganhador da jogada facilita a verificação
+                ganhador = arquivoGanhador.readline()
+                arquivoGanhador.close()
+
+                print('ganhador: ' + ganhador)
+
+                if numJogadas == numUsuarios:     # Verificando se todos já jogaram
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'r')
+                    for linhaVitorias in arquivoVitorias:
+                        vitorias = linhaVitorias.split()
+                        print('Vitorias[0] = ' + vitorias[0] + '\n' + 'Vitorias[1] = ' + vitorias[1])
+                        if vitorias[0] != ganhador:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1])
+                        else:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1]) + 1   # Adicionando uma nova vitória para o ganhador
+                    arquivoVitorias.close()
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'w')
+                    for key, value in vitoriasDeUsuarios.items():
+                        arquivoVitorias.write(str(key) + ' ' + str(value) + '\n')
+                    arquivoVitorias.close()
+
+                    resetJogadas = open('Jogadas.txt', 'r+')   # Resetando arquivo de jogadas
+                    resetJogadas.truncate(0)
+                    resetJogadas.close()
+
+
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAOtX43HSe83D2AjO7WNMji7GjyKQEEAAh8AA4IVFjZ_9lyldZnmyBsE")
         
@@ -2525,6 +3502,52 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             else:
                 arquivoJogadas = open('Jogadas.txt', 'a')
                 arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAOsX43HRWjc8O9e-V4_Kzn9KVm74pUAAh0AA4IVFjYyR1X0LWcBmxsE\n')
+
+                # Adicionar AQUI!!!
+                arquivoJogadas.close()      
+
+                arquivoGanhador = open('ganhadorRodada.txt', 'w')
+                arquivoGanhador.write(str(query.from_user.id))
+                arquivoGanhador.close()
+
+                numUsuarios = 0
+                usuarios = open('Usuarios.txt', 'r')
+                for linha in usuarios:
+                    numUsuarios += 1
+                usuarios.close()
+        
+                numJogadas = 0
+                arquivoJogadas = open('Jogadas.txt', 'r')
+                for linhaJogadas in arquivoJogadas:
+                    numJogadas += 1
+                arquivoJogadas.close()
+
+                vitoriasDeUsuarios = {}      # Eu vou salvar os users aqui nesse dict pra incrementar o número de vezes que eles ganharam no arquivo!
+                arquivoGanhador = open('ganhadorRodada.txt', 'r')  # Ter um arquivo pro ganhador da jogada facilita a verificação
+                ganhador = arquivoGanhador.readline()
+                arquivoGanhador.close()
+
+                print('ganhador: ' + ganhador)
+
+                if numJogadas == numUsuarios:     # Verificando se todos já jogaram
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'r')
+                    for linhaVitorias in arquivoVitorias:
+                        vitorias = linhaVitorias.split()
+                        print('Vitorias[0] = ' + vitorias[0] + '\n' + 'Vitorias[1] = ' + vitorias[1])
+                        if vitorias[0] != ganhador:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1])
+                        else:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1]) + 1   # Adicionando uma nova vitória para o ganhador
+                    arquivoVitorias.close()
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'w')
+                    for key, value in vitoriasDeUsuarios.items():
+                        arquivoVitorias.write(str(key) + ' ' + str(value) + '\n')
+                    arquivoVitorias.close()
+
+                    resetJogadas = open('Jogadas.txt', 'r+')   # Resetando arquivo de jogadas
+                    resetJogadas.truncate(0)
+                    resetJogadas.close()
+
 
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAOsX43HRWjc8O9e-V4_Kzn9KVm74pUAAh0AA4IVFjYyR1X0LWcBmxsE")
@@ -2598,6 +3621,52 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
                 arquivoJogadas = open('Jogadas.txt', 'a')
                 arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAOrX43HRASuiB-AzIw-us6FG_Cfpi8AAiAAA4IVFjbFXeRcjq_OxRsE\n')
 
+                # Adicionar AQUI!!!
+                arquivoJogadas.close()      
+
+                arquivoGanhador = open('ganhadorRodada.txt', 'w')
+                arquivoGanhador.write(str(query.from_user.id))
+                arquivoGanhador.close()
+
+                numUsuarios = 0
+                usuarios = open('Usuarios.txt', 'r')
+                for linha in usuarios:
+                    numUsuarios += 1
+                usuarios.close()
+        
+                numJogadas = 0
+                arquivoJogadas = open('Jogadas.txt', 'r')
+                for linhaJogadas in arquivoJogadas:
+                    numJogadas += 1
+                arquivoJogadas.close()
+
+                vitoriasDeUsuarios = {}      # Eu vou salvar os users aqui nesse dict pra incrementar o número de vezes que eles ganharam no arquivo!
+                arquivoGanhador = open('ganhadorRodada.txt', 'r')  # Ter um arquivo pro ganhador da jogada facilita a verificação
+                ganhador = arquivoGanhador.readline()
+                arquivoGanhador.close()
+
+                print('ganhador: ' + ganhador)
+
+                if numJogadas == numUsuarios:     # Verificando se todos já jogaram
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'r')
+                    for linhaVitorias in arquivoVitorias:
+                        vitorias = linhaVitorias.split()
+                        print('Vitorias[0] = ' + vitorias[0] + '\n' + 'Vitorias[1] = ' + vitorias[1])
+                        if vitorias[0] != ganhador:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1])
+                        else:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1]) + 1   # Adicionando uma nova vitória para o ganhador
+                    arquivoVitorias.close()
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'w')
+                    for key, value in vitoriasDeUsuarios.items():
+                        arquivoVitorias.write(str(key) + ' ' + str(value) + '\n')
+                    arquivoVitorias.close()
+
+                    resetJogadas = open('Jogadas.txt', 'r+')   # Resetando arquivo de jogadas
+                    resetJogadas.truncate(0)
+                    resetJogadas.close()
+
+
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAOrX43HRASuiB-AzIw-us6FG_Cfpi8AAiAAA4IVFjbFXeRcjq_OxRsE")
         
@@ -2669,6 +3738,52 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             else:
                 arquivoJogadas = open('Jogadas.txt', 'a')
                 arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAOqX43HPwV7sphHSdh2R_--fc8LQ2YAAh4AA4IVFjZbm1aHv01wchsE\n')
+
+                # Adicionar AQUI!!!
+                arquivoJogadas.close()      
+
+                arquivoGanhador = open('ganhadorRodada.txt', 'w')
+                arquivoGanhador.write(str(query.from_user.id))
+                arquivoGanhador.close()
+
+                numUsuarios = 0
+                usuarios = open('Usuarios.txt', 'r')
+                for linha in usuarios:
+                    numUsuarios += 1
+                usuarios.close()
+        
+                numJogadas = 0
+                arquivoJogadas = open('Jogadas.txt', 'r')
+                for linhaJogadas in arquivoJogadas:
+                    numJogadas += 1
+                arquivoJogadas.close()
+
+                vitoriasDeUsuarios = {}      # Eu vou salvar os users aqui nesse dict pra incrementar o número de vezes que eles ganharam no arquivo!
+                arquivoGanhador = open('ganhadorRodada.txt', 'r')  # Ter um arquivo pro ganhador da jogada facilita a verificação
+                ganhador = arquivoGanhador.readline()
+                arquivoGanhador.close()
+
+                print('ganhador: ' + ganhador)
+
+                if numJogadas == numUsuarios:     # Verificando se todos já jogaram
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'r')
+                    for linhaVitorias in arquivoVitorias:
+                        vitorias = linhaVitorias.split()
+                        print('Vitorias[0] = ' + vitorias[0] + '\n' + 'Vitorias[1] = ' + vitorias[1])
+                        if vitorias[0] != ganhador:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1])
+                        else:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1]) + 1   # Adicionando uma nova vitória para o ganhador
+                    arquivoVitorias.close()
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'w')
+                    for key, value in vitoriasDeUsuarios.items():
+                        arquivoVitorias.write(str(key) + ' ' + str(value) + '\n')
+                    arquivoVitorias.close()
+
+                    resetJogadas = open('Jogadas.txt', 'r+')   # Resetando arquivo de jogadas
+                    resetJogadas.truncate(0)
+                    resetJogadas.close()
+
 
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAOqX43HPwV7sphHSdh2R_--fc8LQ2YAAh4AA4IVFjZbm1aHv01wchsE")
@@ -2742,6 +3857,52 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
                 arquivoJogadas = open('Jogadas.txt', 'a')
                 arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAOpX40sckXcTuBRRaEyzlfo8fSUxgUAAhgAA4IVFjaw8Fiu2L4LKBsE\n')
 
+                # Adicionar AQUI!!!
+                arquivoJogadas.close()      
+
+                arquivoGanhador = open('ganhadorRodada.txt', 'w')
+                arquivoGanhador.write(str(query.from_user.id))
+                arquivoGanhador.close()
+
+                numUsuarios = 0
+                usuarios = open('Usuarios.txt', 'r')
+                for linha in usuarios:
+                    numUsuarios += 1
+                usuarios.close()
+        
+                numJogadas = 0
+                arquivoJogadas = open('Jogadas.txt', 'r')
+                for linhaJogadas in arquivoJogadas:
+                    numJogadas += 1
+                arquivoJogadas.close()
+
+                vitoriasDeUsuarios = {}      # Eu vou salvar os users aqui nesse dict pra incrementar o número de vezes que eles ganharam no arquivo!
+                arquivoGanhador = open('ganhadorRodada.txt', 'r')  # Ter um arquivo pro ganhador da jogada facilita a verificação
+                ganhador = arquivoGanhador.readline()
+                arquivoGanhador.close()
+
+                print('ganhador: ' + ganhador)
+
+                if numJogadas == numUsuarios:     # Verificando se todos já jogaram
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'r')
+                    for linhaVitorias in arquivoVitorias:
+                        vitorias = linhaVitorias.split()
+                        print('Vitorias[0] = ' + vitorias[0] + '\n' + 'Vitorias[1] = ' + vitorias[1])
+                        if vitorias[0] != ganhador:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1])
+                        else:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1]) + 1   # Adicionando uma nova vitória para o ganhador
+                    arquivoVitorias.close()
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'w')
+                    for key, value in vitoriasDeUsuarios.items():
+                        arquivoVitorias.write(str(key) + ' ' + str(value) + '\n')
+                    arquivoVitorias.close()
+
+                    resetJogadas = open('Jogadas.txt', 'r+')   # Resetando arquivo de jogadas
+                    resetJogadas.truncate(0)
+                    resetJogadas.close()
+
+
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAOpX40sckXcTuBRRaEyzlfo8fSUxgUAAhgAA4IVFjaw8Fiu2L4LKBsE")
         
@@ -2813,6 +3974,52 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             else:
                 arquivoJogadas = open('Jogadas.txt', 'a')
                 arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAOnX40sUryRoFxrvS_7AUfHs_xweOYAAhUAA4IVFjb_txkWAUYo5BsE\n')
+
+                # Adicionar AQUI!!!
+                arquivoJogadas.close()      
+
+                arquivoGanhador = open('ganhadorRodada.txt', 'w')
+                arquivoGanhador.write(str(query.from_user.id))
+                arquivoGanhador.close()
+
+                numUsuarios = 0
+                usuarios = open('Usuarios.txt', 'r')
+                for linha in usuarios:
+                    numUsuarios += 1
+                usuarios.close()
+        
+                numJogadas = 0
+                arquivoJogadas = open('Jogadas.txt', 'r')
+                for linhaJogadas in arquivoJogadas:
+                    numJogadas += 1
+                arquivoJogadas.close()
+
+                vitoriasDeUsuarios = {}      # Eu vou salvar os users aqui nesse dict pra incrementar o número de vezes que eles ganharam no arquivo!
+                arquivoGanhador = open('ganhadorRodada.txt', 'r')  # Ter um arquivo pro ganhador da jogada facilita a verificação
+                ganhador = arquivoGanhador.readline()
+                arquivoGanhador.close()
+
+                print('ganhador: ' + ganhador)
+
+                if numJogadas == numUsuarios:     # Verificando se todos já jogaram
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'r')
+                    for linhaVitorias in arquivoVitorias:
+                        vitorias = linhaVitorias.split()
+                        print('Vitorias[0] = ' + vitorias[0] + '\n' + 'Vitorias[1] = ' + vitorias[1])
+                        if vitorias[0] != ganhador:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1])
+                        else:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1]) + 1   # Adicionando uma nova vitória para o ganhador
+                    arquivoVitorias.close()
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'w')
+                    for key, value in vitoriasDeUsuarios.items():
+                        arquivoVitorias.write(str(key) + ' ' + str(value) + '\n')
+                    arquivoVitorias.close()
+
+                    resetJogadas = open('Jogadas.txt', 'r+')   # Resetando arquivo de jogadas
+                    resetJogadas.truncate(0)
+                    resetJogadas.close()
+
 
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAOnX40sUryRoFxrvS_7AUfHs_xweOYAAhUAA4IVFjb_txkWAUYo5BsE")
@@ -2886,6 +4093,52 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
                 arquivoJogadas = open('Jogadas.txt', 'a')
                 arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAOlX40sIalN2qnz13Mn32ftAAFC0CEiAAIWAAOCFRY2qrzrD-YUiI0bBA\n')
 
+                # Adicionar AQUI!!!
+                arquivoJogadas.close()      
+
+                arquivoGanhador = open('ganhadorRodada.txt', 'w')
+                arquivoGanhador.write(str(query.from_user.id))
+                arquivoGanhador.close()
+
+                numUsuarios = 0
+                usuarios = open('Usuarios.txt', 'r')
+                for linha in usuarios:
+                    numUsuarios += 1
+                usuarios.close()
+        
+                numJogadas = 0
+                arquivoJogadas = open('Jogadas.txt', 'r')
+                for linhaJogadas in arquivoJogadas:
+                    numJogadas += 1
+                arquivoJogadas.close()
+
+                vitoriasDeUsuarios = {}      # Eu vou salvar os users aqui nesse dict pra incrementar o número de vezes que eles ganharam no arquivo!
+                arquivoGanhador = open('ganhadorRodada.txt', 'r')  # Ter um arquivo pro ganhador da jogada facilita a verificação
+                ganhador = arquivoGanhador.readline()
+                arquivoGanhador.close()
+
+                print('ganhador: ' + ganhador)
+
+                if numJogadas == numUsuarios:     # Verificando se todos já jogaram
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'r')
+                    for linhaVitorias in arquivoVitorias:
+                        vitorias = linhaVitorias.split()
+                        print('Vitorias[0] = ' + vitorias[0] + '\n' + 'Vitorias[1] = ' + vitorias[1])
+                        if vitorias[0] != ganhador:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1])
+                        else:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1]) + 1   # Adicionando uma nova vitória para o ganhador
+                    arquivoVitorias.close()
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'w')
+                    for key, value in vitoriasDeUsuarios.items():
+                        arquivoVitorias.write(str(key) + ' ' + str(value) + '\n')
+                    arquivoVitorias.close()
+
+                    resetJogadas = open('Jogadas.txt', 'r+')   # Resetando arquivo de jogadas
+                    resetJogadas.truncate(0)
+                    resetJogadas.close()
+
+
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAOlX40sIalN2qnz13Mn32ftAAFC0CEiAAIWAAOCFRY2qrzrD-YUiI0bBA")
         
@@ -2957,6 +4210,52 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             else:
                 arquivoJogadas = open('Jogadas.txt', 'a')
                 arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAOmX40sOPFAdYBPehbVg7g2Mafe8n8AAhcAA4IVFjabn8s4CMkHnBsE\n')
+
+                # Adicionar AQUI!!!
+                arquivoJogadas.close()      
+
+                arquivoGanhador = open('ganhadorRodada.txt', 'w')
+                arquivoGanhador.write(str(query.from_user.id))
+                arquivoGanhador.close()
+
+                numUsuarios = 0
+                usuarios = open('Usuarios.txt', 'r')
+                for linha in usuarios:
+                    numUsuarios += 1
+                usuarios.close()
+        
+                numJogadas = 0
+                arquivoJogadas = open('Jogadas.txt', 'r')
+                for linhaJogadas in arquivoJogadas:
+                    numJogadas += 1
+                arquivoJogadas.close()
+
+                vitoriasDeUsuarios = {}      # Eu vou salvar os users aqui nesse dict pra incrementar o número de vezes que eles ganharam no arquivo!
+                arquivoGanhador = open('ganhadorRodada.txt', 'r')  # Ter um arquivo pro ganhador da jogada facilita a verificação
+                ganhador = arquivoGanhador.readline()
+                arquivoGanhador.close()
+
+                print('ganhador: ' + ganhador)
+
+                if numJogadas == numUsuarios:     # Verificando se todos já jogaram
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'r')
+                    for linhaVitorias in arquivoVitorias:
+                        vitorias = linhaVitorias.split()
+                        print('Vitorias[0] = ' + vitorias[0] + '\n' + 'Vitorias[1] = ' + vitorias[1])
+                        if vitorias[0] != ganhador:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1])
+                        else:
+                            vitoriasDeUsuarios[vitorias[0]] = int(vitorias[1]) + 1   # Adicionando uma nova vitória para o ganhador
+                    arquivoVitorias.close()
+                    arquivoVitorias = open('UsuariosVitorias.txt', 'w')
+                    for key, value in vitoriasDeUsuarios.items():
+                        arquivoVitorias.write(str(key) + ' ' + str(value) + '\n')
+                    arquivoVitorias.close()
+
+                    resetJogadas = open('Jogadas.txt', 'r+')   # Resetando arquivo de jogadas
+                    resetJogadas.truncate(0)
+                    resetJogadas.close()
+
 
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAOmX40sOPFAdYBPehbVg7g2Mafe8n8AAhcAA4IVFjabn8s4CMkHnBsE")
