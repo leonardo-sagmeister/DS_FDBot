@@ -66,7 +66,6 @@ async def leitura_players(message: types.Message):
         tjogadores.append(str(jogadores[1]))
         i+=1
 
-        
     arquivoplayers.close()
     await message.reply("Os jogadores que estão participando são: " + str(tjogadores) )
     
@@ -136,7 +135,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             arquivo.write(str(query.from_user.id) + " " +
                           str(query.from_user.full_name) + "\n")
 
-            arquivovidas.write(str(query.from_user.id) + " " + "4" + "\n")
+            arquivovidas.write(str(query.from_user.id) + " " + "4" + " " + str(query.from_user.first_name) + " " + "\n")
             texto1 = "TOP DEMAIS MANO, BORA JOGAR!"
 
         elif cont == 1:
@@ -934,8 +933,6 @@ async def start_conta_vidas(message: types.Message):
                     with open('Usuariosvidas.txt', 'w') as f:
                         f.writelines(vidas)
         
-                if ufez[1] == lpalpite[1]:
-                    print("O usuario nao perdeu uma vida")
         arquivofez.close()
 
     arquivopalpites.close()
@@ -943,6 +940,15 @@ async def start_conta_vidas(message: types.Message):
     await message.reply(vidas)
 
 
+@dp.message_handler(commands='vidas')
+async def mostrar_vidas(message: types.Message):
+    tvida = []
+    arquivovidas = open('Usuariosvidas.txt','r')
+    for linha in arquivovidas:
+        uvida = linha.split()
+        tvida.append(str(uvida[2]) + " " + str(uvida[1]))
+    arquivovidas.close()
+    await message.reply("Vidas: " + str(tvida))
 
 
 @dp.message_handler(commands='zap')
