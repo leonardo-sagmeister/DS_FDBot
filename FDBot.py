@@ -25,6 +25,29 @@ if os.path.exists('Usuariosvidas.txt') == False:
 if os.path.exists('Jogadas.txt') == False:
     arquivo = open('Jogadas.txt', 'w+')
     arquivo.close()
+if os.path.exists("usuariosfez.txt") == False:
+    arquivo = open('usuariosfez.txt', 'w+')
+    arquivo.close()
+if os.path.exists('vezjogada.txt') == False:
+    arquivo = open('vezjogada.txt', 'w')
+    arquivo.close()
+if os.path.exists('Usuariospalpites.txt') == False:
+    arquivop = open('Usuariospalpites.txt', 'w+')
+    arquivop.close()
+if os.path.exists('ousuarios.txt') == False:
+    arquivoo = open('ousuarios.txt', 'w+')
+    arquivoo.close()
+
+def somapalpites():
+    spalpite = 0
+    arqpalpites = open("Usuariospalpites.txt", "r")
+    for linha in arqpalpites:
+        palpite = linha.split()
+        spalpite += int(palpite[1])
+    arqpalpites.close()
+    somadepalpites = open("spalpites.txt", 'w+')
+    somadepalpites.write(str(spalpite))
+    somadepalpites.close()
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -123,6 +146,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     await query.answer(f'Você respondeu com {user_data!r}')
     
     arquivovidas = open('Usuariosvidas.txt', 'a')
+    arquivofez = open('usuariosfez.txt', 'a')
 
     if user_data == 'sim':
 
@@ -147,17 +171,20 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
                           str(query.from_user.full_name) + "\n")
 
             arquivovidas.write(str(query.from_user.id) + " " + "4" + " " + str(query.from_user.first_name) + " " + "\n")
+            arquivofez.write(str(query.from_user.id) + " " + "0")
             texto1 = "TOP DEMAIS MANO, BORA JOGAR!"
+
 
         elif cont == 1:
             texto1 = "VOCE JA ESTA JOGANDO!"
-        arquivo.close
+        arquivo.close()
+        arquivovidas.close()
+        arquivofez.close()
     elif user_data == 'nao':
         texto1 = "BELEZA, NÃO AGUENTA PERDER NÉ?"
     else:
         texto1 = f'Entrada não esperada: {user_data!r}!'
 
-        arquivovidas.close()
     await bot.send_message(query.from_user.id, texto1)
 
 
@@ -168,22 +195,6 @@ async def criadorderodadas(message: types.Message):
 
     ordem = 1
 
-    if os.path.exists('vezjogada.txt') == False:
-        arquivo = open('vezjogada.txt', 'w')
-        arquivo.close()
-
-    if os.path.exists('rodada.txt') == False:
-        arquivo = open('rodada.txt', 'w+')
-        arquivo.close()
-
-    if os.path.exists('Usuariospalpites.txt') == False:
-        arquivop = open('Usuariospalpites.txt', 'w+')
-        arquivop.close()
-
-    if os.path.exists('ousuarios.txt') == False:
-        arquivoo = open('ousuarios.txt', 'w+')
-        arquivoo.close()
-
     with open('rodada.txt') as f:
         contagem = sum(1 for _ in f)
     arquivo2 = open('Usuarioscartas.txt', 'a')
@@ -192,19 +203,6 @@ async def criadorderodadas(message: types.Message):
         players = sum(1 for _ in f)
 
 
-    # def soma_palpites():
-    #     arquivo = open("Usuariospalpites.txt", "r")            
-    #     spalpites = 0
-    #     for palpite in arquivo:
-    #         print('--------------------------')
-    #         print(palpite)
-    #         print(int(palpite[10]))
-    #         spalpites += int(palpite[10])
-        
-    #     print('A soma dos palpites e: {}'.format(spalpites))
-    #     return spalpites
-    #     arquivo.close()            
-    #rodada1
     if contagem == 0:
         tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus,
                    ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros, bw]
@@ -296,21 +294,49 @@ async def criadorderodadas(message: types.Message):
                 sleep(1)
                 if str(userver[0]) + " " + str(userver[1]) == usertentativa:
                     print("Na hora certa")
-                    arquivopalpite = open('Usuariospalpites.txt', 'a')
-                    npalpite = str(query.from_user.id) + " " + str(user_data) + "\n"
-                    arquivopalpite.write(npalpite)
-                    arquivovezz = open("vez.txt", 'w')
-                    vezz = int(vezz)
-                    
-                    if vezz > players:
-                        vezz = 1
-                        arquivovezz.write(str(vezz))
+                    with open('Usuariospalpites.txt', 'r') as f:
+                        quantpalpites = sum(1 for _ in f)
+                    if quantpalpites == players-1: #certificando se é o último usuário
+                        somapalpites()
+                        somadepalpites = open('spalpites.txt', 'r')
+                        linha = somadepalpites.readline()
+                        if int(somadepalpites) + user_data == 1:
+                            await bot.send_message(query.message.chat.id, query.from_user.first_name + ", Você não pode dar esse palpite =(, tente outro!")
+                        
+                        else:
+                            arquivopalpite = open('Usuariospalpites.txt', 'a')
+                            npalpite = str(query.from_user.id) + " " + str(user_data) + "\n"
+                            arquivopalpite.write(npalpite)
+                            arquivovezz = open("vez.txt", 'w')
+                            vezz = int(vezz)
+                            
+
+                            if vezz > players:
+                                vezz = 1
+                                arquivovezz.write(str(vezz))
+                            else:
+                                vezz +=1
+                                arquivovezz.write(str(vezz))
+                            
+                            arquivovezz.close()
+                        somadepalpites.close()
                     else:
-                        vezz +=1
-                        arquivovezz.write(str(vezz))
-                    
-                    arquivovezz.close()
-                    
+                        arquivopalpite = open('Usuariospalpites.txt', 'a')
+                        npalpite = str(query.from_user.id) + " " + str(user_data) + "\n"
+                        arquivopalpite.write(npalpite)
+                        arquivovezz = open("vez.txt", 'w')
+                        vezz = int(vezz)
+                        
+
+                        if vezz > players:
+                            vezz = 1
+                            arquivovezz.write(str(vezz))
+                        else:
+                            vezz +=1
+                            arquivovezz.write(str(vezz))
+                        
+                        arquivovezz.close()
+                        arquivopalpite.close()
                 else:
                     print("Na hora errada")
             arquivoou.close()
@@ -1799,7 +1825,6 @@ async def start_cmd_handler(message: types.Message):
 
 @dp.callback_query_handler(text='simDoisDeEspadas')
 @dp.callback_query_handler(text='naoDoisDeEspadas')
-
 async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     user_data = query.data
     cont = 0
