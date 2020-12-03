@@ -6,7 +6,25 @@ from aiogram import Bot, Dispatcher, executor, types
 
 API_TOKEN = input("Insira o TOKEN do seu BOT: ")
 
-#ATRIBUIR ARQUIVO COM NUMERO DA CARTA E BLA E BLA VC VAI LEMBRAR NA HORA
+
+#------------------IMPORTANTE--------------------
+#PRA FACILITAR NOSSA VIDA, BASTA DAR CTRL+F E BUSCAR O QUE DESEJA:
+# Para ir para a rodada 1 procure por rodada1
+# Para ir para a rodada 2 procure por rodada2 e por aí vai
+#Se tiverem ideias para atalhos, podem botar =D
+#------------------IMPORTANTE--------------------
+
+
+#-------------CRIAÇÃO DE ARQUIVOS TODOS JUNTOS PARA NOS AJUDAR
+if os.path.exists('rodada.txt') == False:
+    arquivo = open('rodada.txt', 'w+')
+    arquivo.close()
+if os.path.exists('Usuariosvidas.txt') == False:
+    arquivo = open('Usuariosvidas.txt', 'w+')
+    arquivo.close()
+if os.path.exists('Jogadas.txt') == False:
+    arquivo = open('Jogadas.txt', 'w+')
+    arquivo.close()
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -75,13 +93,6 @@ async def send_welcome(message: types.Message):
     """
     This handler will be called when user sends `/start` or `/help` command
     """
-    if os.path.exists('rodada.txt') == False:
-        arquivo = open('rodada.txt', 'w+')
-        arquivo.close()
-
-    if os.path.exists('Usuariosvidas.txt') == False:
-        arquivo = open('Usuariosvidas.txt', 'w+')
-        arquivo.close()
     await message.reply("Olá!\nEu sou o FDPBOT!\nDesenvolvido pela FDBot Developer Team.\nÉ muito legal ter você aqui comigo :)"
                         "\nEu utilizo a API da aiogram,\nVocê pode consulta-la aqui: https://docs.aiogram.dev/en/latest/index.html.\n\n")
     await message.reply("O jogo foi iniciando, para cadastrar os jogadores envie /join e todos devem apertar em 'SIM' para participar, para ver os jogadores participantes digite: /jogadores")
@@ -193,7 +204,7 @@ async def criadorderodadas(message: types.Message):
     #     print('A soma dos palpites e: {}'.format(spalpites))
     #     return spalpites
     #     arquivo.close()            
-    
+    #rodada1
     if contagem == 0:
         tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus,
                    ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros, bw]
@@ -303,6 +314,65 @@ async def criadorderodadas(message: types.Message):
                 else:
                     print("Na hora errada")
             arquivoou.close()
+
+
+            with open("Jogadas.txt",'r') as f:#-------VENDO SE TODOS JOGARAM
+                jogadas = sum(1 for _ in f)
+            if players == jogadas:
+            #-----------------------VERIFICANDO QUEM ERROU----------------------------
+                mcarta = 0 #Definindo valor inicial
+                i=0
+                arquivojogadas = open('Jogadas.txt', 'r')
+                for linha in arquivojogadas:
+                    jogada = linha.split()
+                    if int(jogada[2]) > mcarta: #Verifica se o valor de carta lida é maior que a maior carta atual
+                        mcarta = int(jogada[2])
+                        cartawin = i #Salvando a linha da carta vencedora
+                    i+=1 #aumentando junto com as linhas
+                arquivojogadas.close()
+
+            #-----------------------VERIFICANDO QUEM ERROU----------------------------
+
+
+                #=-----------------------TODo O CÓDIGO ABAIXO É PARA TIRAR VIDAS DAQUELES QUE ERRARAM
+                arquivopalpites = open('Usuariospalpites.txt', 'r')
+
+                for palpite in arquivopalpites:
+                    lpalpite = palpite.split()
+                    arquivofez = open('usuariosfez.txt', 'r')
+                    for userfez in arquivofez:
+                        ufez = userfez.split()
+                        if ufez[0] == lpalpite[0]: #Se os ids são iguais então eu posso comparar o palpite com o quantas fez
+                            if ufez[1] != lpalpite[1]: #Se quantas fez for diferente do palpite
+
+                                i = 0 #Se inicia em 1 pois as linhas no arquivo começam a partir de 1                   
+                                arquivovidas = open("Usuariosvidas.txt", 'r') #Abro o arquivo aqui pois preciso que o cursor seja resetado ao inicio
+                                for lvida in arquivovidas:
+                                    llvida = lvida.split()
+                                    
+                                    if llvida[0] == ufez[0]: #Se o id do arquivo de vidas for igual ao usuario em questão
+
+                                        nlinha = i #Para salvar a posição da linha do usuário
+                                        useratual = llvida #Salva o usuario em que vamos alterar a vida
+                                    i += 1
+                                    
+                                arquivovidas.close() #Fecho o arquivo aqui pois preciso que o cursor seja resetado ao inicio
+                                with open('Usuariosvidas.txt', 'r') as f:
+                                    vidas = f.readlines() #Armazena tudo o que está dentro de vidas
+
+                                vidaatual = int(llvida[1])-1
+
+                                vidas[nlinha] = (useratual[0] + " " + str(vidaatual) + "\n")
+
+                                with open('Usuariosvidas.txt', 'w') as f:
+                                    f.writelines(vidas)
+                    
+                    arquivofez.close()
+
+                arquivopalpites.close()
+
+                await message.reply(vidas)
+
             #-------------------GODOY E LEO MODIFICARAM AQUI-------------------
             #---------GODOY TAVA MEXENDO AQUI-------------
             # arquivo = open("Usuariospalpites.txt", "r")            
@@ -317,7 +387,7 @@ async def criadorderodadas(message: types.Message):
             #---------GODOY TAVA MEXENDO AQUI-------------
             await query.answer(f'Você respondeu com {user_data!r}')
 
-
+    #rodada2
     if contagem == 1:
         tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus,
                    ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros, bw]
@@ -448,6 +518,7 @@ async def criadorderodadas(message: types.Message):
             reset.truncate(0)
             reset.close()
         # resetar_vez()
+    #rodada3
     elif contagem == 2:
         tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus,
                    ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros, bw]
@@ -589,6 +660,7 @@ async def criadorderodadas(message: types.Message):
             reset.truncate(0)
             reset.close()
         # resetar_vez()
+    #rodada4
     elif contagem == 3:
         tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus,
                    ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros, bw]
@@ -730,7 +802,7 @@ async def criadorderodadas(message: types.Message):
             reset.truncate(0)
             reset.close()
         # resetar_vez()
-
+    #rodada5
     elif contagem == 4:
         tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus,
                    ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros, bw]
@@ -887,6 +959,7 @@ async def criadorderodadas(message: types.Message):
             reset.close()
         # resetar_vez
 
+    #rodadareset
     elif contagem == 5:
         print("RESETOU AS RODADAS")
         reset = open('rodada.txt', 'r+')
@@ -897,47 +970,46 @@ async def criadorderodadas(message: types.Message):
         resetpalpite.close()
 
 #Comando para contabilizar as vidas
-@dp.message_handler(commands='finaliza')
-async def start_conta_vidas(message: types.Message):
+# @dp.message_handler(commands='finaliza')
+# async def start_conta_vidas(message: types.Message):
 
-    arquivopalpites = open('Usuariospalpites.txt', 'r')
+    # arquivopalpites = open('Usuariospalpites.txt', 'r')
 
+    # for palpite in arquivopalpites:
+    #     lpalpite = palpite.split()
+    #     arquivofez = open('usuariosfez.txt', 'r')
+    #     for userfez in arquivofez:
+    #         ufez = userfez.split()
+    #         if ufez[0] == lpalpite[0]: #Se os ids são iguais então eu posso comparar o palpite com o quantas fez
+    #             if ufez[1] != lpalpite[1]: #Se quantas fez for diferente do palpite
 
-    for palpite in arquivopalpites:
-        lpalpite = palpite.split()
-        arquivofez = open('usuariosfez.txt', 'r')
-        for userfez in arquivofez:
-            ufez = userfez.split()
-            if ufez[0] == lpalpite[0]: #Se os ids são iguais então eu posso comparar o palpite com o quantas fez
-                if ufez[1] != lpalpite[1]: #Se quantas fez for diferente do palpite
-
-                    i = 0 #Se inicia em 1 pois as linhas no arquivo começam a partir de 1                   
-                    arquivovidas = open("Usuariosvidas.txt", 'r') #Abro o arquivo aqui pois preciso que o cursor seja resetado ao inicio
-                    for lvida in arquivovidas:
-                        llvida = lvida.split()
+    #                 i = 0 #Se inicia em 1 pois as linhas no arquivo começam a partir de 1                   
+    #                 arquivovidas = open("Usuariosvidas.txt", 'r') #Abro o arquivo aqui pois preciso que o cursor seja resetado ao inicio
+    #                 for lvida in arquivovidas:
+    #                     llvida = lvida.split()
                         
-                        if llvida[0] == ufez[0]: #Se o id do arquivo de vidas for igual ao usuario em questão
+    #                     if llvida[0] == ufez[0]: #Se o id do arquivo de vidas for igual ao usuario em questão
 
-                            nlinha = i #Para salvar a posição da linha do usuário
-                            useratual = llvida #Salva o usuario em que vamos alterar a vida
-                        i += 1
+    #                         nlinha = i #Para salvar a posição da linha do usuário
+    #                         useratual = llvida #Salva o usuario em que vamos alterar a vida
+    #                     i += 1
                         
-                    arquivovidas.close() #Fecho o arquivo aqui pois preciso que o cursor seja resetado ao inicio
-                    with open('Usuariosvidas.txt', 'r') as f:
-                        vidas = f.readlines() #Armazena tudo o que está dentro de vidas
+    #                 arquivovidas.close() #Fecho o arquivo aqui pois preciso que o cursor seja resetado ao inicio
+    #                 with open('Usuariosvidas.txt', 'r') as f:
+    #                     vidas = f.readlines() #Armazena tudo o que está dentro de vidas
 
-                    vidaatual = int(llvida[1])-1
+    #                 vidaatual = int(llvida[1])-1
 
-                    vidas[nlinha] = (useratual[0] + " " + str(vidaatual) + "\n")
+    #                 vidas[nlinha] = (useratual[0] + " " + str(vidaatual) + "\n")
 
-                    with open('Usuariosvidas.txt', 'w') as f:
-                        f.writelines(vidas)
+    #                 with open('Usuariosvidas.txt', 'w') as f:
+    #                     f.writelines(vidas)
         
-        arquivofez.close()
+    #     arquivofez.close()
 
-    arquivopalpites.close()
+    # arquivopalpites.close()
 
-    await message.reply(vidas)
+    # await message.reply(vidas)
 
 
 @dp.message_handler(commands='vidas')
@@ -1008,7 +1080,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             else:
                 print("Entrou onde escreve no arquivo")
                 arquivoJogadas = open('Jogadas.txt', 'a')
-                arquivoJogadas.write(str(query.from_user.id) +' CAACAgEAAxkBAAOjX40im97tNxuWNUKwOU8-5vyYAAE6AAIhAAOCFRY2Ezylu98G3FIbBA\n')
+                arquivoJogadas.write(str(query.from_user.id) +' CAACAgEAAxkBAAOjX40im97tNxuWNUKwOU8-5vyYAAE6AAIhAAOCFRY2Ezylu98G3FIbBA' + " 28" + '\n')
                 arquivoJogadas.close()
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAOjX40im97tNxuWNUKwOU8-5vyYAAE6AAIhAAOCFRY2Ezylu98G3FIbBA")
@@ -1079,7 +1151,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
             else:
                 arquivoJogadas = open('Jogadas.txt', 'a')
-                arquivoJogadas.write(str(query.from_user.id) + " 27" + ' CAACAgEAAxkBAAPAX43Lt-pvzdh34GkKtNgXrRmtL04AAhQAA4IVFjY0nFnyVFB2thsE\n')
+                arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAPAX43Lt-pvzdh34GkKtNgXrRmtL04AAhQAA4IVFjY0nFnyVFB2thsE' + " 27" +'\n')
 
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAPAX43Lt-pvzdh34GkKtNgXrRmtL04AAhQAA4IVFjY0nFnyVFB2thsE")
@@ -1154,7 +1226,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
             else:
                 arquivoJogadas = open('Jogadas.txt', 'a')
-                arquivoJogadas.write(str(query.from_user.id) + " 26" + ' CAACAgEAAxkBAAOkX40iuVC-sD4RxSxxWknzswbPmikAAg4AA4IVFjadPcs09HwT6xsE\n')
+                arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAOkX40iuVC-sD4RxSxxWknzswbPmikAAg4AA4IVFjadPcs09HwT6xsE' + " 26" +'\n')
 
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAOkX40iuVC-sD4RxSxxWknzswbPmikAAg4AA4IVFjadPcs09HwT6xsE")
@@ -1226,7 +1298,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
             else:
                 arquivoJogadas = open('Jogadas.txt', 'a')
-                arquivoJogadas.write(str(query.from_user.id) + " 25" + ' CAACAgEAAxkBAAO1X43J8Gqs5fML2F4Qbvv5ScBMMwgAAhEAA4IVFjaCjVIgaC0x-BsE\n')
+                arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAO1X43J8Gqs5fML2F4Qbvv5ScBMMwgAAhEAA4IVFjaCjVIgaC0x-BsE' + " 25" +'\n')
                 arquivoJogadas.close()
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAO1X43J8Gqs5fML2F4Qbvv5ScBMMwgAAhEAA4IVFjaCjVIgaC0x-BsE")
@@ -1297,7 +1369,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
             else:
                 arquivoJogadas = open('Jogadas.txt', 'a')
-                arquivoJogadas.write(str(query.from_user.id) + " 24" + ' CAACAgEAAxkBAAPBX43LuyEOXiLKYs1oHaltlTjGENkAAg8AA4IVFjZOjRImz1DqhBsE\n')
+                arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAPBX43LuyEOXiLKYs1oHaltlTjGENkAAg8AA4IVFjZOjRImz1DqhBsE' + " 24" +'\n')
 
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAPBX43LuyEOXiLKYs1oHaltlTjGENkAAg8AA4IVFjZOjRImz1DqhBsE")
@@ -1369,7 +1441,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
             else:
                 arquivoJogadas = open('Jogadas.txt', 'a')
-                arquivoJogadas.write(str(query.from_user.id) +" 23" +' CAACAgEAAxkBAAO_X43LamqbvpIj-PAr18qwcVuvW2oAAg0AA4IVFjaW4avxCN1XcxsE\n')
+                arquivoJogadas.write(str(query.from_user.id) +' CAACAgEAAxkBAAO_X43LamqbvpIj-PAr18qwcVuvW2oAAg0AA4IVFjaW4avxCN1XcxsE' + " 23" +'\n')
 
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAO_X43LamqbvpIj-PAr18qwcVuvW2oAAg0AA4IVFjaW4avxCN1XcxsE")
@@ -1441,7 +1513,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
             else:
                 arquivoJogadas = open('Jogadas.txt', 'a')
-                arquivoJogadas.write(str(query.from_user.id) +" 22" +' CAACAgEAAxkBAAO-X43LaNnSJjF89gY5gcQFMdqYT-AAAgoAA4IVFjYUWC1QSdQhChsE\n')
+                arquivoJogadas.write(str(query.from_user.id)+' CAACAgEAAxkBAAO-X43LaNnSJjF89gY5gcQFMdqYT-AAAgoAA4IVFjYUWC1QSdQhChsE' + " 22" +'\n')
 
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAO-X43LaNnSJjF89gY5gcQFMdqYT-AAAgoAA4IVFjYUWC1QSdQhChsE")
@@ -1514,7 +1586,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
             else:
                 arquivoJogadas = open('Jogadas.txt', 'a')
-                arquivoJogadas.write(str(query.from_user.id) + " 21" +' CAACAgEAAxkBAAO9X43LZqZKPJbJNsZf8VzlEwHjVDoAAgsAA4IVFjZ__wMHThM67xsE\n')
+                arquivoJogadas.write(str(query.from_user.id) +' CAACAgEAAxkBAAO9X43LZqZKPJbJNsZf8VzlEwHjVDoAAgsAA4IVFjZ__wMHThM67xsE' + " 21" +'\n')
 
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAO9X43LZqZKPJbJNsZf8VzlEwHjVDoAAgsAA4IVFjZ__wMHThM67xsE")
@@ -1587,7 +1659,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
             else:
                 arquivoJogadas = open('Jogadas.txt', 'a')
-                arquivoJogadas.write(str(query.from_user.id) + " 20" +' CAACAgEAAxkBAAO8X43LZDWFEet2pYK_lEhpUKoU4RcAAgwAA4IVFjbwaLMp1YeJFhsE\n')
+                arquivoJogadas.write(str(query.from_user.id) +' CAACAgEAAxkBAAO8X43LZDWFEet2pYK_lEhpUKoU4RcAAgwAA4IVFjbwaLMp1YeJFhsE' + " 20" +'\n')
 
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAO8X43LZDWFEet2pYK_lEhpUKoU4RcAAgwAA4IVFjbwaLMp1YeJFhsE")
@@ -1660,7 +1732,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
             else:
                 arquivoJogadas = open('Jogadas.txt', 'a')
-                arquivoJogadas.write(str(query.from_user.id) + " 19" +' CAACAgEAAxkBAAO7X43KpLkrJfSdv99imAi7wufxWBQAAgkAA4IVFjZTLQnSuERnVRsE\n')
+                arquivoJogadas.write(str(query.from_user.id) +' CAACAgEAAxkBAAO7X43KpLkrJfSdv99imAi7wufxWBQAAgkAA4IVFjZTLQnSuERnVRsE' + " 19" +'\n')
 
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAO7X43KpLkrJfSdv99imAi7wufxWBQAAgkAA4IVFjZTLQnSuERnVRsE")
@@ -1732,7 +1804,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
             else:
                 arquivoJogadas = open('Jogadas.txt', 'a')
-                arquivoJogadas.write(str(query.from_user.id) + " 18" + ' CAACAgEAAxkBAAO6X43Kob570RlEDS0ByiPGjN8jpukAAgYAA4IVFjag0l3hWjeLaxsE\n')
+                arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAO6X43Kob570RlEDS0ByiPGjN8jpukAAgYAA4IVFjag0l3hWjeLaxsE' + " 18" +'\n')
 
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAO6X43Kob570RlEDS0ByiPGjN8jpukAAgYAA4IVFjag0l3hWjeLaxsE")
@@ -1804,7 +1876,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
             else:
                 arquivoJogadas = open('Jogadas.txt', 'a')
-                arquivoJogadas.write(str(query.from_user.id) + " 18" + ' CAACAgEAAxkBAAO5X43KnmVXF3YGFrieZ1_TvfqKEJcAAgcAA4IVFjYPq6yKzjZRUhsE\n')
+                arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAO5X43KnmVXF3YGFrieZ1_TvfqKEJcAAgcAA4IVFjYPq6yKzjZRUhsE' + " 17" +'\n')
 
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAO5X43KnmVXF3YGFrieZ1_TvfqKEJcAAgcAA4IVFjYPq6yKzjZRUhsE")
@@ -1877,7 +1949,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
             else:
                 arquivoJogadas = open('Jogadas.txt', 'a')
-                arquivoJogadas.write(str(query.from_user.id) + " 17" + ' CAACAgEAAxkBAAO4X43Km2KVTYCog2j2ij3Mssx2bBQAAggAA4IVFjZKI5muQ65F_BsE\n')
+                arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAO4X43Km2KVTYCog2j2ij3Mssx2bBQAAggAA4IVFjZKI5muQ65F_BsE' + " 16" +'\n')
 
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAO4X43Km2KVTYCog2j2ij3Mssx2bBQAAggAA4IVFjZKI5muQ65F_BsE")
@@ -1949,7 +2021,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
             else:
                 arquivoJogadas = open('Jogadas.txt', 'a')
-                arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAO3X43J93iQH2fUs8nj4gZvEZUU8g8AAhMAA4IVFjbzqnpsekpO9RsE\n')
+                arquivoJogadas.write(str(query.from_user.id) + ' CAACAgEAAxkBAAO3X43J93iQH2fUs8nj4gZvEZUU8g8AAhMAA4IVFjbzqnpsekpO9RsE' + " 15" +'\n')
 
                 # ------> Alterar do id do user pro id do chat!!!!
                 await bot.send_sticker(query.message.chat.id, "CAACAgEAAxkBAAO3X43J93iQH2fUs8nj4gZvEZUU8g8AAhMAA4IVFjbzqnpsekpO9RsE")
