@@ -37,6 +37,51 @@ if os.path.exists('Usuariospalpites.txt') == False:
 if os.path.exists('ousuarios.txt') == False:
     arquivoo = open('ousuarios.txt', 'w+')
     arquivoo.close()
+if os.path.exists('Usuarios.txt') == False:
+    arquivo = open("Usuarios.txt", "w+")
+    arquivo.close()
+if os.path.exists('vez.txt') == False:
+    arquivo = open('vez.txt', 'w+')
+    arquivo.write("1")
+    arquivo.close()
+#------------------APAGANDO CONTEÚDO DOS ARQUIVOS PARA NAO PRECISAR FICAR APAGANDO TODAS AS VEZES
+if os.path.exists('rodada.txt') == True:
+    arquivo = open('rodada.txt', 'w+')
+    arquivo.truncate(0)
+    arquivo.close()
+if os.path.exists('Usuariosvidas.txt') == True:
+    arquivo = open('Usuariosvidas.txt', 'w+')
+    arquivo.truncate(0)
+    arquivo.close()
+if os.path.exists('Jogadas.txt') == True:
+    arquivo = open('Jogadas.txt', 'w+')
+    arquivo.truncate(0)
+    arquivo.close()
+if os.path.exists("usuariosfez.txt") == True:
+    arquivo = open('usuariosfez.txt', 'w+')
+    arquivo.truncate(0)
+    arquivo.close()
+if os.path.exists('vezjogada.txt') == True:
+    arquivo = open('vezjogada.txt', 'w')
+    arquivo.truncate(0)
+    arquivo.close()
+if os.path.exists('Usuariospalpites.txt') == True:
+    arquivo = open('Usuariospalpites.txt', 'w+')
+    arquivo.truncate(0)
+    arquivo.close()
+if os.path.exists('ousuarios.txt') == True:
+    arquivo = open('ousuarios.txt', 'w+')
+    arquivo.truncate(0)
+    arquivo.close()
+if os.path.exists('Usuarios.txt') == True:
+    arquivo = open("Usuarios.txt", "w+")
+    arquivo.truncate(0)
+    arquivo.close()
+if os.path.exists('vez.txt') == True:
+    arquivo = open('vez.txt', 'w+')
+    arquivo.write("1")
+    arquivo.close()
+
 
 def somapalpites():
     spalpite = 0
@@ -92,6 +137,8 @@ zap > copas > espadilha > ouros7 > joker > paus3 > copas3 > espadas3 > ouros3 > 
 
 
 print("Bot iniciado, tenha um bom jogo =D")
+
+
 
 @dp.message_handler(commands='jogadores')  #Para ver os jogadores participantes
 async def leitura_players(message: types.Message):
@@ -171,7 +218,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
                           str(query.from_user.full_name) + "\n")
 
             arquivovidas.write(str(query.from_user.id) + " " + "4" + " " + str(query.from_user.first_name) + " " + "\n")
-            arquivofez.write(str(query.from_user.id) + " " + "0")
+            arquivofez.write(str(query.from_user.id) + " " + "0" + " \n")
             texto1 = "TOP DEMAIS MANO, BORA JOGAR!"
 
 
@@ -184,7 +231,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
         texto1 = "BELEZA, NÃO AGUENTA PERDER NÉ?"
     else:
         texto1 = f'Entrada não esperada: {user_data!r}!'
-
+    await bot.send_message(query.message.chat.id, query.from_user.first_name + " está participando!")
     await bot.send_message(query.from_user.id, texto1)
 
 
@@ -192,7 +239,9 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 async def criadorderodadas(message: types.Message):
     tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus,
                ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros, bw]
-
+    reset = open('Usuarioscartas.txt', 'r+')
+    reset.truncate(0)
+    reset.close()
     ordem = 1
 
     with open('rodada.txt') as f:
@@ -206,6 +255,17 @@ async def criadorderodadas(message: types.Message):
     if contagem == 0:
         tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus,
                    ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros, bw]
+                
+        # resetando cartas dos usuarios
+        reset = open('Usuarioscartas.txt', 'r+')
+        reset.truncate(0)
+        reset.close()
+        #resetando palpites dos usuarios
+        resetpalpite = open('Usuariospalpites.txt', 'r+')
+        resetpalpite.truncate(0)
+        resetpalpite.close()
+
+        
         arquivou = open('Usuarios.txt', 'r')
         arquivo = open('rodada.txt', 'a')
         arquivo.write('1\n')
@@ -255,7 +315,7 @@ async def criadorderodadas(message: types.Message):
                 userid = linha.split()
                 send = random.randrange(0, totcartas)
 
-                arquivo2.write(userid[0] + ' ' + tcartas[send] + "\n")
+                arquivo2.write(userid[0] + ' ' + tcartas[send] + " " + str(send) + " "  + userid[1] +" \n")
                 await message.reply_sticker(tcartas[send])
 
                 del (tcartas[send])
@@ -271,6 +331,7 @@ async def criadorderodadas(message: types.Message):
         @dp.callback_query_handler(text='0')
         @dp.callback_query_handler(text='1')
         async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
+            eouser = False
             verpalpite = 0
             user_data = query.data
             with open('Usuarios.txt') as f:
@@ -293,6 +354,7 @@ async def criadorderodadas(message: types.Message):
                 print(userver)
                 sleep(1)
                 if str(userver[0]) + " " + str(userver[1]) == usertentativa:
+                    eouser = True
                     print("Na hora certa")
                     with open('Usuariospalpites.txt', 'r') as f:
                         quantpalpites = sum(1 for _ in f)
@@ -300,13 +362,14 @@ async def criadorderodadas(message: types.Message):
                         somapalpites()
                         somadepalpites = open('spalpites.txt', 'r')
                         linha = somadepalpites.readline()
-                        if int(somadepalpites) + user_data == 1:
-                            await bot.send_message(query.message.chat.id, query.from_user.first_name + ", Você não pode dar esse palpite =(, tente outro!")
+                        if int(linha) + int(user_data) == 1:
+                            await bot.send_message(query.message.chat.id, query.from_user.first_name + ", Você não pode dar esse palpite ): , tente outro!")
                         
                         else:
                             arquivopalpite = open('Usuariospalpites.txt', 'a')
                             npalpite = str(query.from_user.id) + " " + str(user_data) + "\n"
                             arquivopalpite.write(npalpite)
+                            await bot.send_message(query.message.chat.id, query.from_user.first_name + " Disse que faz: " + str(user_data) + " vezes")
                             arquivovezz = open("vez.txt", 'w')
                             vezz = int(vezz)
                             
@@ -324,6 +387,7 @@ async def criadorderodadas(message: types.Message):
                         arquivopalpite = open('Usuariospalpites.txt', 'a')
                         npalpite = str(query.from_user.id) + " " + str(user_data) + "\n"
                         arquivopalpite.write(npalpite)
+                        await bot.send_message(query.message.chat.id, query.from_user.first_name + " Disse que faz: " + str(user_data) + " vezes")
                         arquivovezz = open("vez.txt", 'w')
                         vezz = int(vezz)
                         
@@ -337,25 +401,40 @@ async def criadorderodadas(message: types.Message):
                         
                         arquivovezz.close()
                         arquivopalpite.close()
-                else:
-                    print("Na hora errada")
+            if eouser == False:
+                await bot.send_message(query.message.chat.id, query.from_user.first_name + ", calma aê!!! Não é sua vez parça!")
             arquivoou.close()
+            with open('Usuariospalpites.txt', 'r') as f:
+                quantpalpites = sum(1 for _ in f)
+            if quantpalpites == players: #Certificando que todos os players deram palpite
 
+                mcarta = 0
+                i=0
+                arquivocartas = open('Usuarioscartas.txt', 'r')
+                for linha in arquivocartas:
+                    carta = linha.split()
+                    if int(carta[2]) > mcarta:
+                        mcarta = int(carta[2])
+                        cartawin = i
+                    i+=1
+                arquivocartas.close()
+                with open("Usuarioscartas.txt", "r") as f:
+                    todcartas = f.readlines()
+                winner = todcartas[cartawin]
+                with open("vencedoratual.txt", "w+") as h:
+                    h.writelines(winner)
+                arquivo = open("vencedoratual.txt", 'r')
+                for linha in arquivo:
+                    vencedor = linha.split()
+                arquivo.close()
+                await bot.send_message(query.message.chat.id, "O vencedor dessa rodada foi: " + vencedor[3])
+                with open("usuariosfez.txt", "r") as j:
+                    todfez = j.readlines()
+                todfez[cartawin] = winner[1] + ' 1 \n'
+                with open("usuariosfez.txt", "w") as k:
+                    k.writelines(todfez)
+                vidas()
 
-
-
-            #-------------------GODOY E LEO MODIFICARAM AQUI-------------------
-            #---------GODOY TAVA MEXENDO AQUI-------------
-            # arquivo = open("Usuariospalpites.txt", "r")            
-            # spalpites = 0
-            # for palpite in arquivo:
-            #     spalpite = palpite.split()
-            #     print(palpite)
-            #     spalpites += int(spalpite[1])
-            
-            # print(spalpites)
-            # arquivo.close()
-            #---------GODOY TAVA MEXENDO AQUI-------------
             await query.answer(f'Você respondeu com {user_data!r}')
 
     #rodada2
@@ -441,6 +520,7 @@ async def criadorderodadas(message: types.Message):
         @dp.callback_query_handler(text='1')
         @dp.callback_query_handler(text='2')
         async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
+            eouser = False
             verpalpite = 0
             user_data = query.data
             with open('Usuarios.txt') as f:
@@ -463,44 +543,75 @@ async def criadorderodadas(message: types.Message):
                 print(userver)
                 sleep(1)
                 if str(userver[0]) + " " + str(userver[1]) == usertentativa:
+                    eouser = True
                     print("Na hora certa")
-                    arquivopalpite = open('Usuariospalpites.txt', 'a')
-                    npalpite = str(query.from_user.id) + " " + str(user_data) + "\n"
-                    arquivopalpite.write(npalpite)
-                    arquivovezz = open("vez.txt", 'w')
-                    vezz = int(vezz)
-                    vezz +=1
-                    if vezz > players:
-                        vezz = 1
-                    arquivovezz.write(str(vezz))
-                    arquivovezz.close()
-                    
-                else:
-                    print("Na hora errada")
+                    with open('Usuariospalpites.txt', 'r') as f:
+                        quantpalpites = sum(1 for _ in f)
+                    if quantpalpites == players-1: #certificando se é o último usuário
+                        somapalpites()
+                        somadepalpites = open('spalpites.txt', 'r')
+                        linha = somadepalpites.readline()
+                        if int(linha) + int(user_data) == 2:
+                            await bot.send_message(query.message.chat.id, query.from_user.first_name + ", Você não pode dar esse palpite ): , tente outro!")
+                        
+                        else:
+                            arquivopalpite = open('Usuariospalpites.txt', 'a')
+                            npalpite = str(query.from_user.id) + " " + str(user_data) + "\n"
+                            arquivopalpite.write(npalpite)
+                            await bot.send_message(query.message.chat.id, query.from_user.first_name + " Disse que faz: " + str(user_data) + " vezes")
+                            arquivovezz = open("vez.txt", 'w')
+                            vezz = int(vezz)
+                            
+
+                            if vezz > players:
+                                vezz = 1
+                                arquivovezz.write(str(vezz))
+                            else:
+                                vezz +=1
+                                arquivovezz.write(str(vezz))
+                            
+                            arquivovezz.close()
+                        somadepalpites.close()
+                    else:
+                        arquivopalpite = open('Usuariospalpites.txt', 'a')
+                        npalpite = str(query.from_user.id) + " " + str(user_data) + "\n"
+                        arquivopalpite.write(npalpite)
+                        await bot.send_message(query.message.chat.id, query.from_user.first_name + " Disse que faz: " + str(user_data) + " vezes")
+                        arquivovezz = open("vez.txt", 'w')
+                        vezz = int(vezz)
+                        
+
+                        if vezz > players:
+                            vezz = 1
+                            arquivovezz.write(str(vezz))
+                        else:
+                            vezz +=1
+                            arquivovezz.write(str(vezz))
+                        
+                        arquivovezz.close()
+                        arquivopalpite.close()
+            if eouser == False:
+                await bot.send_message(query.message.chat.id, query.from_user.first_name + ", calma aê!!! Não é sua vez parça!")
             arquivoou.close()
-            #-------------------GODOY E LEO MODIFICARAM AQUI-------------------
-
-            arquivo = open("Usuariospalpites.txt", "r")            
-            spalpites = 0
-            for palpite in arquivo:
-                print(palpite)
-                spalpites += int(palpite[10])
-            
-            print(spalpites)
-            arquivo.close()
-            
-            await query.answer(f'Você respondeu com {user_data!r}')
-            
-
-
+            if quantpalpites == players: #Certificando que todos os players deram palpite
+                await bot.send_message(query.message.chat.id, "Agora que todos deram seus palpites, façam suas jogadas!")  
+                     
 
     #rodada3
     elif contagem == 2:
         tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus,
                    ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros, bw]
+        
+        # resetando cartas dos usuarios
+        reset = open('Usuarioscartas.txt', 'r+')
+        reset.truncate(0)
+        reset.close()
+        #resetando palpites dos usuarios
         resetpalpite = open('Usuariospalpites.txt', 'r+')
         resetpalpite.truncate(0)
         resetpalpite.close()
+
+
         arquivou = open('Usuarios.txt', 'r')
         arquivo = open('rodada.txt', 'a')
         arquivo2 = open('Usuarioscartas.txt', 'a')
@@ -559,9 +670,6 @@ async def criadorderodadas(message: types.Message):
             lista.append(userid[0])
             lista.append(userid[0])
             lista.append(userid[0])
-            # lista.append(userid[0])
-            # lista.append(userid[0])
-            # lista.append(userid[0])
 
         ncartas = (3*players)
         i = 0
@@ -603,46 +711,69 @@ async def criadorderodadas(message: types.Message):
                 sleep(1)
                 if str(userver[0]) + " " + str(userver[1]) == usertentativa:
                     print("Na hora certa")
-                    arquivopalpite = open('Usuariospalpites.txt', 'a')
-                    npalpite = str(query.from_user.id) + " " + str(user_data) + "\n"
-                    arquivopalpite.write(npalpite)
-                    arquivovezz = open("vez.txt", 'w')
-                    vezz = int(vezz)
-                    vezz +=1
-                    if vezz > players:
-                        vezz = 1
-                    arquivovezz.write(str(vezz))
-                    arquivovezz.close()
-                    
+                    with open('Usuariospalpites.txt', 'r') as f:
+                        quantpalpites = sum(1 for _ in f)
+                    if quantpalpites == players-1: #certificando se é o último usuário
+                        somapalpites()
+                        somadepalpites = open('spalpites.txt', 'r')
+                        linha = somadepalpites.readline()
+                        if int(linha) + int(user_data) == 3:
+                            await bot.send_message(query.message.chat.id, query.from_user.first_name + ", Você não pode dar esse palpite ): , tente outro!")
+                        
+                        else:
+                            arquivopalpite = open('Usuariospalpites.txt', 'a')
+                            npalpite = str(query.from_user.id) + " " + str(user_data) + "\n"
+                            arquivopalpite.write(npalpite)
+                            arquivovezz = open("vez.txt", 'w')
+                            vezz = int(vezz)
+                            
+
+                            if vezz > players:
+                                vezz = 1
+                                arquivovezz.write(str(vezz))
+                            else:
+                                vezz +=1
+                                arquivovezz.write(str(vezz))
+                            
+                            arquivovezz.close()
+                        somadepalpites.close()
+                    else:
+                        arquivopalpite = open('Usuariospalpites.txt', 'a')
+                        npalpite = str(query.from_user.id) + " " + str(user_data) + "\n"
+                        arquivopalpite.write(npalpite)
+                        arquivovezz = open("vez.txt", 'w')
+                        vezz = int(vezz)
+                        
+
+                        if vezz > players:
+                            vezz = 1
+                            arquivovezz.write(str(vezz))
+                        else:
+                            vezz +=1
+                            arquivovezz.write(str(vezz))
+                        
+                        arquivovezz.close()
+                        arquivopalpite.close()
                 else:
                     print("Na hora errada")
             arquivoou.close()
-            #-------------------GODOY E LEO MODIFICARAM AQUI-------------------
-
-            #Somar palpites
-            arquivo = open("Usuariospalpites.txt", "r")            
-            spalpites = 0
-            for palpite in arquivo:
-                print(palpite)
-                spalpites += int(palpite[10])
-            
-            print(spalpites)
-            arquivo.close()            
-
-            await query.answer(f'Você respondeu com {user_data!r}')
 
 
-            reset = open('Usuarioscartas.txt', 'r+')
-            reset.truncate(0)
-            reset.close()
-        # resetar_vez()
     #rodada4
     elif contagem == 3:
         tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus,
                    ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros, bw]
+        
+        # resetando cartas dos usuarios
+        reset = open('Usuarioscartas.txt', 'r+')
+        reset.truncate(0)
+        reset.close()
+        #resetando palpites dos usuarios
         resetpalpite = open('Usuariospalpites.txt', 'r+')
         resetpalpite.truncate(0)
         resetpalpite.close()
+
+        
         arquivou = open('Usuarios.txt', 'r')
         arquivo = open('rodada.txt', 'a')
         arquivo2 = open('Usuarioscartas.txt', 'a')
@@ -746,45 +877,69 @@ async def criadorderodadas(message: types.Message):
                 sleep(1)
                 if str(userver[0]) + " " + str(userver[1]) == usertentativa:
                     print("Na hora certa")
-                    arquivopalpite = open('Usuariospalpites.txt', 'a')
-                    npalpite = str(query.from_user.id) + " " + str(user_data) + "\n"
-                    arquivopalpite.write(npalpite)
-                    arquivovezz = open("vez.txt", 'w')
-                    vezz = int(vezz)
-                    vezz +=1
-                    if vezz > players:
-                        vezz = 1
-                    arquivovezz.write(str(vezz))
-                    arquivovezz.close()
-                    
+                    with open('Usuariospalpites.txt', 'r') as f:
+                        quantpalpites = sum(1 for _ in f)
+                    if quantpalpites == players-1: #certificando se é o último usuário
+                        somapalpites()
+                        somadepalpites = open('spalpites.txt', 'r')
+                        linha = somadepalpites.readline()
+                        if int(linha) + int(user_data) == 4:
+                            await bot.send_message(query.message.chat.id, query.from_user.first_name + ", Você não pode dar esse palpite ): , tente outro!")
+                        
+                        else:
+                            arquivopalpite = open('Usuariospalpites.txt', 'a')
+                            npalpite = str(query.from_user.id) + " " + str(user_data) + "\n"
+                            arquivopalpite.write(npalpite)
+                            arquivovezz = open("vez.txt", 'w')
+                            vezz = int(vezz)
+                            
+
+                            if vezz > players:
+                                vezz = 1
+                                arquivovezz.write(str(vezz))
+                            else:
+                                vezz +=1
+                                arquivovezz.write(str(vezz))
+                            
+                            arquivovezz.close()
+                        somadepalpites.close()
+                    else:
+                        arquivopalpite = open('Usuariospalpites.txt', 'a')
+                        npalpite = str(query.from_user.id) + " " + str(user_data) + "\n"
+                        arquivopalpite.write(npalpite)
+                        arquivovezz = open("vez.txt", 'w')
+                        vezz = int(vezz)
+                        
+
+                        if vezz > players:
+                            vezz = 1
+                            arquivovezz.write(str(vezz))
+                        else:
+                            vezz +=1
+                            arquivovezz.write(str(vezz))
+                        
+                        arquivovezz.close()
+                        arquivopalpite.close()
                 else:
                     print("Na hora errada")
             arquivoou.close()
-            #-------------------GODOY E LEO MODIFICARAM AQUI-------------------
-            #Somar palpites
-            arquivo = open("Usuariospalpites.txt", "r")            
-            spalpites = 0
-            for palpite in arquivo:
-                print(palpite)
-                spalpites += int(palpite[10])
-            
-            print(spalpites)
-            arquivo.close()             
-            
-            await query.answer(f'Você respondeu com {user_data!r}')
 
 
-            reset = open('Usuarioscartas.txt', 'r+')
-            reset.truncate(0)
-            reset.close()
-        # resetar_vez()
     #rodada5
     elif contagem == 4:
         tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus,
                    ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros, bw]
+        
+        # resetando cartas dos usuarios
+        reset = open('Usuarioscartas.txt', 'r+')
+        reset.truncate(0)
+        reset.close()
+        #resetando palpites dos usuarios
         resetpalpite = open('Usuariospalpites.txt', 'r+')
         resetpalpite.truncate(0)
         resetpalpite.close()
+
+        
         arquivou = open('Usuarios.txt', 'r')
         arquivo = open('rodada.txt', 'a')
         arquivo2 = open('Usuarioscartas.txt', 'a')
@@ -893,47 +1048,53 @@ async def criadorderodadas(message: types.Message):
                 sleep(1)
                 if str(userver[0]) + " " + str(userver[1]) == usertentativa:
                     print("Na hora certa")
-                    arquivopalpite = open('Usuariospalpites.txt', 'a')
-                    npalpite = str(query.from_user.id) + " " + str(user_data) + "\n"
-                    arquivopalpite.write(npalpite)
-                    arquivovezz = open("vez.txt", 'w')
-                    vezz = int(vezz)
-                    vezz +=1
-                    if vezz > players:
-                        vezz = 1
-                    arquivovezz.write(str(vezz))
-                    arquivovezz.close()
-                    
+                    with open('Usuariospalpites.txt', 'r') as f:
+                        quantpalpites = sum(1 for _ in f)
+                    if quantpalpites == players-1: #certificando se é o último usuário
+                        somapalpites()
+                        somadepalpites = open('spalpites.txt', 'r')
+                        linha = somadepalpites.readline()
+                        if int(linha) + int(user_data) == 5:
+                            await bot.send_message(query.message.chat.id, query.from_user.first_name + ", Você não pode dar esse palpite ): , tente outro!")
+                        
+                        else:
+                            arquivopalpite = open('Usuariospalpites.txt', 'a')
+                            npalpite = str(query.from_user.id) + " " + str(user_data) + "\n"
+                            arquivopalpite.write(npalpite)
+                            arquivovezz = open("vez.txt", 'w')
+                            vezz = int(vezz)
+                            
+
+                            if vezz > players:
+                                vezz = 1
+                                arquivovezz.write(str(vezz))
+                            else:
+                                vezz +=1
+                                arquivovezz.write(str(vezz))
+                            
+                            arquivovezz.close()
+                        somadepalpites.close()
+                    else:
+                        arquivopalpite = open('Usuariospalpites.txt', 'a')
+                        npalpite = str(query.from_user.id) + " " + str(user_data) + "\n"
+                        arquivopalpite.write(npalpite)
+                        arquivovezz = open("vez.txt", 'w')
+                        vezz = int(vezz)
+                        
+
+                        if vezz > players:
+                            vezz = 1
+                            arquivovezz.write(str(vezz))
+                        else:
+                            vezz +=1
+                            arquivovezz.write(str(vezz))
+                        
+                        arquivovezz.close()
+                        arquivopalpite.close()
                 else:
                     print("Na hora errada")
             arquivoou.close()
-            #-------------------GODOY E LEO MODIFICARAM AQUI-------------------
 
-            
-            #Somar palpites
-            arquivo = open("Usuariospalpites.txt", "r")            
-            spalpites = 0
-            for palpite in arquivo:
-                print(palpite)
-                spalpites += int(palpite[10])
-            
-            print(spalpites)
-            arquivo.close() 
-
-            await query.answer(f'Você respondeu com {user_data!r}')
-
-            arquivo = open("Usuariospalpites.txt", "r")
-            spalpites = 0
-            for palpite in arquivo:
-                userpalpite = palpite.split()
-                spalpites = int(userpalpite[1]) + spalpites
-            arquivo.close()
-            print(spalpites)
-
-            reset = open('Usuarioscartas.txt', 'r+')
-            reset.truncate(0)
-            reset.close()
-        # resetar_vez
 
     #rodadareset
     elif contagem == 5:
@@ -3075,46 +3236,48 @@ def finalizacao():
             todjogadas = f.readlines()
         winner = todjogadas[cartawin]
         print(winner)
-
+        vidas()
     #-----------------------FIM VERIFICANDO QUEM ERROU----------------------------
 
+def vidas():
+    #=-----------------------TODo O CÓDIGO ABAIXO É PARA TIRAR VIDAS DAQUELES QUE ERRARAM
+    arquivopalpites = open('Usuariospalpites.txt', 'r')
 
-        #=-----------------------TODo O CÓDIGO ABAIXO É PARA TIRAR VIDAS DAQUELES QUE ERRARAM
-        arquivopalpites = open('Usuariospalpites.txt', 'r')
+    for palpite in arquivopalpites:
+        lpalpite = palpite.split()
+        arquivofez = open('usuariosfez.txt', 'r')
+        for userfez in arquivofez:
+            ufez = userfez.split()
+            if ufez[0] == lpalpite[0]: #Se os ids são iguais então eu posso comparar o palpite com o quantas fez
+                if ufez[1] != lpalpite[1]: #Se quantas fez for diferente do palpite
 
-        for palpite in arquivopalpites:
-            lpalpite = palpite.split()
-            arquivofez = open('usuariosfez.txt', 'r')
-            for userfez in arquivofez:
-                ufez = userfez.split()
-                if ufez[0] == lpalpite[0]: #Se os ids são iguais então eu posso comparar o palpite com o quantas fez
-                    if ufez[1] != lpalpite[1]: #Se quantas fez for diferente do palpite
+                    i = 0 #Se inicia em 1 pois as linhas no arquivo começam a partir de 1                   
+                    arquivovidas = open("Usuariosvidas.txt", 'r') #Abro o arquivo aqui pois preciso que o cursor seja resetado ao inicio
+                    for lvida in arquivovidas:
+                        llvida = lvida.split()
+                        
+                        if llvida[0] == ufez[0]: #Se o id do arquivo de vidas for igual ao usuario em questão
 
-                        i = 0 #Se inicia em 1 pois as linhas no arquivo começam a partir de 1                   
-                        arquivovidas = open("Usuariosvidas.txt", 'r') #Abro o arquivo aqui pois preciso que o cursor seja resetado ao inicio
-                        for lvida in arquivovidas:
-                            llvida = lvida.split()
-                            
-                            if llvida[0] == ufez[0]: #Se o id do arquivo de vidas for igual ao usuario em questão
+                            nlinha = i #Para salvar a posição da linha do usuário
+                            useratual = llvida #Salva o usuario em que vamos alterar a vida
+                        i += 1
+                        
+                    arquivovidas.close() #Fecho o arquivo aqui pois preciso que o cursor seja resetado ao inicio
+                    with open('Usuariosvidas.txt', 'r') as f:
+                        vidas = f.readlines() #Armazena tudo o que está dentro de vidas
 
-                                nlinha = i #Para salvar a posição da linha do usuário
-                                useratual = llvida #Salva o usuario em que vamos alterar a vida
-                            i += 1
-                            
-                        arquivovidas.close() #Fecho o arquivo aqui pois preciso que o cursor seja resetado ao inicio
-                        with open('Usuariosvidas.txt', 'r') as f:
-                            vidas = f.readlines() #Armazena tudo o que está dentro de vidas
+                    vidaatual = int(llvida[1])-1
+                    if vidaatual == 0:
+                        vidas[nlinha] = ""
+                    else:
+                        vidas[nlinha] = (useratual[0] + " " + str(vidaatual) + " " + useratual[2] +"\n")
 
-                        vidaatual = int(llvida[1])-1
+                    with open('Usuariosvidas.txt', 'w') as f:
+                        f.writelines(vidas)
+        
+        arquivofez.close()
 
-                        vidas[nlinha] = (useratual[0] + " " + str(vidaatual) + "\n")
-
-                        with open('Usuariosvidas.txt', 'w') as f:
-                            f.writelines(vidas)
-            
-            arquivofez.close()
-
-        arquivopalpites.close()
+    arquivopalpites.close()
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
