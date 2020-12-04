@@ -1149,17 +1149,6 @@ async def criadorderodadas(message: types.Message):
     # await message.reply(vidas)
 
 
-@dp.message_handler(commands='vidas')
-async def mostrar_vidas(message: types.Message):
-    tvida = []
-    arquivovidas = open('Usuariosvidas.txt','r')
-    for linha in arquivovidas:
-        uvida = linha.split()
-        tvida.append(str(uvida[2]) + " " + str(uvida[1]))
-    arquivovidas.close()
-    await message.reply("Vidas: " + str(tvida))
-
-
 @dp.message_handler(commands='zap')
 async def start_cmd_handler(message: types.Message):
     keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
@@ -1230,7 +1219,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     else:
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
-    finalizacao()
+    #
     
 
 @dp.message_handler(commands='coringa')
@@ -1302,7 +1291,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     else:
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
-    finalizacao()
+    #
 
 async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     user_data_naipe = query.data
@@ -1378,7 +1367,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     else:
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
-    finalizacao()
+    #
 
 
 
@@ -1451,7 +1440,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     else:
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
-    finalizacao()
+    #
 
 
 @dp.message_handler(commands='ouros')
@@ -1523,7 +1512,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     else:
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
-    finalizacao()
+    #
 
 
 
@@ -1596,7 +1585,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     else:
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
-    finalizacao()
+    #
 
 
 
@@ -1669,7 +1658,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     else:
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
-    finalizacao()
+    #
 
 
 
@@ -1743,7 +1732,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     else:
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
-    finalizacao()
+    #
 
 
 
@@ -1817,7 +1806,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     else:
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
-    finalizacao()
+    #
 
 
 
@@ -1891,7 +1880,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     else:
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
-    finalizacao()
+    #
 
 
 
@@ -1964,7 +1953,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     else:
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
-    finalizacao()
+    #
 
 
 
@@ -2036,7 +2025,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     else:
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
-    finalizacao()
+    #
 
 
 
@@ -2110,7 +2099,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     else:
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
-    finalizacao()
+    #
 
 
 
@@ -2183,7 +2172,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     else:
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
-    finalizacao()
+    #
 
 
 
@@ -2256,7 +2245,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     else:
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
-    finalizacao()
+    #
 
 
 
@@ -2329,7 +2318,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     else:
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
-    finalizacao()
+    #
 
 
 
@@ -2402,7 +2391,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     else:
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
-    finalizacao()
+    #
 
 
 
@@ -2475,7 +2464,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     else:
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
-    finalizacao()
+    #
 
 
 
@@ -2548,7 +2537,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     else:
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
-    finalizacao()
+    #
 
 
 
@@ -2621,7 +2610,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     else:
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
-    finalizacao()
+    #
 
 
 
@@ -2694,7 +2683,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     else:
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
-    finalizacao()
+    #
 
 
 
@@ -2767,7 +2756,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     else:
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
-    finalizacao()
+    #
 
 
 
@@ -2840,7 +2829,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     else:
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
-    finalizacao()
+    #
 
 
 
@@ -2913,7 +2902,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     else:
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
-    finalizacao()
+    #
 
 
 
@@ -2986,7 +2975,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     else:
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
-    finalizacao()
+    #
 
 
 
@@ -3059,7 +3048,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     else:
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
-    finalizacao()
+    #
 
 
 
@@ -3132,7 +3121,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     else:
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
-    finalizacao()
+    #
 
 
 
@@ -3205,10 +3194,69 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
     else:
         await bot.send_message(query.from_user.id, "Entrada inexperada. O QUE VOCÊ FEZ?!")
-    finalizacao()
 
 
-def finalizacao():
+@dp.message_handler(commands='vidas')
+async def mostrar_vidas(message: types.Message):
+    tvida = []
+    arquivovidas = open('Usuariosvidas.txt','r')
+    for linha in arquivovidas:
+        uvida = linha.split()
+        tvida.append(str(uvida[2]) + " " + str(uvida[1]))
+    arquivovidas.close()
+    await message.reply("Vidas: " + str(tvida))
+
+
+@dp.message_handler(commands='finaliza')
+async def start_cmd_handler(message: types.Message):
+    keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
+
+    texto = (
+        ('SIM!', 'sim'),
+        ('NÃO!', 'nao'),
+    )
+
+    rbotao = (types.InlineKeyboardButton(tex, callback_data=dat)
+              for tex, dat in texto)
+
+    keyboard_markup.row(*rbotao)
+
+    await message.reply("Deseja finalizar este turno?", reply_markup=keyboard_markup)
+
+
+@dp.callback_query_handler(text='sim')
+@dp.callback_query_handler(text='nao')
+async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
+    user_data = query.data
+    if user_data == 'sim':
+        with open("Usuarios.txt", "r") as f:
+            players = sum(1 for _ in f)
+        with open("Jogadas.txt", "r") as j:
+            jogadas = sum(1 for _ in j)
+
+        if players == jogadas:
+            await bot.send_message(query.message.chat.id, "Todos ja mandaram suas cartas e quem fez foi: ") #Implementar aqui o quem fez que tem lá em cima
+        
+        else:
+            await bot.send_message(query.message.chat.id, "Calma, alguns jogadores não mandaram suas cartas, aguarde que todos enviem e envie o /finaliza novamente")
+    else:
+        await message.reply("Ok, podem continuar jogando suas cartas =D")
+
+# # @dp.message_handler(commands='finaliza')
+# # async def finalizar_turno(message: types.Message):
+#     with open("Usuarios.txt", "r") as f:
+#         players = sum(1 for _ in f)
+#     with open("Jogadas.txt", "r") as j:
+#         jogadas = sum(1 for _ in j)
+
+#     if players == jogadas:
+#         await bot.send_message(query.message.chat.id, "Todos ja mandaram suas cartas e quem fez foi: ") #Implementar aqui o quem fez que tem lá em cima
+    
+#     else:
+#         await bot.send_message(query.message.chat.id, "Calma, alguns jogadores não mandaram suas cartas, aguarde que todos enviem e envie o /finaliza novamente")
+
+
+def finaliza():
     print("ENTROU EM FINALIZAÇÃO")
     with open('Usuarios.txt', 'r') as j:
         players = sum(1 for _ in j)
@@ -3251,7 +3299,7 @@ def vidas():
             if ufez[0] == lpalpite[0]: #Se os ids são iguais então eu posso comparar o palpite com o quantas fez
                 if ufez[1] != lpalpite[1]: #Se quantas fez for diferente do palpite
 
-                    i = 0 #Se inicia em 1 pois as linhas no arquivo começam a partir de 1                   
+                    i = 0 #Se inicia em 0 pois as linhas no arquivo começam a partir de 0                  
                     arquivovidas = open("Usuariosvidas.txt", 'r') #Abro o arquivo aqui pois preciso que o cursor seja resetado ao inicio
                     for lvida in arquivovidas:
                         llvida = lvida.split()
