@@ -251,6 +251,7 @@ async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
 
 @dp.message_handler(commands='nrodada')
 async def criadorderodadas(message: types.Message):
+    vidas()
     tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus,
                ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros, bw]
     reset = open('Usuarioscartas.txt', 'r+')
@@ -454,12 +455,42 @@ async def criadorderodadas(message: types.Message):
                 todfez[cartawin] = winner[1] + ' 1 \n'
                 with open("usuariosfez.txt", "w") as k:
                     k.writelines(todfez)
-                vidas()
+                # vidas()
+                # if os.path.exists('GrandeVencedor.txt'):
+                #     arquivovv = open('GrandeVencedor.txt', 'r')
+                #     idVencedor = arquivovv.readline
+                #     arquivovv.close()
+                #     nomeCompletoGanhador = ''
+                #     nomesUsuarios = open('Usuarios.txt', 'r')
+                #     for linha in nomesUsuarios:
+                #         usuarios = linha.split()
+                #         if str(idVencedor) == str(usuarios[0]):
+                #             for nomes in usuarios[1:]:
+                #                 nomeCompletoGanhador = nomeCompletoGanhador + ' ' + nomes
+
+                #     await bot.send_message(query.message.chat.id, "FIM DE JOGO!!!!! O GRANDE VENCEDOR FOI " + nomeCompletoGanhador.upper + "PARABÉNS!!!!")
+                    
+
 
             await query.answer(f'Você respondeu com {user_data!r}')
 
     #rodada2
-    if contagem == 1:
+    # vidas()
+    if os.path.exists('GrandeVencedor.txt') == True:
+        arquivovv = open('GrandeVencedor.txt', 'r')
+        idVencedor = arquivovv.readline
+        arquivovv.close()
+        nomeCompletoGanhador = ''
+        nomesUsuarios = open('Usuarios.txt', 'r')
+        for linha in nomesUsuarios:
+            usuarios = linha.split()
+            if str(idVencedor) == str(usuarios[0]): 
+                for nomes in usuarios[1:]:
+                    nomeCompletoGanhador = nomeCompletoGanhador + ' ' + nomes
+
+        await bot.send_message(query.message.chat.id, "FIM DE JOGO!!!!! O GRANDE VENCEDOR FOI " + nomeCompletoGanhador.upper + "PARABÉNS!!!!")
+        
+    elif contagem == 1:
         tcartas = [zap, copas, espadilha, ouros7, joker, paus3, copas3, espadas3, ouros3, paus2, copas2, espadas2, ouros2, aspaus,
                    ascopas, asouros, kpaus, kcopas, kespadas, kouros, jpaus, jcopas, jespadas, jouros, qpaus, qcopas, qespadas, qouros, bw]
 
@@ -3323,7 +3354,7 @@ def finaliza():
                 arquivoGanhador.write(nomeCompletoGanhador)
         arquivoGanhador.close()
         nomesUsuarios.close()
-        vidas()
+        # vidas()
         resetJogadas = open('Jogadas.txt', 'r+')
         resetJogadas.truncate(0)
         resetJogadas.close()
@@ -3368,6 +3399,17 @@ def vidas():
         arquivofez.close()
 
     arquivopalpites.close()
+    with open('Usuariosvidas.txt', 'r') as f:
+        vivos = sum(1 for _ in f)
+    f.close()
+    if vivos == 1:
+        vv = open('Usuariosvidas.txt', 'r')
+        for linhavv in vv:
+            oVitorioso = linhavv.split()
+        vv.close()
+        arquivoVitoria = open('GrandeVencedor.txt', 'w+')
+        arquivoVitoria.write(oVitorioso[0])
+        arquivoVitoria.close()
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
