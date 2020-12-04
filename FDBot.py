@@ -22,6 +22,9 @@ if os.path.exists('rodada.txt') == False:
 if os.path.exists('Usuariosvidas.txt') == False:
     arquivo = open('Usuariosvidas.txt', 'w+')
     arquivo.close()
+if os.path.exists('Usuarioscartas.txt') == False:
+    arquivo = open('Usuarioscartas.txt', 'w+')
+    arquivo.close()
 if os.path.exists('Jogadas.txt') == False:
     arquivo = open('Jogadas.txt', 'w+')
     arquivo.close()
@@ -44,6 +47,9 @@ if os.path.exists('vez.txt') == False:
     arquivo = open('vez.txt', 'w+')
     arquivo.write("1")
     arquivo.close()
+if os.path.exists('arquivoGanhador.txt') == False:
+    arquivo = open("arquivoGanhador.txt", "w+")
+    arquivo.close()
 #------------------APAGANDO CONTEÚDO DOS ARQUIVOS PARA NAO PRECISAR FICAR APAGANDO TODAS AS VEZES
 if os.path.exists('rodada.txt') == True:
     arquivo = open('rodada.txt', 'w+')
@@ -51,6 +57,10 @@ if os.path.exists('rodada.txt') == True:
     arquivo.close()
 if os.path.exists('Usuariosvidas.txt') == True:
     arquivo = open('Usuariosvidas.txt', 'w+')
+    arquivo.truncate(0)
+    arquivo.close()
+if os.path.exists('Usuarioscartas.txt') == True:
+    arquivo = open('Usuarioscartas.txt', 'w+')
     arquivo.truncate(0)
     arquivo.close()
 if os.path.exists('Jogadas.txt') == True:
@@ -80,6 +90,10 @@ if os.path.exists('Usuarios.txt') == True:
 if os.path.exists('vez.txt') == True:
     arquivo = open('vez.txt', 'w+')
     arquivo.write("1")
+    arquivo.close()
+if os.path.exists('arquivoGanhador.txt') == True:
+    arquivo = open('arquivoGanhador.txt', "w+")
+    arquivo.truncate(0)
     arquivo.close()
 
 
@@ -3212,8 +3226,8 @@ async def start_cmd_handler(message: types.Message):
     keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
 
     texto = (
-        ('SIM!', 'sim'),
-        ('NÃO!', 'nao'),
+        ('SIM!', 'simfinaliza'),
+        ('NÃO!', 'naofinaliza'),
     )
 
     rbotao = (types.InlineKeyboardButton(tex, callback_data=dat)
@@ -3224,18 +3238,21 @@ async def start_cmd_handler(message: types.Message):
     await message.reply("Deseja finalizar este turno?", reply_markup=keyboard_markup)
 
 
-@dp.callback_query_handler(text='sim')
-@dp.callback_query_handler(text='nao')
+@dp.callback_query_handler(text='simfinaliza')
+@dp.callback_query_handler(text='naofinaliza')
 async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
     user_data = query.data
-    if user_data == 'sim':
+    if user_data == 'simfinaliza':
         with open("Usuarios.txt", "r") as f:
             players = sum(1 for _ in f)
         with open("Jogadas.txt", "r") as j:
             jogadas = sum(1 for _ in j)
 
         if players == jogadas:
-            await bot.send_message(query.message.chat.id, "Todos ja mandaram suas cartas e quem fez foi: ") #Implementar aqui o quem fez que tem lá em cima
+            finaliza()
+            with open('arquivoGanhador.txt', 'r') as f:
+                ganhador = f.readline()
+            await bot.send_message(query.message.chat.id, "Todos ja mandaram suas cartas e quem fez foi: " + ganhador) #Implementar aqui o quem fez que tem lá em cima
         
         else:
             await bot.send_message(query.message.chat.id, "Calma, alguns jogadores não mandaram suas cartas, aguarde que todos enviem e envie o /finaliza novamente")
@@ -3284,6 +3301,20 @@ def finaliza():
             todjogadas = f.readlines()
         winner = todjogadas[cartawin]
         print(winner)
+        nomesUsuarios = open('Usuarios.txt', 'r')
+        arquivoGanhador = open('arquivoGanhador.txt', 'w')
+        vencedor = winner.split()
+        for linha in nomesUsuarios:
+            usuarios = linha.split()
+            print(usuarios[0])
+            print(vencedor[0])
+            nomeCompletoGanhador = ''
+            if str(vencedor[0]) == str(usuarios[0]):
+                for nomes in usuarios[1:]:
+                    nomeCompletoGanhador = nomeCompletoGanhador + ' ' + nomes
+                arquivoGanhador.write(nomeCompletoGanhador)
+        arquivoGanhador.close()
+        nomesUsuarios.close()
         vidas()
     #-----------------------FIM VERIFICANDO QUEM ERROU----------------------------
 
