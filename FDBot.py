@@ -22,9 +22,9 @@ if os.path.exists('rodada.txt') == False:
 if os.path.exists('Usuariosvidas.txt') == False:
     arquivo = open('Usuariosvidas.txt', 'w+')
     arquivo.close()
-if os.path.exists('Usuarioscartas.txt') == False:
-    arquivo = open('Usuarioscartas.txt', 'w+')
-    arquivo.close()
+# if os.path.exists('Usuarioscartas.txt') == False:
+#     arquivo = open('Usuarioscartas.txt', 'w+')
+#     arquivo.close()
 if os.path.exists('Jogadas.txt') == False:
     arquivo = open('Jogadas.txt', 'w+')
     arquivo.close()
@@ -59,10 +59,10 @@ if os.path.exists('Usuariosvidas.txt') == True:
     arquivo = open('Usuariosvidas.txt', 'w+')
     arquivo.truncate(0)
     arquivo.close()
-if os.path.exists('Usuarioscartas.txt') == True:
-    arquivo = open('Usuarioscartas.txt', 'w+')
-    arquivo.truncate(0)
-    arquivo.close()
+# if os.path.exists('Usuarioscartas.txt') == True:
+#     arquivo = open('Usuarioscartas.txt', 'w+')
+#     arquivo.truncate(0)
+#     arquivo.close()
 if os.path.exists('Jogadas.txt') == True:
     arquivo = open('Jogadas.txt', 'w+')
     arquivo.truncate(0)
@@ -287,8 +287,8 @@ async def criadorderodadas(message: types.Message):
         keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
 
         cbotao = (
-            ("0", "0"),
-            ("1", "1"),
+            ("0", "01"),
+            ("1", "11"),
         )
         ctexto = (types.InlineKeyboardButton(ctex, callback_data=cdat)
                   for ctex, cdat in cbotao)
@@ -342,12 +342,13 @@ async def criadorderodadas(message: types.Message):
         arquivou.close()
         arquivo2.close()
 
-        @dp.callback_query_handler(text='0')
-        @dp.callback_query_handler(text='1')
+        @dp.callback_query_handler(text='01')
+        @dp.callback_query_handler(text='11')
         async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             eouser = False
             verpalpite = 0
-            user_data = query.data
+            user_data = query.data[0]
+            players = 0
             with open('Usuarios.txt') as f:
                 players = sum(1 for _ in f)
             #-------------------GODOY E LEO MODIFICARAM AQUI-------------------
@@ -383,12 +384,12 @@ async def criadorderodadas(message: types.Message):
                             arquivopalpite = open('Usuariospalpites.txt', 'a')
                             npalpite = str(query.from_user.id) + " " + str(user_data) + "\n"
                             arquivopalpite.write(npalpite)
+                            arquivopalpite.close()
                             await bot.send_message(query.message.chat.id, query.from_user.first_name + " Disse que faz: " + str(user_data) + " vezes")
                             arquivovezz = open("vez.txt", 'w')
                             vezz = int(vezz)
-                            
 
-                            if vezz > players:
+                            if vezz == players:
                                 vezz = 1
                                 arquivovezz.write(str(vezz))
                             else:
@@ -401,12 +402,13 @@ async def criadorderodadas(message: types.Message):
                         arquivopalpite = open('Usuariospalpites.txt', 'a')
                         npalpite = str(query.from_user.id) + " " + str(user_data) + "\n"
                         arquivopalpite.write(npalpite)
+                        arquivopalpite.close()
                         await bot.send_message(query.message.chat.id, query.from_user.first_name + " Disse que faz: " + str(user_data) + " vezes")
                         arquivovezz = open("vez.txt", 'w')
                         vezz = int(vezz)
                         
 
-                        if vezz > players:
+                        if vezz == players:
                             vezz = 1
                             arquivovezz.write(str(vezz))
                         else:
@@ -414,12 +416,17 @@ async def criadorderodadas(message: types.Message):
                             arquivovezz.write(str(vezz))
                         
                         arquivovezz.close()
-                        arquivopalpite.close()
             if eouser == False:
                 await bot.send_message(query.message.chat.id, query.from_user.first_name + ", calma aê!!! Não é sua vez parça!")
             arquivoou.close()
-            with open('Usuariospalpites.txt', 'r') as f:
-                quantpalpites = sum(1 for _ in f)
+            sleep(1)
+            quantpalpites = 0
+            upalpites = open('Usuariospalpites.txt', 'r')
+            for linhapalpites in upalpites:
+                quantpalpites += 1
+            upalpites.close()
+            print(quantpalpites)
+            print(players)
             if quantpalpites == players: #Certificando que todos os players deram palpite
 
                 mcarta = 0
@@ -500,9 +507,9 @@ async def criadorderodadas(message: types.Message):
         keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
 
         cbotao = (
-            ("0", "0"),
-            ("1", "1"),
-            ("2", "2"),
+            ("0", "02"),
+            ("1", "12"),
+            ("2", "22"),
         )
         ctexto = (types.InlineKeyboardButton(ctex, callback_data=cdat)
                   for ctex, cdat in cbotao)
@@ -530,13 +537,14 @@ async def criadorderodadas(message: types.Message):
         arquivou.close()
         arquivo2.close()
 
-        @dp.callback_query_handler(text='0')
-        @dp.callback_query_handler(text='1')
-        @dp.callback_query_handler(text='2')
+        @dp.callback_query_handler(text='02')
+        @dp.callback_query_handler(text='12')
+        @dp.callback_query_handler(text='22')
         async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             eouser = False
             verpalpite = 0
-            user_data = query.data
+            user_data = query.data[0]
+            quantpalpites = 0
             with open('Usuarios.txt') as f:
                 players = sum(1 for _ in f)
             #-------------------GODOY E LEO MODIFICARAM AQUI-------------------
@@ -577,7 +585,7 @@ async def criadorderodadas(message: types.Message):
                             vezz = int(vezz)
                             
 
-                            if vezz > players:
+                            if vezz == players:
                                 vezz = 1
                                 arquivovezz.write(str(vezz))
                             else:
@@ -595,7 +603,7 @@ async def criadorderodadas(message: types.Message):
                         vezz = int(vezz)
                         
 
-                        if vezz > players:
+                        if vezz == players:
                             vezz = 1
                             arquivovezz.write(str(vezz))
                         else:
@@ -669,10 +677,10 @@ async def criadorderodadas(message: types.Message):
         keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
 
         cbotao = (
-            ("0", "0"),
-            ("1", "1"),
-            ("2", "2"),
-            ("3", "3"),
+            ("0", "03"),
+            ("1", "13"),
+            ("2", "23"),
+            ("3", "33"),
         )
         ctexto = (types.InlineKeyboardButton(ctex, callback_data=cdat)
                   for ctex, cdat in cbotao)
@@ -697,13 +705,13 @@ async def criadorderodadas(message: types.Message):
 
         await message.reply("Quantas você vai fazer?", reply_markup=keyboard_markup)
 
-        @dp.callback_query_handler(text='0')
-        @dp.callback_query_handler(text='1')
-        @dp.callback_query_handler(text='2')
-        @dp.callback_query_handler(text='3')
+        @dp.callback_query_handler(text='03')
+        @dp.callback_query_handler(text='13')
+        @dp.callback_query_handler(text='23')
+        @dp.callback_query_handler(text='33')
         async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             verpalpite = 0
-            user_data = query.data
+            user_data = query.data[0]
             with open('Usuarios.txt') as f:
                 players = sum(1 for _ in f)
             #-------------------GODOY E LEO MODIFICARAM AQUI-------------------
@@ -742,7 +750,7 @@ async def criadorderodadas(message: types.Message):
                             vezz = int(vezz)
                             
 
-                            if vezz > players:
+                            if vezz == players:
                                 vezz = 1
                                 arquivovezz.write(str(vezz))
                             else:
@@ -759,7 +767,7 @@ async def criadorderodadas(message: types.Message):
                         vezz = int(vezz)
                         
 
-                        if vezz > players:
+                        if vezz == players:
                             vezz = 1
                             arquivovezz.write(str(vezz))
                         else:
@@ -830,11 +838,11 @@ async def criadorderodadas(message: types.Message):
         keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
 
         cbotao = (
-            ("0", "0"),
-            ("1", "1"),
-            ("2", "2"),
-            ("3", "3"),
-            ("4", "4"),
+            ("0", "04"),
+            ("1", "14"),
+            ("2", "24"),
+            ("3", "34"),
+            ("4", "44"),
         )
         ctexto = (types.InlineKeyboardButton(ctex, callback_data=cdat)
                   for ctex, cdat in cbotao)
@@ -862,14 +870,14 @@ async def criadorderodadas(message: types.Message):
 
         await message.reply("Quantas você vai fazer?", reply_markup=keyboard_markup)
 
-        @dp.callback_query_handler(text='0')
-        @dp.callback_query_handler(text='1')
-        @dp.callback_query_handler(text='2')
-        @dp.callback_query_handler(text='3')
-        @dp.callback_query_handler(text='4')
+        @dp.callback_query_handler(text='04')
+        @dp.callback_query_handler(text='14')
+        @dp.callback_query_handler(text='24')
+        @dp.callback_query_handler(text='34')
+        @dp.callback_query_handler(text='44')
         async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             verpalpite = 0
-            user_data = query.data
+            user_data = query.data[0]
             with open('Usuarios.txt') as f:
                 players = sum(1 for _ in f)
             #-------------------GODOY E LEO MODIFICARAM AQUI-------------------
@@ -908,7 +916,7 @@ async def criadorderodadas(message: types.Message):
                             vezz = int(vezz)
                             
 
-                            if vezz > players:
+                            if vezz == players:
                                 vezz = 1
                                 arquivovezz.write(str(vezz))
                             else:
@@ -925,7 +933,7 @@ async def criadorderodadas(message: types.Message):
                         vezz = int(vezz)
                         
 
-                        if vezz > players:
+                        if vezz == players:
                             vezz = 1
                             arquivovezz.write(str(vezz))
                         else:
@@ -996,12 +1004,12 @@ async def criadorderodadas(message: types.Message):
         keyboard_markup = types.InlineKeyboardMarkup(row_width=2)
 
         cbotao = (
-            ("0", "0"),
-            ("1", "1"),
-            ("2", "2"),
-            ("3", "3"),
-            ("4", "4"),
-            ("5", "5"),
+            ("0", "05"),
+            ("1", "15"),
+            ("2", "25"),
+            ("3", "35"),
+            ("4", "45"),
+            ("5", "55"),
         )
         ctexto = (types.InlineKeyboardButton(ctex, callback_data=cdat)
                   for ctex, cdat in cbotao)
@@ -1030,15 +1038,15 @@ async def criadorderodadas(message: types.Message):
 
         await message.reply("Quantas você vai fazer?", reply_markup=keyboard_markup)
 
-        @dp.callback_query_handler(text='0')
-        @dp.callback_query_handler(text='1')
-        @dp.callback_query_handler(text='2')
-        @dp.callback_query_handler(text='3')
-        @dp.callback_query_handler(text='4')
-        @dp.callback_query_handler(text='5')
+        @dp.callback_query_handler(text='05')
+        @dp.callback_query_handler(text='15')
+        @dp.callback_query_handler(text='25')
+        @dp.callback_query_handler(text='35')
+        @dp.callback_query_handler(text='45')
+        @dp.callback_query_handler(text='55')
         async def inline_kb_answer_callback_handler(query: types.CallbackQuery):
             verpalpite = 0
-            user_data = query.data
+            user_data = query.data[0]
             verpalpite = 0
             user_data = query.data
             with open('Usuarios.txt') as f:
@@ -3316,6 +3324,9 @@ def finaliza():
         arquivoGanhador.close()
         nomesUsuarios.close()
         vidas()
+        resetJogadas = open('Jogadas.txt', 'r+')
+        resetJogadas.truncate(0)
+        resetJogadas.close()
     #-----------------------FIM VERIFICANDO QUEM ERROU----------------------------
 
 def vidas():
